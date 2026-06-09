@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/otp_screen.dart';
 import '../features/auth/presentation/register_screen.dart';
+import '../features/profile/presentation/fill_profile_screen.dart';
 import 'route_names.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -37,5 +38,19 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
+
+    // ── Fill Profile ───────────────────────────────────────────────────────
+    GoRoute(
+      path: RouteNames.fillProfile,
+      builder: (context, state) {
+        final extra = (state.extra as Map<String, dynamic>?) ?? {};
+        return FillProfileScreen(
+          userId: extra['userId'] as int? ?? 0,
+          token: extra['token'] as String? ?? '',
+          role: extra['role'] as String? ?? '',
+        );
+      },
+    ),
   ],
 );
+

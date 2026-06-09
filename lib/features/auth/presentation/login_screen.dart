@@ -23,15 +23,21 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _authService = AuthService();
 
+  // ── Use ValueNotifier so only the error banner rebuilds, not the whole screen
+  final _serverErrorNotifier = ValueNotifier<String?>( null);
+
   bool _obscurePassword = true;
   bool _rememberMe = true;
   bool _isLoading = false;
-  String? _serverError;
+
+  // ── Static RegExp: compiled once per class, not on every keystroke ─────────
+  static final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _serverErrorNotifier.dispose();
     super.dispose();
   }
 
@@ -40,8 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _validateEmail(String? value) {
     final text = value?.trim() ?? '';
     if (text.isEmpty) return 'Email is required';
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(text)) return 'Email format is invalid';
+    if (!_emailRegex.hasMatch(text)) return 'Email format is invalid';
     return null;
   }
 
@@ -54,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
   // ── Submit ─────────────────────────────────────────────────────────────────
 
   Future<void> _submit() async {
-    setState(() => _serverError = null);
+    _serverErrorNotifier.value = null;
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
@@ -69,33 +74,39 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
 
-      // ─── Login thành công ───────────────────────────────────────────────
-      // Dữ liệu nhận được: response.userId, response.token, response.role
-      // TODO: Lưu token vào SharedPreferences / secure storage rồi
-      //       navigate sang màn hình home phù hợp với role.
-      //
-      // Ví dụ:
-      //   await SecureStorage.save('token', response.token);
-      //   context.go(RouteNames.home);
-      //
-      // Tạm thời hiện SnackBar với thông tin nhận được:
+      // ─── Check if profile has been filled ──────────────────────────────
+      if (!response.updatedProfile) {
+        context.go(
+          RouteNames.fillProfile,
+          extra: {
+            'userId': response.userId,
+            'token': response.token,
+            'role': response.role,
+          },
+        );
+        return;
+      }
+
+      // ─── Profile already filled → go to home ───────────────────────────
+      // TODO: Replace with RouteNames.home based on role
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Welcome! Role: ${response.role} (userId: ${response.userId})'),
+              'Welcome back! Role: ${response.role} (userId: ${response.userId})'),
           backgroundColor: const Color(0xFF059669),
         ),
       );
     } on DioException catch (e) {
       if (!mounted) return;
-      setState(() => _serverError = _extractErrorMessage(e));
+      _serverErrorNotifier.value = _extractErrorMessage(e);
     } catch (e) {
       if (!mounted) return;
-      setState(() => _serverError = e.toString());
+      _serverErrorNotifier.value = e.toString();
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
+
 
   String _extractErrorMessage(DioException e) {
     final data = e.response?.data;
@@ -182,7 +193,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   prefixIcon: Icons.mail_outline,
                   keyboardType: TextInputType.emailAddress,
                   validator: _validateEmail,
-                  onChanged: (_) => setState(() => _serverError = null),
+                  // ✅ Only clear error, no full tree rebuild
+                  onChanged: (_) => _serverErrorNotifier.value = null,
                 ),
                 const SizedBox(height: 20),
 
@@ -206,7 +218,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         setState(() => _obscurePassword = !_obscurePassword),
                   ),
                   validator: _validatePassword,
-                  onChanged: (_) => setState(() => _serverError = null),
+                  // ✅ Only clear error, no full tree rebuild
+                  onChanged: (_) => _serverErrorNotifier.value = null,
                 ),
                 const SizedBox(height: 20),
 
@@ -272,35 +285,43 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
 
-                // Server error
-                if (_serverError != null) ...[
-                  const SizedBox(height: 16),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade50,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.red.shade200),
-                    ),
-                    child: Row(
+                // ✅ ValueListenableBuilder: only THIS widget rebuilds on error
+                ValueListenableBuilder<String?>(
+                  valueListenable: _serverErrorNotifier,
+                  builder: (context, error, _) {
+                    if (error == null) return const SizedBox.shrink();
+                    return Column(
                       children: [
-                        Icon(Icons.error_outline,
-                            color: Colors.red.shade600, size: 18),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            _serverError!,
-                            style: TextStyle(
-                              color: Colors.red.shade700,
-                              fontSize: 13,
-                            ),
+                        const SizedBox(height: 16),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade50,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.red.shade200),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.error_outline,
+                                  color: Colors.red.shade600, size: 18),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  error,
+                                  style: TextStyle(
+                                    color: Colors.red.shade700,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  },
+                ),
 
                 const SizedBox(height: 28),
 
@@ -360,24 +381,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 24),
 
-                // Social login buttons
-                Row(
+                // ✅ const constructors: Flutter skips diffing/rebuilding these
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildSocialButton(
-                      onTap: () {/* TODO: Google sign-in */},
-                      child: _GoogleIcon(),
-                    ),
-                    const SizedBox(width: 16),
-                    _buildSocialButton(
-                      onTap: () {/* TODO: Facebook sign-in */},
-                      child: _FacebookIcon(),
-                    ),
-                    const SizedBox(width: 16),
-                    _buildSocialButton(
-                      onTap: () {/* TODO: GitHub sign-in */},
-                      child: const _GitHubIcon(),
-                    ),
+                    _SocialIconButton(icon: _GoogleIcon()),
+                    SizedBox(width: 16),
+                    _SocialIconButton(icon: _FacebookIcon()),
+                    SizedBox(width: 16),
+                    _SocialIconButton(icon: _GitHubIcon()),
                   ],
                 ),
 
@@ -482,26 +494,40 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildSocialButton({required Widget child, VoidCallback? onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.grey.shade200, width: 1.5),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Center(child: child),
+  // _buildSocialButton removed — replaced by const _SocialIconButton widget below
+}
+
+// ── Static const social button — never rebuilt by Flutter diffing ─────────────
+class _SocialIconButton extends StatelessWidget {
+  final Widget icon;
+  const _SocialIconButton({required this.icon});
+
+  // ✅ Static decoration: created once, not per-build
+  static const _kShadowColor = Color(0x0A000000); // black @ 0.04 opacity
+  static const _decoration = BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.all(Radius.circular(14)),
+    boxShadow: [
+      BoxShadow(
+        color: _kShadowColor,
+        blurRadius: 8,
+        offset: Offset(0, 2),
       ),
+    ],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: _decoration.copyWith(
+        border: Border.all(
+          color: const Color(0xFFE5E7EB), // grey.shade200 as const
+          width: 1.5,
+        ),
+      ),
+      child: Center(child: icon),
     );
   }
 }
@@ -510,14 +536,24 @@ class _LoginScreenState extends State<LoginScreen> {
 // Social icons
 // ─────────────────────────────────────────────────────────────────────────────
 
+// ✅ const constructor: Flutter element is never recreated
 class _GoogleIcon extends StatelessWidget {
+  const _GoogleIcon();
+
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(size: const Size(26, 26), painter: _GooglePainter());
+    // ✅ Static instance reused across rebuilds — no new allocation per frame
+    return const CustomPaint(size: Size(26, 26), painter: _googlePainter);
   }
 }
 
+// Singleton painter — declared at file scope so _GoogleIcon can reference it as const
+const _googlePainter = _GooglePainter();
+
 class _GooglePainter extends CustomPainter {
+  // ✅ const constructor — required for compile-time constant instantiation
+  const _GooglePainter();
+
   @override
   void paint(Canvas canvas, Size size) {
     final w = size.width;
@@ -579,24 +615,29 @@ class _GooglePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
+// ✅ const constructor + const body: entire subtree is compile-time constant
 class _FacebookIcon extends StatelessWidget {
+  const _FacebookIcon();
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return const SizedBox(
       width: 28,
       height: 28,
-      decoration: const BoxDecoration(
-        color: Color(0xFF1877F2),
-        shape: BoxShape.circle,
-      ),
-      child: const Center(
-        child: Text(
-          'f',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w900,
-            height: 1.1,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: Color(0xFF1877F2),
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: Text(
+            'f',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+              height: 1.1,
+            ),
           ),
         ),
       ),
@@ -613,7 +654,10 @@ class _GitHubIcon extends StatelessWidget {
   }
 }
 
+// ✅ const constructor so painter instance is compile-time constant
 class _GitHubIconPainter extends CustomPainter {
+  const _GitHubIconPainter();
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()

@@ -33,7 +33,7 @@ class _OtpScreenState extends State<OtpScreen> {
       List.generate(_otpLength, (_) => FocusNode());
 
   final _otpService = OtpService();
-  final _authService = AuthService();
+  final _authService = AuthService(); // dùng để gọi register()
 
   bool _isVerifying = false;
   String? _errorMessage;
@@ -120,7 +120,7 @@ class _OtpScreenState extends State<OtpScreen> {
     return KeyEventResult.ignored;
   }
 
-  // ── Verification → Register → Login ───────────────────────────────────────
+  // ── Verification → Register → Navigate to Login ───────────────────────────
 
   Future<void> _verify() async {
     if (!_isComplete) {
@@ -137,6 +137,9 @@ class _OtpScreenState extends State<OtpScreen> {
       final otp = _currentOtp;
       final email = widget.email;
       final reg = widget.registrationData;
+      final username = reg['username'] as String;
+      final password = reg['password'] as String;
+      final role = reg['role'] as String?;
 
       // Step 1: verify OTP
       await _otpService.verifyRegisterOtp(email, otp);
@@ -144,21 +147,23 @@ class _OtpScreenState extends State<OtpScreen> {
       // Step 2: create account
       await _authService.register(
         RegisterRequest(
-          username: reg['username'] as String,
-          password: reg['password'] as String,
-          role: reg['role'] as String?,
+          username: username,
+          password: password,
+          role: role,
         ),
       );
 
       if (!mounted) return;
 
-      // Step 3: navigate to login with success message
-      context.go(
-        RouteNames.login,
-        extra: {
-          'message':
-              'Registration successful! Please wait for admin approval to login.',
-        },
+      // Step 3: navigate to login page
+      context.go(RouteNames.login);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Account created successfully! Please log in.'),
+          backgroundColor: Color(0xFF3D3DC6),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
     } catch (e) {
       if (!mounted) return;
