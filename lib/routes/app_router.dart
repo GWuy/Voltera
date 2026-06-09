@@ -4,6 +4,7 @@ import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/otp_screen.dart';
 import '../features/auth/presentation/register_screen.dart';
 import '../features/profile/presentation/fill_profile_screen.dart';
+import '../features/home/presentation/home_screen.dart';
 import 'route_names.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -51,6 +52,11 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
+
+    // ── Home ───────────────────────────────────────────────────────────────
+    GoRoute(
+      path: RouteNames.home,
+      builder: (context, state) => const HomeScreen(),
+    ),
   ],
 );
-

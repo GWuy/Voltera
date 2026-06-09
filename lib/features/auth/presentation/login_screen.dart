@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../data/auth_service.dart';
 import '../data/login_request.dart';
 import '../data/login_response.dart';
+import '../../../core/utils/token_storage.dart';
 import '../../../routes/route_names.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -74,8 +75,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
 
+      // ─── Persist token for subsequent API calls ─────────────────────────
+      await TokenStorage.instance.saveToken(response.token);
+
       // ─── Check if profile has been filled ──────────────────────────────
       if (!response.updatedProfile) {
+        if (!mounted) return;
         context.go(
           RouteNames.fillProfile,
           extra: {
@@ -88,14 +93,9 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       // ─── Profile already filled → go to home ───────────────────────────
-      // TODO: Replace with RouteNames.home based on role
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              'Welcome back! Role: ${response.role} (userId: ${response.userId})'),
-          backgroundColor: const Color(0xFF059669),
-        ),
-      );
+      if (!mounted) return;
+      context.go(RouteNames.home);
+
     } on DioException catch (e) {
       if (!mounted) return;
       _serverErrorNotifier.value = _extractErrorMessage(e);
@@ -130,15 +130,17 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+            child: Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                 const SizedBox(height: 20),
 
                 // Title
@@ -189,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 8),
                 _buildTextField(
                   controller: _emailController,
-                  hintText: 'xampl@yourdomain.com',
+                  hintText: 'exampl@yourdomain.com',
                   prefixIcon: Icons.mail_outline,
                   keyboardType: TextInputType.emailAddress,
                   validator: _validateEmail,
@@ -427,7 +429,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 
   // ── Reusable widgets ───────────────────────────────────────────────────────

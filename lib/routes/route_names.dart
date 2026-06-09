@@ -3,5 +3,6 @@ class RouteNames {
   static const register = '/register';
   static const verifyEmail = '/verify-email';
   static const fillProfile = '/fill-profile';
+  static const home = '/home';
 }
 

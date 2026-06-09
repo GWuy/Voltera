@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
+
 
 import '../../../core/config/api_config.dart';
 import 'profile_request.dart';
@@ -27,8 +29,7 @@ class ProfileService {
       final response = await _dio.get('/api/v1/users/me/profile');
       return ProfileResponse.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      print('ProfileService GET STATUS: ${e.response?.statusCode}');
-      print('ProfileService GET DATA:   ${e.response?.data}');
+      debugPrint('ProfileService GET: ${e.response?.statusCode} ${e.response?.data}');
       rethrow;
     }
   }
@@ -42,8 +43,7 @@ class ProfileService {
       );
       return ProfileResponse.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      print('ProfileService PUT STATUS: ${e.response?.statusCode}');
-      print('ProfileService PUT DATA:   ${e.response?.data}');
+      debugPrint('ProfileService PUT: ${e.response?.statusCode} ${e.response?.data}');
       rethrow;
     }
   }

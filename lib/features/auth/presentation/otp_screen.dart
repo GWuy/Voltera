@@ -203,12 +203,15 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
         centerTitle: false,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
               const SizedBox(height: 12),
 
               // Subtitle
@@ -363,6 +366,8 @@ class _OtpScreenState extends State<OtpScreen> {
             ],
           ),
         ),
+      ),
+      ),
       ),
     );
   }
