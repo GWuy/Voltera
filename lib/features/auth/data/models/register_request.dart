@@ -1,5 +1,5 @@
 class RegisterRequest {
-  RegisterRequest({
+  const RegisterRequest({
     required this.username,
     required this.password,
     this.role,

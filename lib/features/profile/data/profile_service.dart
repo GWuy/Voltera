@@ -1,25 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 
-
-import '../../../core/config/api_config.dart';
+import '../../../core/network/api_client.dart';
 import 'profile_request.dart';
 import 'profile_response.dart';
 
 class ProfileService {
-  ProfileService({required String token, Dio? dio})
-      : _dio = dio ??
-            Dio(
-              BaseOptions(
-                baseUrl: ApiConfig.rootApi,
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': 'Bearer $token',
-                },
-                connectTimeout: const Duration(seconds: 15),
-                receiveTimeout: const Duration(seconds: 15),
-              ),
-            );
+  ProfileService() : _dio = ApiClient.instance.dio;
 
   final Dio _dio;
 
@@ -34,7 +21,7 @@ class ProfileService {
     }
   }
 
-  /// PUT /api/v1/users/me/profile
+  /// ✅ PUT /api/v1/users/me/profile — JSON only
   Future<ProfileResponse> saveProfile(ProfileRequest request) async {
     try {
       final response = await _dio.put(

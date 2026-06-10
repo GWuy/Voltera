@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../data/models/post_response.dart';
@@ -7,6 +8,9 @@ import '../data/post_service.dart';
 import '../../../core/utils/token_storage.dart';
 import '../../../features/profile/data/profile_response.dart';
 import '../../../features/profile/data/profile_service.dart';
+import '../../../features/favorite/presentation/providers/favorite_provider.dart';
+import '../../../routes/route_names.dart';
+import 'package:provider/provider.dart';
 
 // ── Palette ─────────────────────────────────────────────────────────────────
 const _kPrimary = Color(0xFF3D3DC6);
@@ -46,6 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
     _fetchProfile();   // load user info for app bar
     _fetchPosts();
     _searchController.addListener(_applyFilter);
+    
+    // Load favorites to sync heart icons
+    Future.microtask(() => context.read<FavoriteProvider>().loadFavorites());
   }
 
   @override
@@ -60,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final token = await TokenStorage.instance.getToken();
       if (token == null) return;
       final profile =
-          await ProfileService(token: token).getMyProfile();
+          await ProfileService().getMyProfile();
       if (!mounted) return;
       setState(() => _profile = profile);
     } catch (_) {
@@ -575,7 +582,15 @@ class _HomeScreenState extends State<HomeScreen> {
             children: List.generate(items.length, (i) {
               final selected = _navIndex == i;
               return GestureDetector(
-                onTap: () => setState(() => _navIndex = i),
+                onTap: () {
+                  if (i == 1) {
+                    context.go(RouteNames.favorites);
+                  } else if (i == 3) {
+                    context.go(RouteNames.profile);
+                  } else {
+                    setState(() => _navIndex = i);
+                  }
+                },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   padding: const EdgeInsets.symmetric(
@@ -791,22 +806,14 @@ class _BannerCard extends StatelessWidget {
 }
 
 // ── Post Card ────────────────────────────────────────────────────────────────
-class _PostCard extends StatefulWidget {
+class _PostCard extends StatelessWidget {
   final PostResponse post;
   final String Function(double?) formatPrice;
 
   const _PostCard({required this.post, required this.formatPrice});
 
   @override
-  State<_PostCard> createState() => _PostCardState();
-}
-
-class _PostCardState extends State<_PostCard> {
-  bool _isFav = false;
-
-  @override
   Widget build(BuildContext context) {
-    final post = widget.post;
     final isBattery = post.isBattery;
     final thumb = post.thumbnail;
 
@@ -870,29 +877,51 @@ class _PostCardState extends State<_PostCard> {
               Positioned(
                 top: 10,
                 right: 10,
-                child: GestureDetector(
-                  onTap: () => setState(() => _isFav = !_isFav),
-                  child: Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.9),
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 6,
-                        )
-                      ],
-                    ),
-                    child: Icon(
-                      _isFav
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_border_rounded,
-                      size: 18,
-                      color: _isFav ? Colors.red : _kTextMid,
-                    ),
-                  ),
+                child: Consumer<FavoriteProvider>(
+                  builder: (context, provider, child) {
+                    final isFav = provider.isFavorite(post.postId ?? 0);
+                    return GestureDetector(
+                      onTap: () async {
+                        final success = await provider.toggleFavorite(
+                          post.postId ?? 0,
+                          title: post.title,
+                          price: post.price,
+                          thumbnail: post.thumbnail,
+                        );
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(success 
+                                ? (isFav ? 'Removed from favorites' : 'Added to favorites')
+                                : 'Failed to update favorites'),
+                              duration: const Duration(seconds: 1),
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 6,
+                            )
+                          ],
+                        ),
+                        child: Icon(
+                          isFav
+                              ? Icons.favorite_rounded
+                              : Icons.favorite_border_rounded,
+                          size: 18,
+                          color: isFav ? Colors.red : _kTextMid,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
               // Type badge
@@ -982,7 +1011,7 @@ class _PostCardState extends State<_PostCard> {
                       const Spacer(),
                     Flexible(
                       child: Text(
-                        widget.formatPrice(post.price),
+                        formatPrice(post.price),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(

@@ -4,5 +4,7 @@ class RouteNames {
   static const verifyEmail = '/verify-email';
   static const fillProfile = '/fill-profile';
   static const home = '/home';
+  static const profile = '/profile';
+  static const favorites = '/favorites';
 }
 

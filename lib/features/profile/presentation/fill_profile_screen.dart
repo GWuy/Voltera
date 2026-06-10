@@ -58,7 +58,7 @@ class _FillProfileScreenState extends State<FillProfileScreen>
   @override
   void initState() {
     super.initState();
-    _profileService = ProfileService(token: widget.token);
+    _profileService = ProfileService();
 
     _fadeController = AnimationController(
       vsync: this,
@@ -173,16 +173,14 @@ class _FillProfileScreenState extends State<FillProfileScreen>
 
     try {
       await _profileService.saveProfile(
-        ProfileRequest(
-          firstname: _firstnameController.text.trim(),
-          lastname: _lastnameController.text.trim(),
-          email: _emailController.text.trim(),
-          phone: _phoneController.text.trim(),
-          gender: _gender,
-          address: _addressController.text.trim().isEmpty
-              ? null
-              : _addressController.text.trim(),
-        ),
+          ProfileRequest(
+              firstname: _firstnameController.text.trim(),
+              lastname: _lastnameController.text.trim(),
+              email: _emailController.text.trim(),
+              phone: _phoneController.text.trim(),
+              gender: _gender,
+              address: _addressController.text.trim()
+          )
       );
 
       if (!mounted) return;

@@ -1,5 +1,5 @@
 class LoginResponse {
-  LoginResponse({
+  const LoginResponse({
     required this.userId,
     required this.token,
     required this.role,

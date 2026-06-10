@@ -6,6 +6,7 @@ class ProfileRequest {
     this.phone,
     this.gender,
     this.address,
+    this.avatarUrl,
   });
 
   final String? firstname;
@@ -14,13 +15,17 @@ class ProfileRequest {
   final String? phone;
   final bool? gender;
   final String? address;
+  final String? avatarUrl;
 
-  Map<String, dynamic> toJson() => {
-        if (firstname != null) 'firstname': firstname,
-        if (lastname != null) 'lastname': lastname,
-        if (email != null) 'email': email,
-        if (phone != null) 'phone': phone,
-        if (gender != null) 'gender': gender,
-        if (address != null) 'address': address,
-      };
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (firstname != null) map['firstname'] = firstname;
+    if (lastname != null) map['lastname'] = lastname;
+    if (email != null) map['email'] = email;
+    if (phone != null) map['phone'] = phone;
+    if (gender != null) map['gender'] = gender;
+    if (address != null) map['address'] = address;
+    if (avatarUrl != null) map['avatarUrl'] = avatarUrl;
+    return map;
+  }
 }
