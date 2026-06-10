@@ -78,7 +78,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                   itemCount: provider.favorites.length,
                   itemBuilder: (context, index) {
                     final car = provider.favorites[index];
-                    return _buildCarCard(car, provider);
+                    return GestureDetector(
+                      onTap: () => context.push(
+                        '${RouteNames.carDetail}?postId=${car.postId}',
+                      ),
+                      child: _buildCarCard(car, provider),
+                    );
                   },
                 ),
               ),

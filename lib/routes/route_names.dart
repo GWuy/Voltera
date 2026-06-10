@@ -6,5 +6,7 @@ class RouteNames {
   static const home = '/home';
   static const profile = '/profile';
   static const favorites = '/favorites';
+  static const carList = '/car-list';
+  static const carDetail = '/car-detail';
 }
 

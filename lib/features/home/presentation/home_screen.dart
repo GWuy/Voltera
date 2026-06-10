@@ -118,6 +118,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Switches tab and fetches data from the corresponding API.
   void _selectCategory(int idx) {
+    if (idx == 1) {
+      context.push(RouteNames.carList);
+      return;
+    }
     if (_selectedCategory == idx) return; // no-op if already selected
     setState(() => _selectedCategory = idx);
     _fetchPosts();
@@ -153,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 20, vertical: 12),
-                  child: _buildSearchBar(),
+                  // child: _buildSearchBar(),
                 ),
               ),
 
@@ -218,13 +222,21 @@ class _HomeScreenState extends State<HomeScreen> {
               else
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
-                      child: _PostCard(
-                        post: _filteredPosts[index],
-                        formatPrice: _formatPrice,
-                      ),
-                    ),
+                    (context, index) {
+                      final post = _filteredPosts[index];
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
+                        child: GestureDetector(
+                          onTap: () => context.push(
+                            '${RouteNames.carDetail}?postId=${post.postId}',
+                          ),
+                          child: _PostCard(
+                            post: post,
+                            formatPrice: _formatPrice,
+                          ),
+                        ),
+                      );
+                    },
                     childCount: _filteredPosts.length,
                   ),
                 ),
