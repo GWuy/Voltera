@@ -223,10 +223,6 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                           color: Colors.green.shade50,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Text(
-                          _post!.status ?? 'Approved',
-                          style: const TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold),
-                        ),
                       ),
                     ],
                   ),

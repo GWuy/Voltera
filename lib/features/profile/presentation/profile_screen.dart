@@ -112,6 +112,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _handleLogout() async {
+    setState(() => _isLoading = true);
+    try {
+      final email = _emailController.text.trim();
+      // Gọi API logout
+      final profileService = ProfileService();
+      // Giả sử ta thêm method logout vào ProfileService hoặc dùng trực tiếp dio từ ApiClient
+      // Ở đây tôi sẽ sử dụng dio từ ApiClient để gọi POST /api/v1/auth/logout?username=...
+      await profileService.logout(email);
+
+      // Xóa token cục bộ
+      await TokenStorage.instance.deleteToken();
+
+      if (mounted) {
+        context.go(RouteNames.login);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Logout failed: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
   @override
   void dispose() {
     _fullnameController.dispose();
@@ -225,6 +252,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 controller: _addressController,
                 hintText: 'Typing your address',
                 prefixIcon: Icons.location_on_outlined,
+              ),
+              const SizedBox(height: 20),
+
+              // ── Logout Button ──────────────────────────────────────────
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: OutlinedButton.icon(
+                  onPressed: _isLoading ? null : _handleLogout,
+                  icon: const Icon(Icons.logout, color: Colors.red),
+                  label: const Text(
+                    'Logout',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.red, width: 1.5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(height: 40),
 
