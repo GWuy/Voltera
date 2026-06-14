@@ -13,8 +13,7 @@ enum OtpStatus { idle, verifying, success, error }
 ///
 /// Handles the full flow: verify OTP → register account → navigate to login.
 class OtpProvider extends ChangeNotifier {
-  OtpProvider({required AuthRepository repository})
-      : _repository = repository;
+  OtpProvider({required this._repository});
 
   final AuthRepository _repository;
 

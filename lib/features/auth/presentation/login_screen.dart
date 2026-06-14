@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:voltera/features/auth/presentation/providers/auth_provider.dart';
+import 'package:voltera/features/auth/presentation/widgets/auth_footer_link.dart';
+import 'package:voltera/features/auth/presentation/widgets/login_header.dart';
+import 'package:voltera/features/auth/presentation/widgets/or_divider_row.dart';
+import 'package:voltera/features/auth/presentation/widgets/remember_me_row.dart';
 import 'package:voltera/features/auth/presentation/widgets/social_login_row.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/validators.dart';
 import '../../../core/widgets/app_text_field.dart';
@@ -88,18 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
-
-                      // Title
-                      const Text('Login Your\nAccount',
-                          style: AppTextStyles.heading1),
-                      const SizedBox(height: 36),
-
-                      // Success banner (from registration)
-                      if (widget.message != null) ...[
-                        SuccessBanner(message: widget.message!),
-                        const SizedBox(height: 20),
-                      ],
+                      LoginHeader(successMessage: widget.message),
 
                       // Email
                       const Text('Email', style: AppTextStyles.fieldLabel),
@@ -139,59 +131,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 20),
 
                       // Remember me + Forgot Password
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () => setState(
-                                () => _rememberMe = !_rememberMe),
-                            child: Row(
-                              children: [
-                                AnimatedContainer(
-                                  duration: const Duration(milliseconds: 200),
-                                  width: 22,
-                                  height: 22,
-                                  decoration: BoxDecoration(
-                                    color: _rememberMe
-                                        ? AppColors.primary
-                                        : Colors.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                      color: _rememberMe
-                                          ? AppColors.primary
-                                          : Colors.grey.shade400,
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                  child: _rememberMe
-                                      ? const Icon(Icons.check,
-                                          size: 15, color: Colors.white)
-                                      : null,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Remember me',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Spacer(),
-                          TextButton(
-                            onPressed: () {
-                              // TODO: navigate to forgot password screen
-                            },
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            child: const Text('Forgot Password',
-                                style: AppTextStyles.linkDark),
-                          ),
-                        ],
+                      RememberMeRow(
+                        value: _rememberMe,
+                        onChanged: (value) => setState(() => _rememberMe = value),
+                        onForgotPassword: () {},
                       ),
 
                       // Error banner
@@ -212,49 +155,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 28),
 
                       // Or continue with
-                      Row(
-                        children: [
-                          Expanded(
-                              child: Divider(color: Colors.grey.shade300)),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 12),
-                            child: Text(
-                              'or continue with',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey.shade500,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                              child: Divider(color: Colors.grey.shade300)),
-                        ],
-                      ),
+                      const OrDividerRow(),
 
                       const SizedBox(height: 24),
                       const SocialLoginRow(),
                       const SizedBox(height: 36),
 
-                      // Sign up link — Fixed grammar
-                      Center(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "Don't have an account? ",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => context.go(RouteNames.register),
-                              child: const Text('Sign Up',
-                                  style: AppTextStyles.link),
-                            ),
-                          ],
-                        ),
+                      AuthFooterLink(
+                        label: "Don't have an account? ",
+                        linkText: 'Sign Up',
+                        onTap: () => context.go(RouteNames.register),
                       ),
                       const SizedBox(height: 16),
                     ],

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:voltera/features/auth/presentation/providers/auth_provider.dart';
+import 'package:voltera/features/auth/presentation/widgets/auth_footer_link.dart';
+import 'package:voltera/features/auth/presentation/widgets/login_header.dart';
+import 'package:voltera/features/auth/presentation/widgets/role_dropdown.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/validators.dart';
 import '../../../core/widgets/app_text_field.dart';
@@ -90,14 +92,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
-
-                      // Title
-                      const Text('Create Your\nAccount',
-                          style: AppTextStyles.heading1),
-                      const SizedBox(height: 36),
-
-                      // Email
+                      const LoginHeader(),
                       const Text('Email', style: AppTextStyles.fieldLabel),
                       const SizedBox(height: 8),
                       AppTextField(
@@ -178,39 +173,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
 
                       // Sign up as dropdown
-                      const Text('Sign up as',
-                          style: AppTextStyles.fieldLabel),
-                      const SizedBox(height: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.fill,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<UserRole>(
-                            value: _role,
-                            isExpanded: true,
-                            icon: const Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: AppColors.primary,
-                            ),
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: AppColors.textDark,
-                            ),
-                            onChanged: isLoading
-                                ? null
-                                : (value) => setState(
-                                    () => _role = value ?? UserRole.buyer),
-                            items: UserRole.values
-                                .map((role) => DropdownMenuItem(
-                                      value: role,
-                                      child: Text(role.label),
-                                    ))
-                                .toList(),
-                          ),
-                        ),
+                      RoleDropdown(
+                        value: _role,
+                        isLoading: isLoading,
+                        onChanged: (value) =>
+                            setState(() => _role = value ?? UserRole.buyer),
                       ),
 
                       const SizedBox(height: 28),
@@ -225,24 +192,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 40),
 
                       // Already have account
-                      Center(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Already have an account? ',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () => context.go(RouteNames.login),
-                              child: const Text('Login',
-                                  style: AppTextStyles.link),
-                            ),
-                          ],
-                        ),
+                      AuthFooterLink(
+                        label: 'Already have an account? ',
+                        linkText: 'Login',
+                        onTap: () => context.go(RouteNames.login),
                       ),
                       const SizedBox(height: 16),
                     ],

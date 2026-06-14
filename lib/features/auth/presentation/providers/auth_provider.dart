@@ -15,8 +15,7 @@ enum AuthStatus { idle, loading, success, error }
 /// Widgets listen to this [ChangeNotifier] instead of directly calling
 /// API services. All business logic lives here — screens are pure UI.
 class AuthProvider extends ChangeNotifier {
-  AuthProvider({required AuthRepository repository})
-      : _repository = repository;
+  AuthProvider({required this._repository});
 
   final AuthRepository _repository;
 
