@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'providers/favorite_provider.dart';
-import '../../../routes/route_names.dart';
+import '../../../core/router/route_names.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});

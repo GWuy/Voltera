@@ -1,21 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-import '../data/profile_request.dart';
-import '../data/profile_service.dart';
-import '../../../routes/route_names.dart';
+import '../data/models/profile_request.dart';
+import '../presentation/providers/profile_provider.dart';
+import '../../../core/router/route_names.dart';
 
 // ── Pre-computed color constants (avoid runtime withValues() in build) ─────────
 const _kPrimary            = Color(0xFF3D3DC6);
-const _kPrimaryBorder      = Color(0x263D3DC6); // 0.15 alpha
-const _kPrimaryShadow      = Color(0x1F3D3DC6); // 0.12 alpha
-const _kPrimaryEditShadow  = Color(0x663D3DC6); // 0.40 alpha
-const _kPrimaryDisabled    = Color(0x993D3DC6); // 0.60 alpha
-const _kPrimaryBtnShadow   = Color(0x663D3DC6); // 0.40 alpha
-const _kGenderSelected     = Color(0x143D3DC6); // 0.08 alpha
+const _kPrimaryBorder      = Color(0x263D3DC6);
+const _kPrimaryShadow      = Color(0x1F3D3DC6);
+const _kPrimaryEditShadow  = Color(0x663D3DC6);
+const _kPrimaryDisabled    = Color(0x993D3DC6);
+const _kPrimaryBtnShadow   = Color(0x663D3DC6);
+const _kGenderSelected     = Color(0x143D3DC6);
 const _kFill               = Color(0xFFF4F5F7);
-const _kText               = Color(0xFF0D0D0D);
 
 class FillProfileScreen extends StatefulWidget {
   final int userId;
@@ -53,12 +53,12 @@ class _FillProfileScreenState extends State<FillProfileScreen>
   late final AnimationController _avatarController;
   late final Animation<double> _avatarScaleAnimation;
 
-  late ProfileService _profileService;
+  late ProfileProvider _profileProvider;
 
   @override
   void initState() {
     super.initState();
-    _profileService = ProfileService();
+    _profileProvider = context.read<ProfileProvider>();
 
     _fadeController = AnimationController(
       vsync: this,
@@ -88,8 +88,13 @@ class _FillProfileScreenState extends State<FillProfileScreen>
   /// Gọi GET /api/v1/users/me/profile và pre-fill các field có dữ liệu.
   Future<void> _loadProfile() async {
     try {
-      final profile = await _profileService.getMyProfile();
+      await _profileProvider.loadProfile();
       if (!mounted) return;
+      final profile = _profileProvider.profile;
+      if (profile == null) {
+        if (mounted) setState(() => _isLoadingProfile = false);
+        return;
+      }
       setState(() {
         // Pre-fill email nếu có (thường luôn có từ lúc đăng ký)
         if (profile.email != null && profile.email!.isNotEmpty) {
@@ -172,32 +177,31 @@ class _FillProfileScreenState extends State<FillProfileScreen>
     setState(() => _isLoading = true);
 
     try {
-      await _profileService.saveProfile(
-          ProfileRequest(
-              firstname: _firstnameController.text.trim(),
-              lastname: _lastnameController.text.trim(),
-              email: _emailController.text.trim(),
-              phone: _phoneController.text.trim(),
-              gender: _gender,
-              address: _addressController.text.trim()
-          )
-      );
+      final request = ProfileRequest(
+          firstname: _firstnameController.text.trim(),
+          lastname: _lastnameController.text.trim(),
+          email: _emailController.text.trim(),
+          phone: _phoneController.text.trim(),
+          gender: _gender,
+          address: _addressController.text.trim());
+
+      final success = await _profileProvider.saveProfile(request);
 
       if (!mounted) return;
 
-      // Navigate to home based on role
-      // TODO: Replace with actual home route per role
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Profile saved successfully! 🎉'),
-          backgroundColor: Color(0xFF059669),
-          duration: Duration(seconds: 2),
-        ),
-      );
-
-      // Navigate to home (replace with actual route)
-      context.go(RouteNames.login,
-          extra: {'message': 'Profile completed! Welcome aboard.'});
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Profile saved successfully!'),
+            backgroundColor: Color(0xFF059669),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        context.go(RouteNames.login,
+            extra: {'message': 'Profile completed! Welcome aboard.'});
+      } else {
+        setState(() => _serverError = _profileProvider.errorMessage);
+      }
     } on DioException catch (e) {
       if (!mounted) return;
       setState(() => _serverError = _extractErrorMessage(e));

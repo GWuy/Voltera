@@ -6,9 +6,9 @@ import 'package:provider/provider.dart';
 
 import 'car_filter_screen.dart';
 import '../../home/data/models/post_response.dart';
-import '../../home/data/post_service.dart';
 import '../../favorite/presentation/providers/favorite_provider.dart';
-import '../../../routes/route_names.dart';
+import '../../../core/router/route_names.dart';
+import 'providers/product_provider.dart';
 
 class CarListScreen extends StatefulWidget {
   final String? brand;
@@ -19,17 +19,11 @@ class CarListScreen extends StatefulWidget {
 }
 
 class _CarListScreenState extends State<CarListScreen> {
-  final _postService = PostService();
   final _searchController = TextEditingController();
-  
-  List<PostResponse> _cars = [];
-  bool _loading = true;
-  String? _error;
-  
+
   String? _selectedStyle;
   String? _selectedBrand;
-  
-  // Cache filters
+
   Map<String, dynamic> _currentFilters = {};
 
   @override
@@ -39,49 +33,42 @@ class _CarListScreenState extends State<CarListScreen> {
     if (_selectedBrand != null) {
       _currentFilters['brand'] = _selectedBrand;
     }
-    _fetchCars(filters: _currentFilters);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchCars(filters: _currentFilters);
+    });
   }
 
-  Future<void> _fetchCars({Map<String, dynamic>? filters}) async {
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-    try {
-      final cars = await _postService.filterVehicles(
-        keyword: filters?['keyword'] ?? (_searchController.text.isNotEmpty ? _searchController.text : null),
-        address: filters?['address'],
-        brand: filters?['brand'] ?? _selectedBrand,
-        style: filters?['style'] ?? _selectedStyle,
-        version: filters?['version'],
-        color: filters?['color'],
-        origin: filters?['origin'],
-        minOdo: filters?['minOdo'],
-        maxOdo: filters?['maxOdo'],
-        minRange: filters?['minRange'],
-        maxRange: filters?['maxRange'],
-        bodyInsurance: filters?['bodyInsurance'],
-        vehicleInspection: filters?['vehicleInspection'],
-        minPrice: filters?['minPrice'],
-        maxPrice: filters?['maxPrice'],
-        minYearManufacture: filters?['minYearManufacture'],
-        maxYearManufacture: filters?['maxYearManufacture'],
-      );
-      if (!mounted) return;
-      setState(() {
-        _cars = cars;
-        _loading = false;
-        if (filters != null) {
-          _currentFilters = filters;
-        }
-      });
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _error = e.toString();
-        _loading = false;
-      });
+  void _fetchCars({Map<String, dynamic>? filters}) {
+    final provider = context.read<ProductProvider>();
+    final f = filters ?? _currentFilters;
+    provider.filterVehicles(
+      keyword: f['keyword'] ?? (_searchController.text.isNotEmpty ? _searchController.text : null),
+      address: f['address'],
+      brand: f['brand'] ?? _selectedBrand,
+      style: f['style'] ?? _selectedStyle,
+      version: f['version'],
+      color: f['color'],
+      origin: f['origin'],
+      minOdo: f['minOdo'],
+      maxOdo: f['maxOdo'],
+      minRange: f['minRange'],
+      maxRange: f['maxRange'],
+      bodyInsurance: f['bodyInsurance'],
+      vehicleInspection: f['vehicleInspection'],
+      minPrice: f['minPrice'],
+      maxPrice: f['maxPrice'],
+      minYearManufacture: f['minYearManufacture'],
+      maxYearManufacture: f['maxYearManufacture'],
+    );
+    if (filters != null) {
+      setState(() => _currentFilters = filters);
     }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -108,7 +95,6 @@ class _CarListScreenState extends State<CarListScreen> {
       ),
       body: Column(
         children: [
-          // Search & Filter Row
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Row(
@@ -159,8 +145,7 @@ class _CarListScreenState extends State<CarListScreen> {
               ],
             ),
           ),
-          
-          // Category Chips
+
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -177,27 +162,33 @@ class _CarListScreenState extends State<CarListScreen> {
             ),
           ),
 
-          // Car List
           Expanded(
-            child: _loading 
-              ? const Center(child: CircularProgressIndicator(color: Color(0xFF3D3DC6)))
-              : _error != null 
-                ? Center(child: Text(_error!))
-                : _cars.isEmpty
-                  ? const Center(child: Text('No cars found'))
-                  : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      itemCount: _cars.length,
-                      itemBuilder: (context, index) {
-                        final car = _cars[index];
-                        return GestureDetector(
-                          onTap: () => context.push(
-                            '${RouteNames.carDetail}?postId=${car.postId}',
-                          ),
-                          child: _CarCard(car: car),
-                        );
-                      },
-                    ),
+            child: Consumer<ProductProvider>(
+              builder: (context, provider, _) {
+                if (provider.listStatus == ProductStatus.loading) {
+                  return const Center(child: CircularProgressIndicator(color: Color(0xFF3D3DC6)));
+                }
+                if (provider.listStatus == ProductStatus.error) {
+                  return Center(child: Text(provider.errorMessage ?? 'Error'));
+                }
+                if (provider.cars.isEmpty) {
+                  return const Center(child: Text('No cars found'));
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: provider.cars.length,
+                  itemBuilder: (context, index) {
+                    final car = provider.cars[index];
+                    return GestureDetector(
+                      onTap: () => context.push(
+                        '${RouteNames.carDetail}?postId=${car.postId}',
+                      ),
+                      child: _CarCard(car: car),
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -256,7 +247,7 @@ class _CarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final priceFormat = NumberFormat.currency(locale: 'en_US', symbol: '\$');
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
@@ -268,7 +259,6 @@ class _CarCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              // Image
               Expanded(
                 flex: 4,
                 child: ClipRRect(
@@ -287,7 +277,6 @@ class _CarCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
-              // Info
               Expanded(
                 flex: 6,
                 child: Column(
@@ -333,7 +322,6 @@ class _CarCard extends StatelessWidget {
               ),
             ],
           ),
-          // Favorite Button
           Positioned(
             top: 0,
             right: 0,

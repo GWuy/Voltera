@@ -41,4 +41,17 @@ class ProfileApiService {
       rethrow;
     }
   }
+
+  /// POST /api/v1/auth/logout?username={username}
+  Future<void> logout(String username) async {
+    try {
+      await _dio.post(
+        '/api/v1/auth/logout',
+        queryParameters: {'username': username},
+      );
+    } on DioException catch (e) {
+      debugPrint('ProfileApiService LOGOUT: ${e.response?.statusCode} ${e.response?.data}');
+      rethrow;
+    }
+  }
 }

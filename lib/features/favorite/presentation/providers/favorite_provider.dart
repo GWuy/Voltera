@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../data/favorite_service.dart';
 import '../../data/models/fav_list_response.dart';
+import '../../domain/repositories/favorite_repository.dart';
 
 class FavoriteProvider extends ChangeNotifier {
-  final FavoriteService _service = FavoriteService();
-  
+  FavoriteProvider({required FavoriteRepository repository})
+      : _repository = repository;
+
+  final FavoriteRepository _repository;
+
   List<FavListResponse> _favorites = [];
   bool _isLoading = false;
 
@@ -17,7 +20,7 @@ class FavoriteProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      _favorites = await _service.getFavorites();
+      _favorites = await _repository.getFavorites();
     } catch (e) {
       debugPrint('Error loading favorites: $e');
     } finally {
@@ -34,14 +37,13 @@ class FavoriteProvider extends ChangeNotifier {
     final currentlyFavorite = isFavorite(postId);
     try {
       if (currentlyFavorite) {
-        await _service.removeFromFavorite(postId);
+        await _repository.removeFromFavorite(postId);
         _favorites.removeWhere((element) => element.postId == postId);
       } else {
-        await _service.addToFavorite(postId);
-        // Optimistically add to list if we have info, otherwise reload
+        await _repository.addToFavorite(postId);
         if (title != null && price != null) {
           _favorites.add(FavListResponse(
-            userId: 0, // Not strictly needed for UI display
+            userId: 0,
             postId: postId,
             postTitle: title,
             price: price,

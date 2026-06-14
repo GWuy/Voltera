@@ -16,4 +16,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<ProfileResponse> saveProfile(ProfileRequest request) =>
       _apiService.saveProfile(request);
+
+  @override
+  Future<void> logout(String username) => _apiService.logout(username);
 }

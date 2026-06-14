@@ -9,8 +9,8 @@ import '../../../core/utils/validators.dart';
 import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/error_banner.dart';
 import '../../../core/widgets/loading_button.dart';
-import '../../../routes/route_names.dart';
-import '../../../shared/enums/user_role.dart';
+import '../../../core/router/route_names.dart';
+import '../../../core/enums/user_role.dart';
 
 /// Registration screen — thin UI shell.
 ///

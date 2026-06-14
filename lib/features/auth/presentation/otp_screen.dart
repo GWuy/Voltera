@@ -7,7 +7,7 @@ import 'package:voltera/features/auth/presentation/providers/otp_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/error_banner.dart';
-import '../../../routes/route_names.dart';
+import '../../../core/router/route_names.dart';
 
 /// OTP verification screen — thin UI shell.
 ///

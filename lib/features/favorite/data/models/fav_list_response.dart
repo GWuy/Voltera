@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class FavListResponse {
   final int userId;
   final int postId;

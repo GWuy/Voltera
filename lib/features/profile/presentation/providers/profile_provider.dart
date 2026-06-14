@@ -73,4 +73,21 @@ class ProfileProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<bool> logout(String username) async {
+    _status = ProfileStatus.loading;
+    notifyListeners();
+    try {
+      await _repository.logout(username);
+      _status = ProfileStatus.idle;
+      _profile = null;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _status = ProfileStatus.error;
+      _errorMessage = e.toString();
+      notifyListeners();
+      return false;
+    }
+  }
 }
