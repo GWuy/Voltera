@@ -2,9 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider_pkg;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../favorite/presentation/providers/favorite_provider.dart';
+import '../../contract/providers/contract_providers.dart';
+import '../../../core/router/route_names.dart';
 import 'providers/product_provider.dart';
 
 class CarDetailScreen extends StatefulWidget {
@@ -30,7 +33,7 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProductProvider>(
+    return provider_pkg.Consumer<ProductProvider>(
       builder: (context, provider, _) {
         if (provider.detailStatus == ProductStatus.loading) {
           return const Scaffold(
@@ -63,7 +66,7 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
               style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
             ),
             actions: [
-              Consumer<FavoriteProvider>(
+              provider_pkg.Consumer<FavoriteProvider>(
                 builder: (context, favProvider, _) {
                   final isFav = favProvider.isFavorite(_post.postId ?? 0);
                   return IconButton(
@@ -303,16 +306,40 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.shopping_cart_outlined),
-                    label: const Text('Buy', style: TextStyle(fontWeight: FontWeight.bold)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF3D3DC6),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    ),
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      return ElevatedButton.icon(
+                        onPressed: () async {
+                          try {
+                            showDialog(
+                              context: context, 
+                              barrierDismissible: false,
+                              builder: (_) => const Center(child: CircularProgressIndicator())
+                            );
+                            
+                            final contract = await ref.read(contractRepositoryProvider).createContract(_post.postId ?? 0);
+                            
+                            if (context.mounted) {
+                              Navigator.pop(context); // close dialog
+                              context.push('${RouteNames.contractPreview}?id=${contract.id}');
+                            }
+                          } catch (e) {
+                            if (context.mounted) {
+                              Navigator.pop(context); // close dialog
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                            }
+                          }
+                        },
+                        icon: const Icon(Icons.handshake_outlined),
+                        label: const Text('Contract', style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF3D3DC6),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                        ),
+                      );
+                    }
                   ),
                 ),
               ],

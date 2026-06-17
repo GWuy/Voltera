@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
@@ -24,7 +25,11 @@ import 'features/notification/domain/repositories/notification_repository.dart';
 import 'features/notification/presentation/providers/notification_provider.dart';
 
 void main() {
-  runApp(const VolteraApp());
+  runApp(
+    const ProviderScope(
+      child: VolteraApp(),
+    ),
+  );
 }
 
 class VolteraApp extends StatelessWidget {

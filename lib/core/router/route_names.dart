@@ -9,4 +9,6 @@ class RouteNames {
   static const carList = '/car-list';
   static const carDetail = '/car-detail';
   static const notifications = '/notifications';
+  static const contractPreview = '/contract-preview';
+  static const contractList = '/contracts';
 }

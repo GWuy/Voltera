@@ -10,6 +10,8 @@ import '../../features/favorite/presentation/favorite_screen.dart';
 import '../../features/product/presentation/car_list_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/notification/presentation/notification_screen.dart';
+import '../../features/contract/presentation/contract_preview_screen.dart';
+import '../../features/contract/presentation/contract_list_screen.dart';
 import 'route_names.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -88,6 +90,19 @@ final GoRouter appRouter = GoRouter(
           role: extra['role'] as String? ?? '',
         );
       },
+    ),
+
+    GoRoute(
+      path: RouteNames.contractPreview,
+      builder: (context, state) {
+        final contractId = state.uri.queryParameters['id'] ?? '1';
+        return ContractPreviewScreen(contractId: contractId);
+      },
+    ),
+
+    GoRoute(
+      path: RouteNames.contractList,
+      builder: (context, state) => const ContractListScreen(),
     ),
   ],
 );

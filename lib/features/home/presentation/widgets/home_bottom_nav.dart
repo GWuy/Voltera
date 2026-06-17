@@ -22,7 +22,7 @@ class HomeBottomNav extends StatelessWidget {
     const items = [
       (icon: Icons.home_rounded, label: 'Home'),
       (icon: Icons.favorite_border_rounded, label: 'Favourite'),
-      (icon: Icons.shopping_bag_outlined, label: 'Orders'),
+      (icon: Icons.description_outlined, label: 'Contract'),
       (icon: Icons.person_outline_rounded, label: 'Profile'),
     ];
 
@@ -48,6 +48,8 @@ class HomeBottomNav extends StatelessWidget {
                 onTap: () {
                   if (i == 1) {
                     context.go(RouteNames.favorites);
+                  } else if (i == 2) {
+                    context.push(RouteNames.contractList);
                   } else if (i == 3) {
                     context.go(RouteNames.profile);
                   } else {
