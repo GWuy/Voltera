@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:voltera/core/network/api_client.dart';
@@ -38,6 +40,35 @@ class ProfileApiService {
     } on DioException catch (e) {
       debugPrint(
           'ProfileApiService PUT: ${e.response?.statusCode} ${e.response?.data}');
+      rethrow;
+    }
+  }
+
+  /// POST /api/upload/avatar
+  Future<String> uploadAvatar(File imageFile) async {
+    try {
+      String fileName = imageFile.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(imageFile.path, filename: fileName),
+      });
+
+      final response = await _dio.post(
+        '/api/upload/avatar',
+        data: formData,
+        options: Options(
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        ),
+      );
+      
+      // Assuming the response returns the URL in data or data['url']
+      if (response.data is Map && response.data['url'] != null) {
+        return response.data['url'] as String;
+      }
+      return response.data.toString();
+    } on DioException catch (e) {
+      debugPrint('ProfileApiService UPLOAD AVATAR: ${e.response?.statusCode} ${e.response?.data}');
       rethrow;
     }
   }

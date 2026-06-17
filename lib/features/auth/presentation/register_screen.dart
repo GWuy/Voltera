@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:voltera/features/auth/presentation/providers/auth_provider.dart';
 import 'package:voltera/features/auth/presentation/widgets/auth_footer_link.dart';
 import 'package:voltera/features/auth/presentation/widgets/login_header.dart';
-import 'package:voltera/features/auth/presentation/widgets/role_dropdown.dart';
 
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/validators.dart';
@@ -12,7 +11,6 @@ import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/error_banner.dart';
 import '../../../core/widgets/loading_button.dart';
 import '../../../core/router/route_names.dart';
-import '../../../core/enums/user_role.dart';
 
 /// Registration screen — thin UI shell.
 ///
@@ -30,7 +28,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  UserRole _role = UserRole.buyer;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
@@ -80,7 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           'registrationData': {
                             'username': email,
                             'password': _passwordController.text,
-                            'role': _role.value,
+                            'role': 'BUYER',
                           },
                         },
                       );
@@ -171,14 +168,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ErrorBanner(message: auth.errorMessage!),
                         const SizedBox(height: 28),
                       ],
-
-                      // Sign up as dropdown
-                      RoleDropdown(
-                        value: _role,
-                        isLoading: isLoading,
-                        onChanged: (value) =>
-                            setState(() => _role = value ?? UserRole.buyer),
-                      ),
 
                       const SizedBox(height: 28),
 

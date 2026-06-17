@@ -19,6 +19,9 @@ import 'features/favorite/presentation/providers/favorite_provider.dart';
 import 'features/product/data/repositories/product_repository_impl.dart';
 import 'features/product/domain/repositories/product_repository.dart';
 import 'features/product/presentation/providers/product_provider.dart';
+import 'features/notification/data/repositories/notification_repository_impl.dart';
+import 'features/notification/domain/repositories/notification_repository.dart';
+import 'features/notification/presentation/providers/notification_provider.dart';
 
 void main() {
   runApp(const VolteraApp());
@@ -34,6 +37,7 @@ class VolteraApp extends StatelessWidget {
     final ProfileRepository profileRepository = ProfileRepositoryImpl();
     final FavoriteRepository favoriteRepository = FavoriteRepositoryImpl();
     final ProductRepository productRepository = ProductRepositoryImpl();
+    final NotificationRepository notificationRepository = NotificationRepositoryImpl();
 
     return MultiProvider(
       providers: [
@@ -43,6 +47,7 @@ class VolteraApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProfileProvider(repository: profileRepository)),
         ChangeNotifierProvider(create: (_) => FavoriteProvider(repository: favoriteRepository)),
         ChangeNotifierProvider(create: (_) => ProductProvider(repository: productRepository)),
+        ChangeNotifierProvider(create: (_) => NotificationProvider(repository: notificationRepository)),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

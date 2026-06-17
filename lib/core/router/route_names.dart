@@ -8,4 +8,5 @@ class RouteNames {
   static const favorites = '/favorites';
   static const carList = '/car-list';
   static const carDetail = '/car-detail';
+  static const notifications = '/notifications';
 }

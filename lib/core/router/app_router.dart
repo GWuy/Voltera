@@ -9,6 +9,7 @@ import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/favorite/presentation/favorite_screen.dart';
 import '../../features/product/presentation/car_list_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/notification/presentation/notification_screen.dart';
 import 'route_names.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -56,6 +57,11 @@ final GoRouter appRouter = GoRouter(
         final postId = int.parse(state.uri.queryParameters['postId'] ?? '0');
         return CarDetailScreen(postId: postId);
       },
+    ),
+
+    GoRoute(
+      path: RouteNames.notifications,
+      builder: (context, state) => const NotificationScreen(),
     ),
 
     GoRoute(

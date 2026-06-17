@@ -17,9 +17,9 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
   // Vehicle Details
   String? _selectedBrand;
   String? _selectedStyle;
+  String? _selectedColor;
+  String? _selectedOrigin;
   late final TextEditingController _versionController;
-  late final TextEditingController _colorController;
-  late final TextEditingController _originController;
 
   // Performance
   late final TextEditingController _minOdoController;
@@ -46,8 +46,8 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
     _selectedBrand = f?['brand'];
     _selectedStyle = f?['style'];
     _versionController = TextEditingController(text: f?['version']);
-    _colorController = TextEditingController(text: f?['color']);
-    _originController = TextEditingController(text: f?['origin']);
+    _selectedColor = f?['color'];
+    _selectedOrigin = f?['origin'];
     _minOdoController = TextEditingController(text: f?['minOdo']?.toString());
     _maxOdoController = TextEditingController(text: f?['maxOdo']?.toString());
     _minRangeController = TextEditingController(text: f?['minRange']?.toString());
@@ -65,8 +65,6 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
     _keywordController.dispose();
     _locationController.dispose();
     _versionController.dispose();
-    _colorController.dispose();
-    _originController.dispose();
     _minOdoController.dispose();
     _maxOdoController.dispose();
     _minRangeController.dispose();
@@ -84,9 +82,9 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
       _locationController.clear();
       _selectedBrand = null;
       _selectedStyle = null;
+      _selectedColor = null;
+      _selectedOrigin = null;
       _versionController.clear();
-      _colorController.clear();
-      _originController.clear();
       _minOdoController.clear();
       _maxOdoController.clear();
       _minRangeController.clear();
@@ -107,8 +105,8 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
       'brand': _selectedBrand,
       'style': _selectedStyle,
       'version': _versionController.text.isEmpty ? null : _versionController.text,
-      'color': _colorController.text.isEmpty ? null : _colorController.text,
-      'origin': _originController.text.isEmpty ? null : _originController.text,
+      'color': _selectedColor,
+      'origin': _selectedOrigin,
       'minOdo': int.tryParse(_minOdoController.text),
       'maxOdo': int.tryParse(_maxOdoController.text),
       'minRange': int.tryParse(_minRangeController.text),
@@ -171,7 +169,7 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
                       child: _buildDropdownField(
                         hint: 'Brand',
                         value: _selectedBrand,
-                        items: ['Tesla', 'Toyota', 'Audi', 'Vinfast'],
+                        items: ['Tesla', 'Toyota', 'Honda', 'Nissan', 'Hyundai', 'Kia', 'Mercedes-Benz', 'BMW', 'Audi', 'Volkswagen', 'Porsche', 'Ford', 'Chevrolet', 'Volvo', 'Lexus', 'Jaguar', 'Land Rover', 'BYD', 'VinFast', 'MG'],
                         onChanged: (val) => setState(() => _selectedBrand = val),
                       ),
                     ),
@@ -180,7 +178,7 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
                       child: _buildDropdownField(
                         hint: 'Style',
                         value: _selectedStyle,
-                        items: ['Sedan', 'SUV', 'Hatchback'],
+                        items: ['SUV', 'Sedan', 'Hatchback', 'Crossover (CUV)', 'Pickup Truck', 'MPV', 'Sports Car'],
                         onChanged: (val) => setState(() => _selectedStyle = val),
                       ),
                     ),
@@ -197,17 +195,21 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: _buildTextField(
-                        controller: _colorController,
-                        hintText: 'Color',
+                      child: _buildDropdownField(
+                        hint: 'Color',
+                        value: _selectedColor,
+                        items: ['White', 'Black', 'Gray', 'Silver', 'Blue', 'Red', 'Green', 'Yellow', 'Orange', 'Brown', 'Gold', 'Beige', 'Purple', 'Other'],
+                        onChanged: (val) => setState(() => _selectedColor = val),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
-                _buildTextField(
-                  controller: _originController,
-                  hintText: 'Origin',
+                _buildDropdownField(
+                  hint: 'Origin',
+                  value: _selectedOrigin,
+                  items: ['United States', 'Germany', 'Japan', 'South Korea', 'China', 'Vietnam', 'Sweden', 'United Kingdom', 'Italy', 'France', 'India', 'Czech Republic', 'Spain', 'Romania', 'Croatia', 'Turkey', 'Russia', 'Malaysia'],
+                  onChanged: (val) => setState(() => _selectedOrigin = val),
                 ),
               ],
             ),

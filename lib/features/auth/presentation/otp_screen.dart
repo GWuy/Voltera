@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:voltera/features/auth/presentation/providers/auth_provider.dart';
 import 'package:voltera/features/auth/presentation/providers/otp_provider.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -125,24 +126,37 @@ class _OtpScreenState extends State<OtpScreen> {
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
-              child: Consumer<OtpProvider>(
-                builder: (context, otp, _) {
-                  // Navigate on success
+              child: Consumer2<OtpProvider, AuthProvider>(
+                builder: (context, otp, auth, _) {
+                  // Handle Success: Login and Navigate
                   if (otp.status == OtpStatus.success) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      context.go(RouteNames.login);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                              'Account created successfully! Please log in.'),
-                          backgroundColor: AppColors.primary,
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
+                      otp.resetStatus(); // Custom method to prevent loop
+                      auth
+                          .login(
+                        widget.registrationData['username'] as String,
+                        widget.registrationData['password'] as String,
+                      )
+                          .then((_) {
+                        if (auth.status == AuthStatus.success &&
+                            auth.loginResponse != null) {
+                          final res = auth.loginResponse!;
+                          if (!res.updatedProfile) {
+                            context.go(RouteNames.fillProfile, extra: {
+                              'userId': res.userId,
+                              'token': res.token,
+                              'role': res.role,
+                            });
+                          } else {
+                            context.go(RouteNames.home);
+                          }
+                        }
+                      });
                     });
                   }
 
-                  final isVerifying = otp.status == OtpStatus.verifying;
+                  final isVerifying = otp.status == OtpStatus.verifying ||
+                      auth.status == AuthStatus.loading;
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -175,9 +189,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       _buildOtpBoxes(),
 
                       // Error message
-                      if (otp.errorMessage != null) ...[
+                      if (otp.errorMessage != null || auth.errorMessage != null) ...[
                         const SizedBox(height: 16),
-                        ErrorBanner(message: otp.errorMessage!),
+                        ErrorBanner(message: otp.errorMessage ?? auth.errorMessage!),
                       ],
 
                       const SizedBox(height: 32),

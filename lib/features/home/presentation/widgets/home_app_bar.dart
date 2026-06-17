@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../profile/presentation/providers/profile_provider.dart';
+import '../../../../features/notification/presentation/providers/notification_provider.dart';
+import '../../../../core/router/route_names.dart';
 
 const _kPrimary = Color(0xFF3D3DC6);
 const _kSurface = Colors.white;
@@ -86,44 +89,49 @@ class HomeAppBar extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
-                child: Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: _kSurface,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.07),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      const Center(
-                        child: Icon(
-                          Icons.notifications_none_rounded,
-                          color: _kTextDark,
-                          size: 24,
-                        ),
-                      ),
-                      Positioned(
-                        right: 10,
-                        top: 10,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFEF4444),
-                            shape: BoxShape.circle,
+                onTap: () => context.push(RouteNames.notifications),
+                child: Consumer<NotificationProvider>(
+                  builder: (context, notifProvider, _) {
+                    return Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: _kSurface,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.07),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                      child: Stack(
+                        children: [
+                          const Center(
+                            child: Icon(
+                              Icons.notifications_none_rounded,
+                              color: _kTextDark,
+                              size: 24,
+                            ),
+                          ),
+                          if (notifProvider.hasUnread)
+                            Positioned(
+                              right: 10,
+                              top: 10,
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFEF4444),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../data/models/profile_request.dart';
@@ -24,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   bool? _gender;
   String? _avatarUrl;
+  File? _pickedImage;
 
   @override
   void initState() {
@@ -40,6 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return;
     }
 
+    if (!mounted) return;
     final provider = context.read<ProfileProvider>();
     await provider.loadProfile();
 
@@ -57,8 +62,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85);
+    if (picked != null) {
+      setState(() {
+        _pickedImage = File(picked.path);
+      });
+    }
+  }
+
   Future<void> _handleUpdate() async {
     if (!_formKey.currentState!.validate()) return;
+
+    final provider = context.read<ProfileProvider>();
+    bool success = true;
+
+    if (_pickedImage != null) {
+      final uploadedUrl = await provider.uploadAvatar(_pickedImage!);
+      if (!mounted) return;
+      if (uploadedUrl == null) {
+        final error = provider.errorMessage;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error ?? 'Failed to upload avatar')),
+        );
+        return;
+      }
+      setState(() {
+        _avatarUrl = uploadedUrl;
+        _pickedImage = null;
+      });
+    }
 
     final nameParts = _fullnameController.text.trim().split(' ');
     final firstname = nameParts.isNotEmpty ? nameParts[0] : '';
@@ -73,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       address: _addressController.text.trim(),
     );
 
-    final success = await context.read<ProfileProvider>().saveProfile(request);
+    success = await provider.saveProfile(request);
     if (!mounted) return;
 
     if (success) {
@@ -81,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         const SnackBar(content: Text('Profile updated successfully!')),
       );
     } else {
-      final error = context.read<ProfileProvider>().errorMessage;
+      final error = provider.errorMessage;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error ?? 'Failed to update profile')),
       );
@@ -153,22 +187,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   const SizedBox(height: 20),
                   Center(
-                    child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.fillReadOnly,
-                        image: (_avatarUrl != null && _avatarUrl!.isNotEmpty)
-                            ? DecorationImage(
-                                image: NetworkImage(_avatarUrl!),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                      ),
-                      child: (_avatarUrl == null || _avatarUrl!.isEmpty)
-                          ? const Icon(Icons.person, size: 80, color: AppColors.primary)
-                          : null,
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.fillReadOnly,
+                            image: _pickedImage != null
+                                ? DecorationImage(
+                                    image: FileImage(_pickedImage!),
+                                    fit: BoxFit.cover,
+                                  )
+                                : (_avatarUrl != null && _avatarUrl!.isNotEmpty)
+                                    ? DecorationImage(
+                                        image: NetworkImage(_avatarUrl!),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : null,
+                          ),
+                          child: (_pickedImage == null && (_avatarUrl == null || _avatarUrl!.isEmpty))
+                              ? const Icon(Icons.person, size: 80, color: AppColors.primary)
+                              : null,
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: _pickImage,
+                            child: Container(
+                              width: 34,
+                              height: 34,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.primary,
+                                border: Border.all(color: Colors.white, width: 2),
+                              ),
+                              child: const Icon(Icons.camera_alt, color: Colors.white, size: 18),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 32),

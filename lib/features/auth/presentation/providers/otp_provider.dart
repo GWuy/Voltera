@@ -107,6 +107,12 @@ class OtpProvider extends ChangeNotifier {
     }
   }
 
+  void resetStatus() {
+    _status = OtpStatus.idle;
+    _errorMessage = null;
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _timer?.cancel();

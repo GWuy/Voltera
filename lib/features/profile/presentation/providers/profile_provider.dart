@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -71,6 +73,29 @@ class ProfileProvider extends ChangeNotifier {
     if (_errorMessage != null) {
       _errorMessage = null;
       notifyListeners();
+    }
+  }
+
+  Future<String?> uploadAvatar(File imageFile) async {
+    _status = ProfileStatus.loading;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final url = await _repository.uploadAvatar(imageFile);
+      _status = ProfileStatus.success;
+      notifyListeners();
+      return url;
+    } on ApiException catch (e) {
+      _status = ProfileStatus.error;
+      _errorMessage = e.userMessage;
+      notifyListeners();
+      return null;
+    } catch (e) {
+      _status = ProfileStatus.error;
+      _errorMessage = e.toString();
+      notifyListeners();
+      return null;
     }
   }
 

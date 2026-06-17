@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../domain/repositories/profile_repository.dart';
 import '../models/profile_request.dart';
 import '../models/profile_response.dart';
@@ -16,6 +18,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<ProfileResponse> saveProfile(ProfileRequest request) =>
       _apiService.saveProfile(request);
+
+  @override
+  Future<String> uploadAvatar(File imageFile) => 
+      _apiService.uploadAvatar(imageFile);
 
   @override
   Future<void> logout(String username) => _apiService.logout(username);

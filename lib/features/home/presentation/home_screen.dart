@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../core/router/route_names.dart';
 import '../../../features/favorite/presentation/providers/favorite_provider.dart';
 import '../../../features/profile/presentation/providers/profile_provider.dart';
+import '../../../features/notification/presentation/providers/notification_provider.dart';
 import 'providers/home_provider.dart';
 import 'widgets/banner_carousel.dart';
 import 'widgets/home_app_bar.dart';
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context.read<HomeProvider>().fetchPosts();
       context.read<ProfileProvider>().loadProfile();
       context.read<FavoriteProvider>().loadFavorites();
+      context.read<NotificationProvider>().loadNotifications();
     });
     _searchController.addListener(() {
       context.read<HomeProvider>().updateSearch(_searchController.text);
