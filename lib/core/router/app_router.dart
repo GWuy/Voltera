@@ -7,6 +7,7 @@ import '../../features/profile/presentation/fill_profile_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/favorite/presentation/favorite_screen.dart';
 import '../../features/product/presentation/car_list_screen.dart';
+import '../../features/product/presentation/car_detail_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/notification/presentation/notification_screen.dart';
 import '../../features/contract/presentation/contract_preview_screen.dart';
@@ -45,6 +46,13 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: RouteNames.profile, builder: (context, state) => const ProfileScreen()),
     GoRoute(path: RouteNames.favorites, builder: (context, state) => const FavoriteScreen()),
     GoRoute(path: RouteNames.carList, builder: (context, state) => CarListScreen(brand: state.uri.queryParameters['brand'])),
+    GoRoute(
+      path: RouteNames.carDetail,
+      builder: (context, state) {
+        final postId = int.tryParse(state.uri.queryParameters['postId'] ?? '') ?? 0;
+        return CarDetailScreen(postId: postId);
+      },
+    ),
     GoRoute(path: RouteNames.notifications, builder: (context, state) => const NotificationScreen()),
     GoRoute(path: RouteNames.verifyEmail, builder: (context, state) {
       final extra = (state.extra as Map<String, dynamic>?) ?? {};
