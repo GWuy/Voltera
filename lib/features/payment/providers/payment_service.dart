@@ -20,7 +20,7 @@ class PaymentCheckoutResponse {
 }
 
 class PaymentService {
-  final _dio = ApiClient.instance.dio;
+  final _dio = ApiClient.createPublicDio();
 
   Future<PaymentCheckoutResponse> createPayment(int transactionId) async {
     final response = await _dio.post('/api/payos/create-payment/$transactionId');

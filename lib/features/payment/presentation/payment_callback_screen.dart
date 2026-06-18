@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../core/router/route_names.dart';
-import '../../transaction/data/transaction_repository_impl.dart';
+import '../providers/payment_callback_provider.dart';
 
-class PaymentCallbackScreen extends StatefulWidget {
+class PaymentCallbackScreen extends ConsumerStatefulWidget {
   final int transactionId;
   final String? initialStatus;
   final String? orderCode;
@@ -21,97 +19,58 @@ class PaymentCallbackScreen extends StatefulWidget {
   });
 
   @override
-  State<PaymentCallbackScreen> createState() => _PaymentCallbackScreenState();
+  ConsumerState<PaymentCallbackScreen> createState() => _PaymentCallbackScreenState();
 }
 
-class _PaymentCallbackScreenState extends State<PaymentCallbackScreen> {
-  Timer? _pollTimer;
-  Timer? _timeoutTimer;
-  bool _navigated = false;
-
-  final TransactionRepository _transactionRepository = TransactionRepositoryImpl();
-
+class _PaymentCallbackScreenState extends ConsumerState<PaymentCallbackScreen> {
   @override
   void initState() {
     super.initState();
-
-    debugPrint(
-        'PaymentCallback: tx=${widget.transactionId}'
-    );
-
-    debugPrint(
-        'PaymentCallback: status=${widget.initialStatus}'
-    );
-
-    final status = (widget.initialStatus ?? '').toUpperCase();
-
-    if (status == 'PAID') {
-      WidgetsBinding.instance.addPostFrameCallback(
-            (_) => _goSuccess(),
-      );
-      return;
-    }
-
-    if (status == 'CANCELLED') {
-      WidgetsBinding.instance.addPostFrameCallback(
-            (_) => _goFailed('CANCELLED'),
-      );
-      return;
-    }
-
-    _poll();
-    _pollTimer = Timer.periodic(const Duration(seconds: 3), (_) => _poll());
-    _timeoutTimer = Timer(const Duration(seconds: 60), () => _goFailed('FAILED'));
-  }
-
-  Future<void> _poll() async {
-    if (_navigated) return;
-
-    try {
-      final tx = await _transactionRepository.getTransactionDetail(widget.transactionId);
-      final status = (tx.transactionStatus ?? '').toUpperCase();
-
-      if (status == 'PAID') _goSuccess();
-      if (status == 'FAILED' || status == 'CANCELLED') _goFailed(status);
-    } catch (_) {}
-  }
-
-  void _goSuccess() {
-    if (_navigated || !mounted) return;
-    _navigated = true;
-    _stop();
-    context.go('${RouteNames.paymentSuccess}?transactionId=${widget.transactionId}');
-  }
-
-  void _goFailed(String status) {
-    if (_navigated || !mounted) return;
-    _navigated = true;
-    _stop();
-    context.go('${RouteNames.paymentFailed}?transactionId=${widget.transactionId}&status=$status');
-  }
-
-  void _stop() {
-    _pollTimer?.cancel();
-    _timeoutTimer?.cancel();
-  }
-
-  @override
-  void dispose() {
-    _stop();
-    super.dispose();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(paymentCallbackProvider(widget.transactionId).notifier).startPolling(widget.initialStatus);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(paymentCallbackProvider(widget.transactionId));
+
+    ref.listen(paymentCallbackProvider(widget.transactionId), (previous, next) {
+      if (next.status == PaymentPollStatus.paid) {
+        context.go('${RouteNames.paymentSuccess}?transactionId=${widget.transactionId}');
+      } else if (next.status == PaymentPollStatus.cancelled) {
+        context.go('${RouteNames.paymentFailed}?transactionId=${widget.transactionId}&status=CANCELLED');
+      } else if (next.status == PaymentPollStatus.failed || next.status == PaymentPollStatus.timeout) {
+        context.go('${RouteNames.paymentFailed}?transactionId=${widget.transactionId}&status=FAILED');
+      }
+    });
+
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: const [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text('Verifying payment...'),
-          ],
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(color: Color(0xFF3D3DC6)),
+                const SizedBox(height: 32),
+                const Text(
+                  'Verifying Payment',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  state.status == PaymentPollStatus.timeout
+                      ? 'Verification timed out. Check transactions list.'
+                      : 'Please wait while we confirm your transaction...',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15, color: Colors.grey.shade600),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
