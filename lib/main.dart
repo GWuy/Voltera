@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
+import 'core/deeplink/deep_link_service.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
@@ -32,8 +33,32 @@ void main() {
   );
 }
 
-class VolteraApp extends StatelessWidget {
+class VolteraApp extends StatefulWidget {
   const VolteraApp({super.key});
+
+  @override
+  State<VolteraApp> createState() => _VolteraAppState();
+}
+
+class _VolteraAppState extends State<VolteraApp> {
+  final deepLinkService = DeepLinkService();
+
+  @override
+  void initState() {
+    super.initState();
+    deepLinkService.init((uri) {
+      print('URI = $uri');
+      // Do NOT call appRouter.go(loc) here.
+      // GoRouter automatically handles incoming Android Intents and Deep Links natively.
+      // Calling it here causes duplicate navigation, leading to the GoException.
+    });
+  }
+
+  @override
+  void dispose() {
+    deepLinkService.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
