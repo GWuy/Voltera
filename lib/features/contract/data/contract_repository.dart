@@ -9,6 +9,7 @@ abstract class ContractRepository {
   Future<ContractModel> createContract(int postId);
   Future<ContractModel> signContract(String contractId);
   Future<ContractModel> cancelContract(String contractId);
+  Future<ProductInfo> getProductInfo(int contractId);
 }
 
 class ContractRepositoryImpl implements ContractRepository {
@@ -50,6 +51,7 @@ class ContractRepositoryImpl implements ContractRepository {
     // Note: The backend response has slightly different field names than our initial model
     return ContractModel(
       id: data['contractId'].toString(),
+      transactionId: data['transactionId'] ?? 0,
       createdAt: data['signedDate'] != null 
           ? DateTime.parse(data['signedDate']) 
           : DateTime.now(),
@@ -79,6 +81,42 @@ class ContractRepositoryImpl implements ContractRepository {
       signedBySeller: data['signedBySeller'] ?? false,
       signedByBuyer: data['signedByBuyer'] ?? false,
     );
+  }
+
+  @override
+  Future<ProductInfo> getProductInfo(int contractId) async {
+    final response = await _dio.get('/api/contract/product-infor/$contractId');
+    final data = response.data;
+    return _mapProductInfo(data);
+  }
+
+  ProductInfo _mapProductInfo(dynamic data) {
+    final type = (data['type'] as String?)?.toUpperCase();
+    if (type == 'VEHICLE') {
+      return ProductInfo.vehicle(
+        name: data['title'] ?? '',
+        brand: data['brand'] ?? '',
+        model: data['model'] ?? '',
+        version: data['version'] ?? '',
+        yearManufacture: data['yearManufacture'] ?? 0,
+        batteryCapacity: (data['batteryCapacity'] ?? 0).toDouble(),
+        odo: data['odo'] ?? 0,
+        color: data['color'] ?? '',
+        price: (data['price'] ?? 0).toDouble(),
+      );
+    } else {
+      return ProductInfo.battery(
+        name: data['title'] ?? '',
+        serialNumber: data['serialNumber'] ?? '',
+        originalCapacity: (data['originalCapacity'] ?? 0).toDouble(),
+        remainingCapacity: (data['remainingCapacity'] ?? 0).toDouble(),
+        voltage: (data['voltage'] ?? 0).toDouble(),
+        cycleCount: data['cycleCount'] ?? 0,
+        warranty: data['warranty'] ?? '',
+        mileageCovered: data['mileageCovered'] ?? 0,
+        price: (data['price'] ?? 0).toDouble(),
+      );
+    }
   }
 
   ContractStatus _mapStatus(String? status) {
@@ -123,9 +161,26 @@ class FakeContractRepository implements ContractRepository {
     return _mockContract(contractId).copyWith(status: ContractStatus.cancelled);
   }
 
+  @override
+  Future<ProductInfo> getProductInfo(int contractId) async {
+    await Future.delayed(const Duration(seconds: 1));
+    return const ProductInfo.vehicle(
+      name: 'VinFast VF e34',
+      brand: 'VinFast',
+      model: 'VF e34',
+      version: 'Standard',
+      yearManufacture: 2022,
+      batteryCapacity: 42.0,
+      odo: 15000,
+      color: 'Blue',
+      price: 500000000.0,
+    );
+  }
+
   ContractModel _mockContract(String id) {
     return ContractModel(
       id: id,
+      transactionId: 1,
       createdAt: DateTime.now().subtract(const Duration(days: 1)),
       status: ContractStatus.signed,
       seller: const UserInfo(

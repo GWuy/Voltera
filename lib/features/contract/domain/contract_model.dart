@@ -21,6 +21,7 @@ enum ContractStatus {
 abstract class ContractModel with _$ContractModel {
   const factory ContractModel({
     required String id,
+    required int transactionId,
     required DateTime createdAt,
     required ContractStatus status,
     required UserInfo seller,

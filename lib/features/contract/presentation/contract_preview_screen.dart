@@ -59,7 +59,7 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
           const SizedBox(height: 16),
           _buildPartyCard('Buyer Information', contract.buyer.fullName, contract.buyer.email, context),
           const SizedBox(height: 16),
-          _buildProductCard(contract.product, context),
+          _buildProductSection(int.parse(widget.contractId), context, ref),
           const SizedBox(height: 16),
           _buildSignaturesCard(contract, context),
           const SizedBox(height: 24),
@@ -286,6 +286,39 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
     );
   }
 
+  Widget _buildProductSection(int contractId, BuildContext context, WidgetRef ref) {
+    final productAsync = ref.watch(productInfoProvider(contractId));
+
+    return productAsync.when(
+      data: (product) => _buildProductCard(product, context),
+      loading: () => const Card(
+        elevation: 0,
+        child: Padding(
+          padding: EdgeInsets.all(32.0),
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      ),
+      error: (error, _) => Card(
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const Icon(Icons.error_outline, color: Colors.red),
+              const SizedBox(height: 8),
+              Text('Failed to load product info: $error'),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () => ref.invalidate(productInfoProvider(contractId)),
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildProductCard(ProductInfo product, BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -324,7 +357,7 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
               battery: (b) => Column(
                 children: [
                   _buildInfoRow('Type', 'Battery', context),
-                  _buildInfoRow('Name', b.name, context),
+                  _buildInfoRow('Title', b.name, context),
                   _buildInfoRow('Serial', b.serialNumber, context),
                   _buildInfoRow('Capacity', '${b.remainingCapacity} / ${b.originalCapacity} kWh', context),
                   _buildInfoRow('Voltage', '${b.voltage} V', context),

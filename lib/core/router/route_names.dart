@@ -13,4 +13,7 @@ class RouteNames {
   static const contractList = '/contracts';
   static const transactionList = '/transactions';
   static const transactionDetail = '/transaction-detail';
+  static const paymentCallback = '/payment/callback';
+  static const paymentSuccess = '/payment/success';
+  static const paymentFailed = '/payment/failed';
 }

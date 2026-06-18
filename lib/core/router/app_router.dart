@@ -14,6 +14,9 @@ import '../../features/contract/presentation/contract_preview_screen.dart';
 import '../../features/contract/presentation/contract_list_screen.dart';
 import '../../features/transaction/presentation/transaction_list_screen.dart';
 import '../../features/transaction/presentation/transaction_detail_screen.dart';
+import '../../features/payment/presentation/payment_callback_screen.dart';
+import '../../features/payment/presentation/payment_failed_screen.dart';
+import '../../features/payment/presentation/payment_success_screen.dart';
 import 'route_names.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -117,6 +120,29 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final id = int.parse(state.uri.queryParameters['id'] ?? '0');
         return TransactionDetailScreen(transactionId: id);
+      },
+    ),
+    GoRoute(
+      path: RouteNames.paymentCallback,
+      builder: (context, state) {
+        final id = int.parse(state.uri.queryParameters['transactionId'] ?? '0');
+        final status = state.uri.queryParameters['status'];
+        return PaymentCallbackScreen(transactionId: id, initialStatus: status);
+      },
+    ),
+    GoRoute(
+      path: RouteNames.paymentSuccess,
+      builder: (context, state) {
+        final id = int.parse(state.uri.queryParameters['transactionId'] ?? '0');
+        return PaymentSuccessScreen(transactionId: id);
+      },
+    ),
+    GoRoute(
+      path: RouteNames.paymentFailed,
+      builder: (context, state) {
+        final id = int.parse(state.uri.queryParameters['transactionId'] ?? '0');
+        final status = state.uri.queryParameters['status'] ?? 'FAILED';
+        return PaymentFailedScreen(transactionId: id, status: status);
       },
     ),
   ],

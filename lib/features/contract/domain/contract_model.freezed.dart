@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ContractModel {
 
- String get id; DateTime get createdAt; ContractStatus get status; UserInfo get seller; UserInfo get buyer; ProductInfo get product; double get salePrice; bool get signedBySeller; bool get signedByBuyer;
+ String get id; int get transactionId; DateTime get createdAt; ContractStatus get status; UserInfo get seller; UserInfo get buyer; ProductInfo get product; double get salePrice; bool get signedBySeller; bool get signedByBuyer;
 /// Create a copy of ContractModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ContractModelCopyWith<ContractModel> get copyWith => _$ContractModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContractModel&&(identical(other.id, id) || other.id == id)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.status, status) || other.status == status)&&(identical(other.seller, seller) || other.seller == seller)&&(identical(other.buyer, buyer) || other.buyer == buyer)&&(identical(other.product, product) || other.product == product)&&(identical(other.salePrice, salePrice) || other.salePrice == salePrice)&&(identical(other.signedBySeller, signedBySeller) || other.signedBySeller == signedBySeller)&&(identical(other.signedByBuyer, signedByBuyer) || other.signedByBuyer == signedByBuyer));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContractModel&&(identical(other.id, id) || other.id == id)&&(identical(other.transactionId, transactionId) || other.transactionId == transactionId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.status, status) || other.status == status)&&(identical(other.seller, seller) || other.seller == seller)&&(identical(other.buyer, buyer) || other.buyer == buyer)&&(identical(other.product, product) || other.product == product)&&(identical(other.salePrice, salePrice) || other.salePrice == salePrice)&&(identical(other.signedBySeller, signedBySeller) || other.signedBySeller == signedBySeller)&&(identical(other.signedByBuyer, signedByBuyer) || other.signedByBuyer == signedByBuyer));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,createdAt,status,seller,buyer,product,salePrice,signedBySeller,signedByBuyer);
+int get hashCode => Object.hash(runtimeType,id,transactionId,createdAt,status,seller,buyer,product,salePrice,signedBySeller,signedByBuyer);
 
 @override
 String toString() {
-  return 'ContractModel(id: $id, createdAt: $createdAt, status: $status, seller: $seller, buyer: $buyer, product: $product, salePrice: $salePrice, signedBySeller: $signedBySeller, signedByBuyer: $signedByBuyer)';
+  return 'ContractModel(id: $id, transactionId: $transactionId, createdAt: $createdAt, status: $status, seller: $seller, buyer: $buyer, product: $product, salePrice: $salePrice, signedBySeller: $signedBySeller, signedByBuyer: $signedByBuyer)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ContractModelCopyWith<$Res>  {
   factory $ContractModelCopyWith(ContractModel value, $Res Function(ContractModel) _then) = _$ContractModelCopyWithImpl;
 @useResult
 $Res call({
- String id, DateTime createdAt, ContractStatus status, UserInfo seller, UserInfo buyer, ProductInfo product, double salePrice, bool signedBySeller, bool signedByBuyer
+ String id, int transactionId, DateTime createdAt, ContractStatus status, UserInfo seller, UserInfo buyer, ProductInfo product, double salePrice, bool signedBySeller, bool signedByBuyer
 });
 
 
@@ -65,10 +65,11 @@ class _$ContractModelCopyWithImpl<$Res>
 
 /// Create a copy of ContractModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? createdAt = null,Object? status = null,Object? seller = null,Object? buyer = null,Object? product = null,Object? salePrice = null,Object? signedBySeller = null,Object? signedByBuyer = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? transactionId = null,Object? createdAt = null,Object? status = null,Object? seller = null,Object? buyer = null,Object? product = null,Object? salePrice = null,Object? signedBySeller = null,Object? signedByBuyer = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,transactionId: null == transactionId ? _self.transactionId : transactionId // ignore: cast_nullable_to_non_nullable
+as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ContractStatus,seller: null == seller ? _self.seller : seller // ignore: cast_nullable_to_non_nullable
 as UserInfo,buyer: null == buyer ? _self.buyer : buyer // ignore: cast_nullable_to_non_nullable
@@ -188,10 +189,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  DateTime createdAt,  ContractStatus status,  UserInfo seller,  UserInfo buyer,  ProductInfo product,  double salePrice,  bool signedBySeller,  bool signedByBuyer)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  int transactionId,  DateTime createdAt,  ContractStatus status,  UserInfo seller,  UserInfo buyer,  ProductInfo product,  double salePrice,  bool signedBySeller,  bool signedByBuyer)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ContractModel() when $default != null:
-return $default(_that.id,_that.createdAt,_that.status,_that.seller,_that.buyer,_that.product,_that.salePrice,_that.signedBySeller,_that.signedByBuyer);case _:
+return $default(_that.id,_that.transactionId,_that.createdAt,_that.status,_that.seller,_that.buyer,_that.product,_that.salePrice,_that.signedBySeller,_that.signedByBuyer);case _:
   return orElse();
 
 }
@@ -209,10 +210,10 @@ return $default(_that.id,_that.createdAt,_that.status,_that.seller,_that.buyer,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  DateTime createdAt,  ContractStatus status,  UserInfo seller,  UserInfo buyer,  ProductInfo product,  double salePrice,  bool signedBySeller,  bool signedByBuyer)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  int transactionId,  DateTime createdAt,  ContractStatus status,  UserInfo seller,  UserInfo buyer,  ProductInfo product,  double salePrice,  bool signedBySeller,  bool signedByBuyer)  $default,) {final _that = this;
 switch (_that) {
 case _ContractModel():
-return $default(_that.id,_that.createdAt,_that.status,_that.seller,_that.buyer,_that.product,_that.salePrice,_that.signedBySeller,_that.signedByBuyer);case _:
+return $default(_that.id,_that.transactionId,_that.createdAt,_that.status,_that.seller,_that.buyer,_that.product,_that.salePrice,_that.signedBySeller,_that.signedByBuyer);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -229,10 +230,10 @@ return $default(_that.id,_that.createdAt,_that.status,_that.seller,_that.buyer,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  DateTime createdAt,  ContractStatus status,  UserInfo seller,  UserInfo buyer,  ProductInfo product,  double salePrice,  bool signedBySeller,  bool signedByBuyer)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  int transactionId,  DateTime createdAt,  ContractStatus status,  UserInfo seller,  UserInfo buyer,  ProductInfo product,  double salePrice,  bool signedBySeller,  bool signedByBuyer)?  $default,) {final _that = this;
 switch (_that) {
 case _ContractModel() when $default != null:
-return $default(_that.id,_that.createdAt,_that.status,_that.seller,_that.buyer,_that.product,_that.salePrice,_that.signedBySeller,_that.signedByBuyer);case _:
+return $default(_that.id,_that.transactionId,_that.createdAt,_that.status,_that.seller,_that.buyer,_that.product,_that.salePrice,_that.signedBySeller,_that.signedByBuyer);case _:
   return null;
 
 }
@@ -244,10 +245,11 @@ return $default(_that.id,_that.createdAt,_that.status,_that.seller,_that.buyer,_
 @JsonSerializable()
 
 class _ContractModel implements ContractModel {
-  const _ContractModel({required this.id, required this.createdAt, required this.status, required this.seller, required this.buyer, required this.product, required this.salePrice, required this.signedBySeller, required this.signedByBuyer});
+  const _ContractModel({required this.id, required this.transactionId, required this.createdAt, required this.status, required this.seller, required this.buyer, required this.product, required this.salePrice, required this.signedBySeller, required this.signedByBuyer});
   factory _ContractModel.fromJson(Map<String, dynamic> json) => _$ContractModelFromJson(json);
 
 @override final  String id;
+@override final  int transactionId;
 @override final  DateTime createdAt;
 @override final  ContractStatus status;
 @override final  UserInfo seller;
@@ -270,16 +272,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContractModel&&(identical(other.id, id) || other.id == id)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.status, status) || other.status == status)&&(identical(other.seller, seller) || other.seller == seller)&&(identical(other.buyer, buyer) || other.buyer == buyer)&&(identical(other.product, product) || other.product == product)&&(identical(other.salePrice, salePrice) || other.salePrice == salePrice)&&(identical(other.signedBySeller, signedBySeller) || other.signedBySeller == signedBySeller)&&(identical(other.signedByBuyer, signedByBuyer) || other.signedByBuyer == signedByBuyer));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContractModel&&(identical(other.id, id) || other.id == id)&&(identical(other.transactionId, transactionId) || other.transactionId == transactionId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.status, status) || other.status == status)&&(identical(other.seller, seller) || other.seller == seller)&&(identical(other.buyer, buyer) || other.buyer == buyer)&&(identical(other.product, product) || other.product == product)&&(identical(other.salePrice, salePrice) || other.salePrice == salePrice)&&(identical(other.signedBySeller, signedBySeller) || other.signedBySeller == signedBySeller)&&(identical(other.signedByBuyer, signedByBuyer) || other.signedByBuyer == signedByBuyer));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,createdAt,status,seller,buyer,product,salePrice,signedBySeller,signedByBuyer);
+int get hashCode => Object.hash(runtimeType,id,transactionId,createdAt,status,seller,buyer,product,salePrice,signedBySeller,signedByBuyer);
 
 @override
 String toString() {
-  return 'ContractModel(id: $id, createdAt: $createdAt, status: $status, seller: $seller, buyer: $buyer, product: $product, salePrice: $salePrice, signedBySeller: $signedBySeller, signedByBuyer: $signedByBuyer)';
+  return 'ContractModel(id: $id, transactionId: $transactionId, createdAt: $createdAt, status: $status, seller: $seller, buyer: $buyer, product: $product, salePrice: $salePrice, signedBySeller: $signedBySeller, signedByBuyer: $signedByBuyer)';
 }
 
 
@@ -290,7 +292,7 @@ abstract mixin class _$ContractModelCopyWith<$Res> implements $ContractModelCopy
   factory _$ContractModelCopyWith(_ContractModel value, $Res Function(_ContractModel) _then) = __$ContractModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, DateTime createdAt, ContractStatus status, UserInfo seller, UserInfo buyer, ProductInfo product, double salePrice, bool signedBySeller, bool signedByBuyer
+ String id, int transactionId, DateTime createdAt, ContractStatus status, UserInfo seller, UserInfo buyer, ProductInfo product, double salePrice, bool signedBySeller, bool signedByBuyer
 });
 
 
@@ -307,10 +309,11 @@ class __$ContractModelCopyWithImpl<$Res>
 
 /// Create a copy of ContractModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? createdAt = null,Object? status = null,Object? seller = null,Object? buyer = null,Object? product = null,Object? salePrice = null,Object? signedBySeller = null,Object? signedByBuyer = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? transactionId = null,Object? createdAt = null,Object? status = null,Object? seller = null,Object? buyer = null,Object? product = null,Object? salePrice = null,Object? signedBySeller = null,Object? signedByBuyer = null,}) {
   return _then(_ContractModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,transactionId: null == transactionId ? _self.transactionId : transactionId // ignore: cast_nullable_to_non_nullable
+as int,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ContractStatus,seller: null == seller ? _self.seller : seller // ignore: cast_nullable_to_non_nullable
 as UserInfo,buyer: null == buyer ? _self.buyer : buyer // ignore: cast_nullable_to_non_nullable

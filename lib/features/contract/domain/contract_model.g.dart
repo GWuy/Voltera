@@ -9,6 +9,7 @@ part of 'contract_model.dart';
 _ContractModel _$ContractModelFromJson(Map<String, dynamic> json) =>
     _ContractModel(
       id: json['id'] as String,
+      transactionId: (json['transactionId'] as num).toInt(),
       createdAt: DateTime.parse(json['createdAt'] as String),
       status: $enumDecode(_$ContractStatusEnumMap, json['status']),
       seller: UserInfo.fromJson(json['seller'] as Map<String, dynamic>),
@@ -22,6 +23,7 @@ _ContractModel _$ContractModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ContractModelToJson(_ContractModel instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'transactionId': instance.transactionId,
       'createdAt': instance.createdAt.toIso8601String(),
       'status': _$ContractStatusEnumMap[instance.status]!,
       'seller': instance.seller,

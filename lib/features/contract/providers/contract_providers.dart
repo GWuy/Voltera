@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/contract_repository.dart';
 import '../domain/contract_model.dart';
+import '../domain/product_info.dart';
 import '../services/contract_pdf_service.dart';
 
 final contractRepositoryProvider = Provider<ContractRepository>((ref) {
@@ -20,4 +21,9 @@ final contractProvider = FutureProvider.family<ContractModel, String>((ref, id) 
 final contractsListProvider = FutureProvider<List<ContractModel>>((ref) {
   final repository = ref.watch(contractRepositoryProvider);
   return repository.getContracts();
+});
+
+final productInfoProvider = FutureProvider.family<ProductInfo, int>((ref, contractId) {
+  final repository = ref.watch(contractRepositoryProvider);
+  return repository.getProductInfo(contractId);
 });
