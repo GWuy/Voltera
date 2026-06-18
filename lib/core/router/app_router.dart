@@ -12,6 +12,8 @@ import '../../features/home/presentation/home_screen.dart';
 import '../../features/notification/presentation/notification_screen.dart';
 import '../../features/contract/presentation/contract_preview_screen.dart';
 import '../../features/contract/presentation/contract_list_screen.dart';
+import '../../features/transaction/presentation/transaction_list_screen.dart';
+import '../../features/transaction/presentation/transaction_detail_screen.dart';
 import 'route_names.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -103,6 +105,19 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteNames.contractList,
       builder: (context, state) => const ContractListScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.transactionList,
+      builder: (context, state) => const TransactionListScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.transactionDetail,
+      builder: (context, state) {
+        final id = int.parse(state.uri.queryParameters['id'] ?? '0');
+        return TransactionDetailScreen(transactionId: id);
+      },
     ),
   ],
 );

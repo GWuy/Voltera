@@ -11,4 +11,6 @@ class RouteNames {
   static const notifications = '/notifications';
   static const contractPreview = '/contract-preview';
   static const contractList = '/contracts';
+  static const transactionList = '/transactions';
+  static const transactionDetail = '/transaction-detail';
 }

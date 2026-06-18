@@ -23,6 +23,7 @@ class HomeBottomNav extends StatelessWidget {
       (icon: Icons.home_rounded, label: 'Home'),
       (icon: Icons.favorite_border_rounded, label: 'Favourite'),
       (icon: Icons.description_outlined, label: 'Contract'),
+      (icon: Icons.swap_horiz_rounded, label: 'Transaction'),
       (icon: Icons.person_outline_rounded, label: 'Profile'),
     ];
 
@@ -51,6 +52,8 @@ class HomeBottomNav extends StatelessWidget {
                   } else if (i == 2) {
                     context.push(RouteNames.contractList);
                   } else if (i == 3) {
+                    context.push(RouteNames.transactionList);
+                  } else if (i == 4) {
                     context.go(RouteNames.profile);
                   } else {
                     onIndexChanged(i);
