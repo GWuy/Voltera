@@ -122,7 +122,9 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/payment/callback',
       builder: (context, state) {
-        print('=== CALLBACK ROUTE HIT ===');
+        if (kDebugMode) {
+          print('=== CALLBACK ROUTE HIT ===');
+        }
         print('URI = ${state.uri}');
 
         final id =

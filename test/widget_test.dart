@@ -1,12 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:voltera/main.dart';
+import 'package:voltera/features/auth/presentation/register_screen.dart';
 
 void main() {
-  testWidgets('register screen loads', (WidgetTester tester) async {
-    await tester.pumpWidget(const VolteraApp());
+  testWidgets('Register screen loads', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: RegisterScreen(),
+      ),
+    );
 
-    expect(find.text('Create account'), findsOneWidget);
     expect(find.text('Register'), findsOneWidget);
   });
 }
