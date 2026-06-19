@@ -4,11 +4,7 @@ import 'package:voltera/features/auth/presentation/register_screen.dart';
 
 void main() {
   testWidgets('Register screen loads', (tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: RegisterScreen(),
-      ),
-    );
+    await tester.pumpWidget(const MaterialApp(home: RegisterScreen()));
 
     expect(find.text('Register'), findsOneWidget);
   });
