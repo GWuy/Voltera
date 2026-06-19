@@ -10,7 +10,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
   final _dio = ApiClient.instance.dio;
 
   @override
-    Future<List<TransactionModel>> getTransactionsByStatus(String status) async {
+  Future<List<TransactionModel>> getTransactionsByStatus(String status) async {
     final response = await _dio.get('/api/transactions/by-status/$status');
     final List list = response.data;
     return list.map((json) => TransactionModel.fromJson(json)).toList();

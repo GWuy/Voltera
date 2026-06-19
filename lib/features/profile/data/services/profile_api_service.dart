@@ -6,7 +6,6 @@ import 'package:voltera/core/network/api_client.dart';
 import 'package:voltera/features/profile/data/models/profile_request.dart';
 import 'package:voltera/features/profile/data/models/profile_response.dart';
 
-
 /// Low-level API service for profile endpoints.
 ///
 /// Uses the shared authenticated [Dio] instance from [ApiClient].
@@ -24,7 +23,8 @@ class ProfileApiService {
       return ProfileResponse.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       debugPrint(
-          'ProfileApiService GET: ${e.response?.statusCode} ${e.response?.data}');
+        'ProfileApiService GET: ${e.response?.statusCode} ${e.response?.data}',
+      );
       rethrow;
     }
   }
@@ -39,7 +39,8 @@ class ProfileApiService {
       return ProfileResponse.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       debugPrint(
-          'ProfileApiService PUT: ${e.response?.statusCode} ${e.response?.data}');
+        'ProfileApiService PUT: ${e.response?.statusCode} ${e.response?.data}',
+      );
       rethrow;
     }
   }
@@ -49,26 +50,27 @@ class ProfileApiService {
     try {
       String fileName = imageFile.path.split('/').last;
       FormData formData = FormData.fromMap({
-        "file": await MultipartFile.fromFile(imageFile.path, filename: fileName),
+        "file": await MultipartFile.fromFile(
+          imageFile.path,
+          filename: fileName,
+        ),
       });
 
       final response = await _dio.post(
         '/api/upload/avatar',
         data: formData,
-        options: Options(
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        ),
+        options: Options(headers: {"Content-Type": "multipart/form-data"}),
       );
-      
+
       // Assuming the response returns the URL in data or data['url']
       if (response.data is Map && response.data['url'] != null) {
         return response.data['url'] as String;
       }
       return response.data.toString();
     } on DioException catch (e) {
-      debugPrint('ProfileApiService UPLOAD AVATAR: ${e.response?.statusCode} ${e.response?.data}');
+      debugPrint(
+        'ProfileApiService UPLOAD AVATAR: ${e.response?.statusCode} ${e.response?.data}',
+      );
       rethrow;
     }
   }
@@ -81,7 +83,9 @@ class ProfileApiService {
         queryParameters: {'username': username},
       );
     } on DioException catch (e) {
-      debugPrint('ProfileApiService LOGOUT: ${e.response?.statusCode} ${e.response?.data}');
+      debugPrint(
+        'ProfileApiService LOGOUT: ${e.response?.statusCode} ${e.response?.data}',
+      );
       rethrow;
     }
   }

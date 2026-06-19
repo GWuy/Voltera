@@ -3,8 +3,6 @@ import 'package:voltera/features/auth/data/models/login_response.dart';
 import 'package:voltera/features/auth/data/models/register_request.dart';
 import 'package:voltera/features/auth/data/models/register_response.dart';
 
-
-
 /// Abstract interface for authentication operations.
 ///
 /// This abstraction allows the presentation layer to depend on a contract

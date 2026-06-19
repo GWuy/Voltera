@@ -48,10 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
     provider.clearError();
     if (!_formKey.currentState!.validate()) return;
 
-    provider.login(
-      _emailController.text.trim(),
-      _passwordController.text,
-    );
+    provider.login(_emailController.text.trim(), _passwordController.text);
   }
 
   @override
@@ -75,11 +72,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       final response = auth.loginResponse!;
                       auth.reset();
                       if (!response.updatedProfile) {
-                        context.go(RouteNames.fillProfile, extra: {
-                          'userId': response.userId,
-                          'token': response.token,
-                          'role': response.role,
-                        });
+                        context.go(
+                          RouteNames.fillProfile,
+                          extra: {
+                            'userId': response.userId,
+                            'token': response.token,
+                            'role': response.role,
+                          },
+                        );
                       } else {
                         context.go(RouteNames.home);
                       }
@@ -123,7 +123,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             size: 22,
                           ),
                           onPressed: () => setState(
-                              () => _obscurePassword = !_obscurePassword),
+                            () => _obscurePassword = !_obscurePassword,
+                          ),
                         ),
                         validator: (v) => Validators.password(v, minLength: 1),
                         onChanged: (_) => auth.clearError(),
@@ -133,7 +134,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       // Remember me + Forgot Password
                       RememberMeRow(
                         value: _rememberMe,
-                        onChanged: (value) => setState(() => _rememberMe = value),
+                        onChanged: (value) =>
+                            setState(() => _rememberMe = value),
                         onForgotPassword: () {},
                       ),
 

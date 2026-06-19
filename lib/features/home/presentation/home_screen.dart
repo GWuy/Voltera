@@ -65,7 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SliverToBoxAdapter(child: HomeAppBar()),
                   const SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
                     ),
                   ),
                   const SliverToBoxAdapter(child: BannerCarousel()),
@@ -92,29 +95,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: HomeErrorState(homeProvider: homeProvider),
                     )
                   else if (homeProvider.filteredPosts.isEmpty)
-                    const SliverFillRemaining(
-                      child: HomeEmptyState(),
-                    )
+                    const SliverFillRemaining(child: HomeEmptyState())
                   else
                     SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final post = homeProvider.filteredPosts[index];
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
-                            child: GestureDetector(
-                              onTap: () => context.push(
-                                '${RouteNames.carDetail}?postId=${post.postId}',
-                              ),
-                              child: PostCard(
-                                post: post,
-                                formatPrice: homeProvider.formatPrice,
-                              ),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final post = homeProvider.filteredPosts[index];
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
+                          child: GestureDetector(
+                            onTap: () => context.push(
+                              '${RouteNames.carDetail}?postId=${post.postId}',
                             ),
-                          );
-                        },
-                        childCount: homeProvider.filteredPosts.length,
-                      ),
+                            child: PostCard(
+                              post: post,
+                              formatPrice: homeProvider.formatPrice,
+                            ),
+                          ),
+                        );
+                      }, childCount: homeProvider.filteredPosts.length),
                     ),
                   const SliverToBoxAdapter(child: SizedBox(height: 20)),
                 ],

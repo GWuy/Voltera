@@ -37,20 +37,27 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
       builder: (context, provider, _) {
         if (provider.detailStatus == ProductStatus.loading) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator(color: Color(0xFF3D3DC6))),
+            body: Center(
+              child: CircularProgressIndicator(color: Color(0xFF3D3DC6)),
+            ),
           );
         }
 
-        if (provider.detailStatus == ProductStatus.error || provider.detail == null) {
+        if (provider.detailStatus == ProductStatus.error ||
+            provider.detail == null) {
           return Scaffold(
             appBar: AppBar(),
-            body: Center(child: Text(provider.errorMessage ?? 'Failed to load details')),
+            body: Center(
+              child: Text(provider.errorMessage ?? 'Failed to load details'),
+            ),
           );
         }
 
         final _post = provider.detail!;
         final car = _post.vehicle;
-        final images = _post.imageUrls.isNotEmpty ? _post.imageUrls : [_post.thumbnail ?? ''];
+        final images = _post.imageUrls.isNotEmpty
+            ? _post.imageUrls
+            : [_post.thumbnail ?? ''];
 
         return Scaffold(
           backgroundColor: const Color(0xFFF7F8FC),
@@ -63,14 +70,21 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
             ),
             title: Text(
               _post.title ?? 'Car Detail',
-              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
             actions: [
               provider_pkg.Consumer<FavoriteProvider>(
                 builder: (context, favProvider, _) {
                   final isFav = favProvider.isFavorite(_post.postId ?? 0);
                   return IconButton(
-                    icon: Icon(isFav ? Icons.favorite : Icons.favorite_border, color: isFav ? Colors.red : Colors.black),
+                    icon: Icon(
+                      isFav ? Icons.favorite : Icons.favorite_border,
+                      color: isFav ? Colors.red : Colors.black,
+                    ),
                     onPressed: () => favProvider.toggleFavorite(
                       _post.postId ?? 0,
                       title: _post.title,
@@ -91,7 +105,10 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
                   child: Text(
                     'Home > Vehicles > ${_post.title}',
                     style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
@@ -108,7 +125,9 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
-                          image: CachedNetworkImageProvider(images[_selectedImageIndex]),
+                          image: CachedNetworkImageProvider(
+                            images[_selectedImageIndex],
+                          ),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -126,13 +145,19 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                     itemBuilder: (context, index) {
                       final isSelected = _selectedImageIndex == index;
                       return GestureDetector(
-                        onTap: () => setState(() => _selectedImageIndex = index),
+                        onTap: () =>
+                            setState(() => _selectedImageIndex = index),
                         child: Container(
                           width: 80,
                           margin: const EdgeInsets.only(right: 12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: isSelected ? const Color(0xFF3D3DC6) : Colors.transparent, width: 2),
+                            border: Border.all(
+                              color: isSelected
+                                  ? const Color(0xFF3D3DC6)
+                                  : Colors.transparent,
+                              width: 2,
+                            ),
                             image: DecorationImage(
                               image: CachedNetworkImageProvider(images[index]),
                               fit: BoxFit.cover,
@@ -188,11 +213,17 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                           Expanded(
                             child: Text(
                               '${car?.brand} ${car?.model}\n${car?.version}',
-                              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.green.shade50,
                               borderRadius: BorderRadius.circular(8),
@@ -203,18 +234,42 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                       const SizedBox(height: 8),
                       Text(
                         _priceFormat.format(_post.price ?? 0),
-                        style: const TextStyle(color: Color(0xFF3D3DC6), fontSize: 24, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          color: Color(0xFF3D3DC6),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          Icon(Icons.location_on_outlined, size: 14, color: Colors.grey.shade500),
+                          Icon(
+                            Icons.location_on_outlined,
+                            size: 14,
+                            color: Colors.grey.shade500,
+                          ),
                           const SizedBox(width: 4),
-                          Text(_post.location ?? 'N/A', style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
+                          Text(
+                            _post.location ?? 'N/A',
+                            style: TextStyle(
+                              color: Colors.grey.shade500,
+                              fontSize: 12,
+                            ),
+                          ),
                           const SizedBox(width: 16),
-                          Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey.shade500),
+                          Icon(
+                            Icons.calendar_today_outlined,
+                            size: 14,
+                            color: Colors.grey.shade500,
+                          ),
                           const SizedBox(width: 4),
-                          Text('Posted Jun 10, 2026', style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
+                          Text(
+                            'Posted Jun 10, 2026',
+                            style: TextStyle(
+                              color: Colors.grey.shade500,
+                              fontSize: 12,
+                            ),
+                          ),
                         ],
                       ),
                       const Divider(height: 32),
@@ -230,8 +285,16 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           _buildSpecIcon(Icons.speed, '155 mph', 'Top Speed'),
-                          _buildSpecIcon(Icons.timer_outlined, '2.5 sec', '0-60mph'),
-                          _buildSpecIcon(Icons.electric_car, '${car?.range ?? 0} km', 'Range'),
+                          _buildSpecIcon(
+                            Icons.timer_outlined,
+                            '2.5 sec',
+                            '0-60mph',
+                          ),
+                          _buildSpecIcon(
+                            Icons.electric_car,
+                            '${car?.range ?? 0} km',
+                            'Range',
+                          ),
                         ],
                       ),
                     ],
@@ -250,7 +313,10 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                       _buildSpecRow('Model', car?.model ?? 'N/A'),
                       _buildSpecRow('Color', car?.color ?? 'N/A'),
                       _buildSpecRow('Style', car?.style ?? 'N/A'),
-                      _buildSpecRow('Battery', '${car?.batteryCapacity ?? 0}kWh'),
+                      _buildSpecRow(
+                        'Battery',
+                        '${car?.batteryCapacity ?? 0}kWh',
+                      ),
                       _buildSpecRow('Seats', '${car?.numberOfSeat ?? 0}'),
                       _buildSpecRow('Odometer', '${car?.odo ?? 0}km'),
                       _buildSpecRow('Charging', '${car?.chargingTime ?? 0}h'),
@@ -265,9 +331,16 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.location_on, color: Color(0xFF3D3DC6), size: 18),
+                          const Icon(
+                            Icons.location_on,
+                            color: Color(0xFF3D3DC6),
+                            size: 18,
+                          ),
                           const SizedBox(width: 8),
-                          Text(_post.location ?? 'N/A', style: const TextStyle(fontWeight: FontWeight.w500)),
+                          Text(
+                            _post.location ?? 'N/A',
+                            style: const TextStyle(fontWeight: FontWeight.w500),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -291,8 +364,21 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Price Cash', style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
-                    Text(_priceFormat.format(_post.price ?? 0), style: const TextStyle(color: Color(0xFF3D3DC6), fontWeight: FontWeight.bold, fontSize: 18)),
+                    Text(
+                      'Price Cash',
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      _priceFormat.format(_post.price ?? 0),
+                      style: const TextStyle(
+                        color: Color(0xFF3D3DC6),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
                   ],
                 ),
                 const Spacer(),
@@ -312,34 +398,47 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                         onPressed: () async {
                           try {
                             showDialog(
-                              context: context, 
+                              context: context,
                               barrierDismissible: false,
-                              builder: (_) => const Center(child: CircularProgressIndicator())
+                              builder: (_) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             );
-                            
-                            final contract = await ref.read(contractRepositoryProvider).createContract(_post.postId ?? 0);
-                            
+
+                            final contract = await ref
+                                .read(contractRepositoryProvider)
+                                .createContract(_post.postId ?? 0);
+
                             if (context.mounted) {
                               Navigator.pop(context); // close dialog
-                              context.push('${RouteNames.contractPreview}?id=${contract.id}');
+                              context.push(
+                                '${RouteNames.contractPreview}?id=${contract.id}',
+                              );
                             }
                           } catch (e) {
                             if (context.mounted) {
                               Navigator.pop(context); // close dialog
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Error: $e')),
+                              );
                             }
                           }
                         },
                         icon: const Icon(Icons.handshake_outlined),
-                        label: const Text('Contract', style: TextStyle(fontWeight: FontWeight.bold)),
+                        label: const Text(
+                          'Contract',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF3D3DC6),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                         ),
                       );
-                    }
+                    },
                   ),
                 ),
               ],
@@ -373,7 +472,10 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (title != null) ...[
-            Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 16),
           ],
           child,
@@ -394,7 +496,14 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
         children: [
           const Icon(Icons.check_circle, color: Color(0xFF3D3DC6), size: 14),
           const SizedBox(width: 6),
-          Text(label, style: const TextStyle(color: Color(0xFF3D3DC6), fontSize: 11, fontWeight: FontWeight.w500)),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Color(0xFF3D3DC6),
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ],
       ),
     );
@@ -405,8 +514,14 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
       children: [
         Icon(icon, color: Colors.grey.shade400, size: 24),
         const SizedBox(height: 8),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-        Text(label, style: TextStyle(color: Colors.grey.shade500, fontSize: 11)),
+        Text(
+          value,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        ),
+        Text(
+          label,
+          style: TextStyle(color: Colors.grey.shade500, fontSize: 11),
+        ),
       ],
     );
   }
@@ -416,8 +531,14 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(label, style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+        Text(
+          label,
+          style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+        ),
+        Text(
+          value,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        ),
       ],
     );
   }

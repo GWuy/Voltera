@@ -32,5 +32,6 @@ abstract class ContractModel with _$ContractModel {
     required bool signedByBuyer,
   }) = _ContractModel;
 
-  factory ContractModel.fromJson(Map<String, dynamic> json) => _$ContractModelFromJson(json);
+  factory ContractModel.fromJson(Map<String, dynamic> json) =>
+      _$ContractModelFromJson(json);
 }

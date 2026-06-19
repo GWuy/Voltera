@@ -14,28 +14,34 @@ class ContractPdfService {
     final fontBold = await PdfGoogleFonts.robotoBold();
 
     final dateFormatter = DateFormat('MMMM dd, yyyy');
-    final currencyFormatter = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
+    final currencyFormatter = NumberFormat.currency(
+      symbol: '\$',
+      decimalDigits: 2,
+    );
 
     pdf.addPage(
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
         margin: const pw.EdgeInsets.all(32),
-        theme: pw.ThemeData.withFont(
-          base: fontRegular,
-          bold: fontBold,
-        ),
+        theme: pw.ThemeData.withFont(base: fontRegular, bold: fontBold),
         header: (context) {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.center,
             children: [
               pw.Text(
                 'SOCIALIST REPUBLIC OF VIETNAM',
-                style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 16,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
               pw.SizedBox(height: 4),
               pw.Text(
                 'Independence - Freedom - Happiness',
-                style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 14,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
               pw.SizedBox(height: 8),
               pw.Divider(),
@@ -65,11 +71,14 @@ class ContractPdfService {
             pw.Center(
               child: pw.Text(
                 'ELECTRIC VEHICLE SALES CONTRACT',
-                style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 20,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
             ),
             pw.SizedBox(height: 24),
-            
+
             // Contract Info
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -87,11 +96,19 @@ class ContractPdfService {
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Expanded(
-                  child: _buildPartyInfo('Seller Information', contract.seller.fullName, contract.seller.email),
+                  child: _buildPartyInfo(
+                    'Seller Information',
+                    contract.seller.fullName,
+                    contract.seller.email,
+                  ),
                 ),
                 pw.SizedBox(width: 16),
                 pw.Expanded(
-                  child: _buildPartyInfo('Buyer Information', contract.buyer.fullName, contract.buyer.email),
+                  child: _buildPartyInfo(
+                    'Buyer Information',
+                    contract.buyer.fullName,
+                    contract.buyer.email,
+                  ),
                 ),
               ],
             ),
@@ -115,22 +132,30 @@ class ContractPdfService {
             // Terms
             _buildSectionTitle('4. Terms and Conditions'),
             pw.SizedBox(height: 8),
-            _buildParagraph('Both parties agree to the terms and conditions outlined in this contract. The seller guarantees that the product is free from any liens or encumbrances and has the legal right to sell the product.'),
+            _buildParagraph(
+              'Both parties agree to the terms and conditions outlined in this contract. The seller guarantees that the product is free from any liens or encumbrances and has the legal right to sell the product.',
+            ),
             pw.SizedBox(height: 16),
 
             _buildSectionTitle('5. Rights and Obligations of Seller'),
             pw.SizedBox(height: 8),
-            _buildParagraph('The seller is obligated to hand over the product in the described condition along with all necessary documents. The seller must assist the buyer in the transfer of ownership if required.'),
+            _buildParagraph(
+              'The seller is obligated to hand over the product in the described condition along with all necessary documents. The seller must assist the buyer in the transfer of ownership if required.',
+            ),
             pw.SizedBox(height: 16),
 
             _buildSectionTitle('6. Rights and Obligations of Buyer'),
             pw.SizedBox(height: 8),
-            _buildParagraph('The buyer is obligated to pay the agreed sale price in full. Upon taking possession, the buyer assumes all responsibility for the product.'),
+            _buildParagraph(
+              'The buyer is obligated to pay the agreed sale price in full. Upon taking possession, the buyer assumes all responsibility for the product.',
+            ),
             pw.SizedBox(height: 16),
 
             _buildSectionTitle('7. Contract Effectiveness'),
             pw.SizedBox(height: 8),
-            _buildParagraph('This contract becomes effective immediately upon signing by both parties.'),
+            _buildParagraph(
+              'This contract becomes effective immediately upon signing by both parties.',
+            ),
             pw.SizedBox(height: 48),
 
             // Signatures
@@ -168,7 +193,10 @@ class ContractPdfService {
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          pw.Text(title, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12)),
+          pw.Text(
+            title,
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12),
+          ),
           pw.SizedBox(height: 8),
           pw.Text('Full Name: $name', style: const pw.TextStyle(fontSize: 12)),
           pw.SizedBox(height: 4),
@@ -191,7 +219,10 @@ class ContractPdfService {
           children: [
             _buildInfoRow('Type:', 'Vehicle'),
             _buildInfoRow('Name:', v.name),
-            _buildInfoRow('Brand/Model:', '${v.brand} ${v.model} (${v.version})'),
+            _buildInfoRow(
+              'Brand/Model:',
+              '${v.brand} ${v.model} (${v.version})',
+            ),
             _buildInfoRow('Year:', '${v.yearManufacture}'),
             _buildInfoRow('Battery Capacity:', '${v.batteryCapacity} kWh'),
             _buildInfoRow('ODO:', '${v.odo} km'),
@@ -204,7 +235,10 @@ class ContractPdfService {
             _buildInfoRow('Type:', 'Battery'),
             _buildInfoRow('Name:', b.name),
             _buildInfoRow('Serial Number:', b.serialNumber),
-            _buildInfoRow('Capacity:', '${b.remainingCapacity} / ${b.originalCapacity} kWh'),
+            _buildInfoRow(
+              'Capacity:',
+              '${b.remainingCapacity} / ${b.originalCapacity} kWh',
+            ),
             _buildInfoRow('Voltage:', '${b.voltage} V'),
             _buildInfoRow('Cycle Count:', '${b.cycleCount}'),
             _buildInfoRow('Warranty:', b.warranty),
@@ -222,7 +256,10 @@ class ContractPdfService {
         children: [
           pw.SizedBox(
             width: 120,
-            child: pw.Text(label, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12)),
+            child: pw.Text(
+              label,
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12),
+            ),
           ),
           pw.Expanded(
             child: pw.Text(value, style: const pw.TextStyle(fontSize: 12)),
@@ -254,7 +291,9 @@ class ContractPdfService {
           height: 60,
           alignment: pw.Alignment.center,
           decoration: pw.BoxDecoration(
-            border: pw.Border.all(color: isSigned ? PdfColors.green : PdfColors.red),
+            border: pw.Border.all(
+              color: isSigned ? PdfColors.green : PdfColors.red,
+            ),
             borderRadius: const pw.BorderRadius.all(pw.Radius.circular(4)),
           ),
           child: pw.Text(

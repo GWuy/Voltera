@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:voltera/core/theme/app_colors.dart';
 
-
 /// Social login buttons row (Google, Facebook, GitHub).
 ///
 /// Extracted from login_screen to reduce file size and enable reuse.

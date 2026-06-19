@@ -1,6 +1,5 @@
 import 'package:voltera/features/home/data/models/post_response.dart';
 
-
 /// Abstract interface for post/listing operations.
 abstract class PostRepository {
   /// Fetches all approved posts.

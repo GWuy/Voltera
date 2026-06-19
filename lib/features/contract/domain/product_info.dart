@@ -29,5 +29,6 @@ sealed class ProductInfo with _$ProductInfo {
     required double price,
   }) = BatteryInfo;
 
-  factory ProductInfo.fromJson(Map<String, dynamic> json) => _$ProductInfoFromJson(json);
+  factory ProductInfo.fromJson(Map<String, dynamic> json) =>
+      _$ProductInfoFromJson(json);
 }

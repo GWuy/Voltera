@@ -55,19 +55,28 @@ class CarListItemCard extends StatelessWidget {
                       Text(
                         car.title ?? 'No Name',
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          const Icon(Icons.star,
-                              color: Colors.orange, size: 16),
+                          const Icon(
+                            Icons.star,
+                            color: Colors.orange,
+                            size: 16,
+                          ),
                           const SizedBox(width: 4),
-                          Text('4.8',
-                              style: TextStyle(
-                                  color: Colors.grey.shade600, fontSize: 14)),
+                          Text(
+                            '4.8',
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 12),
@@ -76,12 +85,19 @@ class CarListItemCard extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.speed,
-                                  color: Colors.grey.shade400, size: 18),
+                              Icon(
+                                Icons.speed,
+                                color: Colors.grey.shade400,
+                                size: 18,
+                              ),
                               const SizedBox(width: 4),
-                              Text('${car.vehicle?.odo ?? 0} km',
-                                  style: const TextStyle(
-                                      fontSize: 12, color: Colors.grey)),
+                              Text(
+                                '${car.vehicle?.odo ?? 0} km',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ],
                           ),
                           Text(

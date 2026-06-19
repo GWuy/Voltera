@@ -64,7 +64,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
-    final picked = await picker.pickImage(source: ImageSource.gallery, imageQuality: 85);
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+    );
     if (picked != null) {
       setState(() {
         _pickedImage = File(picked.path);
@@ -132,9 +135,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context.go(RouteNames.login);
     } else {
       final error = context.read<ProfileProvider>().errorMessage;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error ?? 'Logout failed')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error ?? 'Logout failed')));
     }
   }
 
@@ -153,9 +156,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (context, provider, _) {
         final isLoading = provider.status == ProfileStatus.loading;
 
-        if (provider.status == ProfileStatus.loading && provider.profile == null) {
+        if (provider.status == ProfileStatus.loading &&
+            provider.profile == null) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator(color: AppColors.primary)),
+            body: Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            ),
           );
         }
 
@@ -201,14 +207,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     fit: BoxFit.cover,
                                   )
                                 : (_avatarUrl != null && _avatarUrl!.isNotEmpty)
-                                    ? DecorationImage(
-                                        image: NetworkImage(_avatarUrl!),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : null,
+                                ? DecorationImage(
+                                    image: NetworkImage(_avatarUrl!),
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
                           ),
-                          child: (_pickedImage == null && (_avatarUrl == null || _avatarUrl!.isEmpty))
-                              ? const Icon(Icons.person, size: 80, color: AppColors.primary)
+                          child:
+                              (_pickedImage == null &&
+                                  (_avatarUrl == null || _avatarUrl!.isEmpty))
+                              ? const Icon(
+                                  Icons.person,
+                                  size: 80,
+                                  color: AppColors.primary,
+                                )
                               : null,
                         ),
                         Positioned(
@@ -222,9 +234,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: AppColors.primary,
-                                border: Border.all(color: Colors.white, width: 2),
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 2,
+                                ),
                               ),
-                              child: const Icon(Icons.camera_alt, color: Colors.white, size: 18),
+                              child: const Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                                size: 18,
+                              ),
                             ),
                           ),
                         ),
@@ -282,11 +301,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: const Icon(Icons.logout, color: Colors.red),
                       label: const Text(
                         'Logout',
-                        style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.red, width: 1.5),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
                     ),
                   ),
@@ -300,16 +325,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                         elevation: 0,
                       ),
                       child: isLoading
                           ? const SizedBox(
                               width: 24,
                               height: 24,
-                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
                             )
-                          : const Text('Submit', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          : const Text(
+                              'Submit',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 40),
@@ -325,7 +361,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildLabel(String text) {
     return Text(
       text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textDark),
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: AppColors.textDark,
+      ),
     );
   }
 
@@ -343,7 +383,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         prefixIcon: Icon(prefixIcon, color: Colors.grey, size: 22),
         filled: true,
         fillColor: AppColors.fill,
-        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -357,10 +400,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       value: _gender,
       icon: const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
       decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.person_outline, color: Colors.grey, size: 22),
+        prefixIcon: const Icon(
+          Icons.person_outline,
+          color: Colors.grey,
+          size: 22,
+        ),
         filled: true,
         fillColor: AppColors.fill,
-        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -368,7 +418,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       borderRadius: BorderRadius.circular(12),
       dropdownColor: Colors.white,
-      hint: const Text('Select Gender', style: TextStyle(color: Colors.grey, fontSize: 14)),
+      hint: const Text(
+        'Select Gender',
+        style: TextStyle(color: Colors.grey, fontSize: 14),
+      ),
       items: const [
         DropdownMenuItem(value: true, child: Text('Male')),
         DropdownMenuItem(value: false, child: Text('Female')),

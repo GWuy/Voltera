@@ -21,9 +21,10 @@ class HomeEmptyState extends StatelessWidget {
               'No listings found',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: _kTextDark),
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: _kTextDark,
+              ),
             ),
             SizedBox(height: 4),
             Text(

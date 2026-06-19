@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:voltera/core/network/api_client.dart';
 import 'package:voltera/features/home/data/models/post_response.dart';
 
-
 /// Low-level API service for post/listing endpoints.
 ///
 /// Uses the shared authenticated [Dio] instance from [ApiClient].
@@ -35,8 +34,10 @@ class PostApiService {
           .map((e) => PostResponse.fromJson(e as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
-      debugPrint('PostApiService [$path] error: '
-          '${e.response?.statusCode} ${e.response?.data}');
+      debugPrint(
+        'PostApiService [$path] error: '
+        '${e.response?.statusCode} ${e.response?.data}',
+      );
       rethrow;
     }
   }

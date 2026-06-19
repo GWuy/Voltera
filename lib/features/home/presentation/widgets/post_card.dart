@@ -39,8 +39,9 @@ class PostCard extends StatelessWidget {
           Stack(
             children: [
               ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(18)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(18),
+                ),
                 child: thumb != null
                     ? CachedNetworkImage(
                         imageUrl: thumb,
@@ -52,16 +53,19 @@ class PostCard extends StatelessWidget {
                           color: const Color(0xFFF3F4F6),
                           child: const Center(
                             child: CircularProgressIndicator(
-                                color: _kPrimary, strokeWidth: 2),
+                              color: _kPrimary,
+                              strokeWidth: 2,
+                            ),
                           ),
                         ),
                         errorWidget: (ctx, url, err) => Container(
                           height: 180,
                           color: const Color(0xFFF3F4F6),
                           child: const Icon(
-                              Icons.image_not_supported_rounded,
-                              color: _kTextMid,
-                              size: 40),
+                            Icons.image_not_supported_rounded,
+                            color: _kTextMid,
+                            size: 40,
+                          ),
                         ),
                       )
                     : Container(
@@ -95,11 +99,13 @@ class PostCard extends StatelessWidget {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(success
-                                  ? (isFav
-                                      ? 'Removed from favorites'
-                                      : 'Added to favorites')
-                                  : 'Failed to update favorites'),
+                              content: Text(
+                                success
+                                    ? (isFav
+                                          ? 'Removed from favorites'
+                                          : 'Added to favorites')
+                                    : 'Failed to update favorites',
+                              ),
                               duration: const Duration(seconds: 1),
                             ),
                           );
@@ -115,7 +121,7 @@ class PostCard extends StatelessWidget {
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 6,
-                            )
+                            ),
                           ],
                         ),
                         child: Icon(
@@ -134,11 +140,12 @@ class PostCard extends StatelessWidget {
                 top: 10,
                 left: 10,
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
                   decoration: BoxDecoration(
-                    color:
-                        isBattery ? const Color(0xFF059669) : _kPrimary,
+                    color: isBattery ? const Color(0xFF059669) : _kPrimary,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -190,14 +197,19 @@ class PostCard extends StatelessWidget {
                 Row(
                   children: [
                     if (post.location != null) ...[
-                      const Icon(Icons.location_on_rounded,
-                          size: 14, color: _kTextMid),
+                      const Icon(
+                        Icons.location_on_rounded,
+                        size: 14,
+                        color: _kTextMid,
+                      ),
                       const SizedBox(width: 3),
                       Expanded(
                         child: Text(
                           post.location!,
-                          style:
-                              const TextStyle(fontSize: 12, color: _kTextMid),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: _kTextMid,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -232,14 +244,17 @@ class PostCard extends StatelessWidget {
       spacing: 12,
       children: [
         _PostDetail(
-            icon: Icons.bolt_rounded,
-            label: '${battery.voltage?.toStringAsFixed(0) ?? '--'} V'),
+          icon: Icons.bolt_rounded,
+          label: '${battery.voltage?.toStringAsFixed(0) ?? '--'} V',
+        ),
         _PostDetail(
-            icon: Icons.loop_rounded,
-            label: '${battery.cycleCount ?? '--'} cycles'),
+          icon: Icons.loop_rounded,
+          label: '${battery.cycleCount ?? '--'} cycles',
+        ),
         _PostDetail(
-            icon: Icons.speed_rounded,
-            label: '${battery.mileageCovered ?? '--'} km'),
+          icon: Icons.speed_rounded,
+          label: '${battery.mileageCovered ?? '--'} km',
+        ),
       ],
     );
   }
@@ -249,14 +264,18 @@ class PostCard extends StatelessWidget {
       spacing: 12,
       children: [
         _PostDetail(
-            icon: Icons.branding_watermark_rounded,
-            label: vehicle.brand ?? '--'),
+          icon: Icons.branding_watermark_rounded,
+          label: vehicle.brand ?? '--',
+        ),
         _PostDetail(
-            icon: Icons.calendar_today_rounded,
-            label: '${vehicle.year ?? '--'}'),
+          icon: Icons.calendar_today_rounded,
+          label: '${vehicle.year ?? '--'}',
+        ),
         if (vehicle.vehicleType != null)
           _PostDetail(
-              icon: Icons.category_rounded, label: vehicle.vehicleType!),
+            icon: Icons.category_rounded,
+            label: vehicle.vehicleType!,
+          ),
       ],
     );
   }

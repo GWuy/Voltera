@@ -29,12 +29,16 @@ class CarInfoCard extends StatelessWidget {
                 child: Text(
                   '${car?.brand} ${car?.model}\n${car?.version}',
                   style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold),
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.green.shade50,
                   borderRadius: BorderRadius.circular(8),
@@ -46,24 +50,35 @@ class CarInfoCard extends StatelessWidget {
           Text(
             formatPrice(price ?? 0),
             style: const TextStyle(
-                color: _kPrimary, fontSize: 24, fontWeight: FontWeight.bold),
+              color: _kPrimary,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 12),
           Row(
             children: [
-              Icon(Icons.location_on_outlined,
-                  size: 14, color: Colors.grey.shade500),
+              Icon(
+                Icons.location_on_outlined,
+                size: 14,
+                color: Colors.grey.shade500,
+              ),
               const SizedBox(width: 4),
-              Text(location ?? 'N/A',
-                  style:
-                      TextStyle(color: Colors.grey.shade500, fontSize: 12)),
+              Text(
+                location ?? 'N/A',
+                style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+              ),
               const SizedBox(width: 16),
-              Icon(Icons.calendar_today_outlined,
-                  size: 14, color: Colors.grey.shade500),
+              Icon(
+                Icons.calendar_today_outlined,
+                size: 14,
+                color: Colors.grey.shade500,
+              ),
               const SizedBox(width: 4),
-              Text('Posted Jun 10, 2026',
-                  style:
-                      TextStyle(color: Colors.grey.shade500, fontSize: 12)),
+              Text(
+                'Posted Jun 10, 2026',
+                style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+              ),
             ],
           ),
           const Divider(height: 32),
@@ -79,15 +94,20 @@ class CarInfoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _SpecIcon(
-                  icon: Icons.speed, value: '155 mph', label: 'Top Speed'),
+                icon: Icons.speed,
+                value: '155 mph',
+                label: 'Top Speed',
+              ),
               _SpecIcon(
-                  icon: Icons.timer_outlined,
-                  value: '2.5 sec',
-                  label: '0-60mph'),
+                icon: Icons.timer_outlined,
+                value: '2.5 sec',
+                label: '0-60mph',
+              ),
               _SpecIcon(
-                  icon: Icons.electric_car,
-                  value: '${car?.range ?? 0} km',
-                  label: 'Range'),
+                icon: Icons.electric_car,
+                value: '${car?.range ?? 0} km',
+                label: 'Range',
+              ),
             ],
           ),
         ],
@@ -141,8 +161,10 @@ class CarLocationCard extends StatelessWidget {
             children: [
               const Icon(Icons.location_on, color: _kPrimary, size: 18),
               const SizedBox(width: 8),
-              Text(location ?? 'N/A',
-                  style: const TextStyle(fontWeight: FontWeight.w500)),
+              Text(
+                location ?? 'N/A',
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -189,9 +211,10 @@ class _WhiteCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (title != null) ...[
-            Text(title!,
-                style: const TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(
+              title!,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 16),
           ],
           child,
@@ -218,11 +241,14 @@ class _ConditionBadge extends StatelessWidget {
         children: [
           const Icon(Icons.check_circle, color: _kPrimary, size: 14),
           const SizedBox(width: 6),
-          Text(label,
-              style: const TextStyle(
-                  color: _kPrimary,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500)),
+          Text(
+            label,
+            style: const TextStyle(
+              color: _kPrimary,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ],
       ),
     );
@@ -233,8 +259,11 @@ class _SpecIcon extends StatelessWidget {
   final IconData icon;
   final String value;
   final String label;
-  const _SpecIcon(
-      {required this.icon, required this.value, required this.label});
+  const _SpecIcon({
+    required this.icon,
+    required this.value,
+    required this.label,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -242,11 +271,14 @@ class _SpecIcon extends StatelessWidget {
       children: [
         Icon(icon, color: Colors.grey.shade400, size: 24),
         const SizedBox(height: 8),
-        Text(value,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 14)),
-        Text(label,
-            style: TextStyle(color: Colors.grey.shade500, fontSize: 11)),
+        Text(
+          value,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        ),
+        Text(
+          label,
+          style: TextStyle(color: Colors.grey.shade500, fontSize: 11),
+        ),
       ],
     );
   }
@@ -263,11 +295,14 @@ class _SpecRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(label,
-            style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
-        Text(value,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 14)),
+        Text(
+          label,
+          style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+        ),
+        Text(
+          value,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        ),
       ],
     );
   }

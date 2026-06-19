@@ -26,9 +26,10 @@ class HomeErrorState extends StatelessWidget {
               'Could not load posts',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: _kTextDark),
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: _kTextDark,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
@@ -47,7 +48,8 @@ class HomeErrorState extends StatelessWidget {
                 backgroundColor: _kPrimary,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
           ],

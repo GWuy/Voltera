@@ -36,8 +36,7 @@ class HomeCategoryRow extends StatelessWidget {
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 220),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
               decoration: BoxDecoration(
                 color: selected ? _kPrimary : _kSurface,
                 borderRadius: BorderRadius.circular(30),

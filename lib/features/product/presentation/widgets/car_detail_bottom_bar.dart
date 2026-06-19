@@ -30,14 +30,17 @@ class CarDetailBottomBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Price Cash',
-                  style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
+              Text(
+                'Price Cash',
+                style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+              ),
               Text(
                 formatPrice(price ?? 0),
                 style: const TextStyle(
-                    color: _kPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
+                  color: _kPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
             ],
           ),
@@ -58,14 +61,17 @@ class CarDetailBottomBar extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: onBuy,
               icon: const Icon(Icons.shopping_cart_outlined),
-              label: const Text('Buy',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              label: const Text(
+                'Buy',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: _kPrimary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
+                  borderRadius: BorderRadius.circular(15),
+                ),
               ),
             ),
           ),

@@ -51,7 +51,8 @@ class PostResponse {
       vehicle: json['vehicle'] != null
           ? VehicleDTO.fromJson(json['vehicle'] as Map<String, dynamic>)
           : null,
-      imageUrls: (json['imageUrls'] as List<dynamic>?)
+      imageUrls:
+          (json['imageUrls'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],

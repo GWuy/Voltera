@@ -13,17 +13,23 @@ class TransactionStatusNotifier extends Notifier<String> {
   void setStatus(String status) => state = status;
 }
 
-final selectedTransactionStatusProvider = NotifierProvider<TransactionStatusNotifier, String>(() {
-  return TransactionStatusNotifier();
-});
+final selectedTransactionStatusProvider =
+    NotifierProvider<TransactionStatusNotifier, String>(() {
+      return TransactionStatusNotifier();
+    });
 
-final transactionsProvider = FutureProvider<List<TransactionModel>>((ref) async {
+final transactionsProvider = FutureProvider<List<TransactionModel>>((
+  ref,
+) async {
   final status = ref.watch(selectedTransactionStatusProvider);
   final repo = ref.watch(transactionRepositoryProvider);
   return repo.getTransactionsByStatus(status);
 });
 
-final transactionDetailProvider = FutureProvider.family<TransactionModel, int>((ref, id) async {
+final transactionDetailProvider = FutureProvider.family<TransactionModel, int>((
+  ref,
+  id,
+) async {
   final repo = ref.watch(transactionRepositoryProvider);
   return repo.getTransactionDetail(id);
 });

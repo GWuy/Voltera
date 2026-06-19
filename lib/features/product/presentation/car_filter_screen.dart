@@ -50,14 +50,26 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
     _selectedOrigin = f?['origin'];
     _minOdoController = TextEditingController(text: f?['minOdo']?.toString());
     _maxOdoController = TextEditingController(text: f?['maxOdo']?.toString());
-    _minRangeController = TextEditingController(text: f?['minRange']?.toString());
-    _maxRangeController = TextEditingController(text: f?['maxRange']?.toString());
-    _minYearController = TextEditingController(text: f?['minYearManufacture']?.toString());
-    _maxYearController = TextEditingController(text: f?['maxYearManufacture']?.toString());
+    _minRangeController = TextEditingController(
+      text: f?['minRange']?.toString(),
+    );
+    _maxRangeController = TextEditingController(
+      text: f?['maxRange']?.toString(),
+    );
+    _minYearController = TextEditingController(
+      text: f?['minYearManufacture']?.toString(),
+    );
+    _maxYearController = TextEditingController(
+      text: f?['maxYearManufacture']?.toString(),
+    );
     _bodyInsurance = f?['bodyInsurance'] ?? false;
     _vehicleInspection = f?['vehicleInspection'] ?? false;
-    _minPriceController = TextEditingController(text: f?['minPrice']?.toString());
-    _maxPriceController = TextEditingController(text: f?['maxPrice']?.toString());
+    _minPriceController = TextEditingController(
+      text: f?['minPrice']?.toString(),
+    );
+    _maxPriceController = TextEditingController(
+      text: f?['maxPrice']?.toString(),
+    );
   }
 
   @override
@@ -100,11 +112,17 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
 
   Map<String, dynamic> _collectFilters() {
     return {
-      'keyword': _keywordController.text.isEmpty ? null : _keywordController.text,
-      'address': _locationController.text.isEmpty ? null : _locationController.text,
+      'keyword': _keywordController.text.isEmpty
+          ? null
+          : _keywordController.text,
+      'address': _locationController.text.isEmpty
+          ? null
+          : _locationController.text,
       'brand': _selectedBrand,
       'style': _selectedStyle,
-      'version': _versionController.text.isEmpty ? null : _versionController.text,
+      'version': _versionController.text.isEmpty
+          ? null
+          : _versionController.text,
       'color': _selectedColor,
       'origin': _selectedOrigin,
       'minOdo': int.tryParse(_minOdoController.text),
@@ -131,12 +149,21 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
           icon: const Icon(Icons.close, color: Colors.black),
           onPressed: () => context.pop(),
         ),
-        title: const Text('Filter', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: const Text(
+          'Filter',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         actions: [
           TextButton(
             onPressed: _resetFilters,
-            child: const Text('Reset', style: TextStyle(color: Color(0xFF3D3DC6), fontWeight: FontWeight.bold)),
+            child: const Text(
+              'Reset',
+              style: TextStyle(
+                color: Color(0xFF3D3DC6),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
@@ -169,8 +196,30 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
                       child: _buildDropdownField(
                         hint: 'Brand',
                         value: _selectedBrand,
-                        items: ['Tesla', 'Toyota', 'Honda', 'Nissan', 'Hyundai', 'Kia', 'Mercedes-Benz', 'BMW', 'Audi', 'Volkswagen', 'Porsche', 'Ford', 'Chevrolet', 'Volvo', 'Lexus', 'Jaguar', 'Land Rover', 'BYD', 'VinFast', 'MG'],
-                        onChanged: (val) => setState(() => _selectedBrand = val),
+                        items: [
+                          'Tesla',
+                          'Toyota',
+                          'Honda',
+                          'Nissan',
+                          'Hyundai',
+                          'Kia',
+                          'Mercedes-Benz',
+                          'BMW',
+                          'Audi',
+                          'Volkswagen',
+                          'Porsche',
+                          'Ford',
+                          'Chevrolet',
+                          'Volvo',
+                          'Lexus',
+                          'Jaguar',
+                          'Land Rover',
+                          'BYD',
+                          'VinFast',
+                          'MG',
+                        ],
+                        onChanged: (val) =>
+                            setState(() => _selectedBrand = val),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -178,8 +227,17 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
                       child: _buildDropdownField(
                         hint: 'Style',
                         value: _selectedStyle,
-                        items: ['SUV', 'Sedan', 'Hatchback', 'Crossover (CUV)', 'Pickup Truck', 'MPV', 'Sports Car'],
-                        onChanged: (val) => setState(() => _selectedStyle = val),
+                        items: [
+                          'SUV',
+                          'Sedan',
+                          'Hatchback',
+                          'Crossover (CUV)',
+                          'Pickup Truck',
+                          'MPV',
+                          'Sports Car',
+                        ],
+                        onChanged: (val) =>
+                            setState(() => _selectedStyle = val),
                       ),
                     ),
                   ],
@@ -198,8 +256,24 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
                       child: _buildDropdownField(
                         hint: 'Color',
                         value: _selectedColor,
-                        items: ['White', 'Black', 'Gray', 'Silver', 'Blue', 'Red', 'Green', 'Yellow', 'Orange', 'Brown', 'Gold', 'Beige', 'Purple', 'Other'],
-                        onChanged: (val) => setState(() => _selectedColor = val),
+                        items: [
+                          'White',
+                          'Black',
+                          'Gray',
+                          'Silver',
+                          'Blue',
+                          'Red',
+                          'Green',
+                          'Yellow',
+                          'Orange',
+                          'Brown',
+                          'Gold',
+                          'Beige',
+                          'Purple',
+                          'Other',
+                        ],
+                        onChanged: (val) =>
+                            setState(() => _selectedColor = val),
                       ),
                     ),
                   ],
@@ -208,7 +282,26 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
                 _buildDropdownField(
                   hint: 'Origin',
                   value: _selectedOrigin,
-                  items: ['United States', 'Germany', 'Japan', 'South Korea', 'China', 'Vietnam', 'Sweden', 'United Kingdom', 'Italy', 'France', 'India', 'Czech Republic', 'Spain', 'Romania', 'Croatia', 'Turkey', 'Russia', 'Malaysia'],
+                  items: [
+                    'United States',
+                    'Germany',
+                    'Japan',
+                    'South Korea',
+                    'China',
+                    'Vietnam',
+                    'Sweden',
+                    'United Kingdom',
+                    'Italy',
+                    'France',
+                    'India',
+                    'Czech Republic',
+                    'Spain',
+                    'Romania',
+                    'Croatia',
+                    'Turkey',
+                    'Russia',
+                    'Malaysia',
+                  ],
                   onChanged: (val) => setState(() => _selectedOrigin = val),
                 ),
               ],
@@ -284,16 +377,28 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
             onPressed: () => context.pop(_collectFilters()),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF3D3DC6),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
             ),
-            child: const Text('Apply Filter', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+            child: const Text(
+              'Apply Filter',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildSection({required String title, required List<Widget> children}) {
+  Widget _buildSection({
+    required String title,
+    required List<Widget> children,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -303,7 +408,12 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 1),
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+                letterSpacing: 1,
+              ),
             ),
             const Icon(Icons.keyboard_arrow_up, size: 18, color: Colors.grey),
           ],
@@ -329,9 +439,14 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-          prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: Colors.grey, size: 20) : null,
+          prefixIcon: prefixIcon != null
+              ? Icon(prefixIcon, color: Colors.grey, size: 20)
+              : null,
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
         ),
       ),
     );
@@ -352,13 +467,13 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: value,
-          hint: Text(hint, style: const TextStyle(color: Colors.grey, fontSize: 14)),
+          hint: Text(
+            hint,
+            style: const TextStyle(color: Colors.grey, fontSize: 14),
+          ),
           isExpanded: true,
           items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(item),
-            );
+            return DropdownMenuItem<String>(value: item, child: Text(item));
           }).toList(),
           onChanged: onChanged,
           icon: const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
@@ -370,7 +485,10 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
   Widget _buildRangeHeader(String label) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+      child: Text(
+        label,
+        style: const TextStyle(fontSize: 11, color: Colors.grey),
+      ),
     );
   }
 
@@ -382,12 +500,16 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
   }) {
     return Row(
       children: [
-        Expanded(child: _buildTextField(controller: minController, hintText: minHint)),
+        Expanded(
+          child: _buildTextField(controller: minController, hintText: minHint),
+        ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 12),
           child: Text('-', style: TextStyle(color: Colors.grey)),
         ),
-        Expanded(child: _buildTextField(controller: maxController, hintText: maxHint)),
+        Expanded(
+          child: _buildTextField(controller: maxController, hintText: maxHint),
+        ),
       ],
     );
   }
@@ -400,7 +522,10 @@ class _CarFilterScreenState extends State<CarFilterScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        ),
         Switch(
           value: value,
           onChanged: onChanged,

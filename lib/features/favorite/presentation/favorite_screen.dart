@@ -41,7 +41,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       body: Consumer<FavoriteProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading && provider.favorites.isEmpty) {
-            return const Center(child: CircularProgressIndicator(color: Color(0xFF3D3DC6)));
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF3D3DC6)),
+            );
           }
 
           if (provider.favorites.isEmpty) {
@@ -57,7 +59,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 16,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -121,7 +126,11 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                             height: 100,
                             fit: BoxFit.contain,
                           )
-                        : const Icon(Icons.directions_car, size: 80, color: Colors.grey),
+                        : const Icon(
+                            Icons.directions_car,
+                            size: 80,
+                            color: Colors.grey,
+                          ),
                   ),
                   const SizedBox(width: 16),
                   // Name and Rating
@@ -166,7 +175,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(success ? 'Removed from favorites' : 'Failed to remove'),
+                      content: Text(
+                        success ? 'Removed from favorites' : 'Failed to remove',
+                      ),
                       duration: const Duration(seconds: 1),
                     ),
                   );

@@ -26,11 +26,7 @@ import 'features/notification/domain/repositories/notification_repository.dart';
 import 'features/notification/presentation/providers/notification_provider.dart';
 
 void main() {
-  runApp(
-    const ProviderScope(
-      child: VolteraApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: VolteraApp()));
 }
 
 class VolteraApp extends StatefulWidget {
@@ -67,17 +63,33 @@ class _VolteraAppState extends State<VolteraApp> {
     final ProfileRepository profileRepository = ProfileRepositoryImpl();
     final FavoriteRepository favoriteRepository = FavoriteRepositoryImpl();
     final ProductRepository productRepository = ProductRepositoryImpl();
-    final NotificationRepository notificationRepository = NotificationRepositoryImpl();
+    final NotificationRepository notificationRepository =
+        NotificationRepositoryImpl();
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider(repository: authRepository)),
-        ChangeNotifierProvider(create: (_) => OtpProvider(repository: authRepository)),
-        ChangeNotifierProvider(create: (_) => HomeProvider(repository: postRepository)),
-        ChangeNotifierProvider(create: (_) => ProfileProvider(repository: profileRepository)),
-        ChangeNotifierProvider(create: (_) => FavoriteProvider(repository: favoriteRepository)),
-        ChangeNotifierProvider(create: (_) => ProductProvider(repository: productRepository)),
-        ChangeNotifierProvider(create: (_) => NotificationProvider(repository: notificationRepository)),
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(repository: authRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => OtpProvider(repository: authRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => HomeProvider(repository: postRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProfileProvider(repository: profileRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => FavoriteProvider(repository: favoriteRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProductProvider(repository: productRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              NotificationProvider(repository: notificationRepository),
+        ),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

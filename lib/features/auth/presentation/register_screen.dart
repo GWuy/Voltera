@@ -122,7 +122,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             size: 22,
                           ),
                           onPressed: () => setState(
-                              () => _obscurePassword = !_obscurePassword),
+                            () => _obscurePassword = !_obscurePassword,
+                          ),
                         ),
                         validator: Validators.password,
                         onChanged: (_) {
@@ -133,8 +134,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 20),
 
                       // Confirm Password
-                      const Text('Confirm Password',
-                          style: AppTextStyles.fieldLabel),
+                      const Text(
+                        'Confirm Password',
+                        style: AppTextStyles.fieldLabel,
+                      ),
                       const SizedBox(height: 8),
                       AppTextField(
                         controller: _confirmPasswordController,
@@ -149,12 +152,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: Colors.grey,
                             size: 22,
                           ),
-                          onPressed: () => setState(() =>
-                              _obscureConfirmPassword =
-                                  !_obscureConfirmPassword),
+                          onPressed: () => setState(
+                            () => _obscureConfirmPassword =
+                                !_obscureConfirmPassword,
+                          ),
                         ),
                         validator: (v) => Validators.confirmPassword(
-                            v, _passwordController.text),
+                          v,
+                          _passwordController.text,
+                        ),
                         onChanged: (_) {
                           auth.clearError();
                           _revalidate();

@@ -36,16 +36,13 @@ class RoleDropdown extends StatelessWidget {
                 Icons.keyboard_arrow_down_rounded,
                 color: AppColors.primary,
               ),
-              style: const TextStyle(
-                fontSize: 15,
-                color: AppColors.textDark,
-              ),
+              style: const TextStyle(fontSize: 15, color: AppColors.textDark),
               onChanged: isLoading ? null : onChanged,
               items: UserRole.values
-                  .map((role) => DropdownMenuItem(
-                        value: role,
-                        child: Text(role.label),
-                      ))
+                  .map(
+                    (role) =>
+                        DropdownMenuItem(value: role, child: Text(role.label)),
+                  )
                   .toList(),
             ),
           ),

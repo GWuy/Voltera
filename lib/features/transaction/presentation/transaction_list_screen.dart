@@ -16,10 +16,7 @@ class TransactionListScreen extends ConsumerWidget {
     final transactionsAsync = ref.watch(transactionsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Transactions'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Transactions'), centerTitle: true),
       body: Column(
         children: [
           // Filter Tabs
@@ -36,17 +33,21 @@ class TransactionListScreen extends ConsumerWidget {
                     selected: isSelected,
                     onSelected: (selected) {
                       if (selected) {
-                        ref.read(selectedTransactionStatusProvider.notifier).setStatus(status);
+                        ref
+                            .read(selectedTransactionStatusProvider.notifier)
+                            .setStatus(status);
                       }
                     },
-                    selectedColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
+                    selectedColor: Theme.of(
+                      context,
+                    ).primaryColor.withValues(alpha: 0.2),
                     checkmarkColor: Theme.of(context).primaryColor,
                   ),
                 );
               }).toList(),
             ),
           ),
-          
+
           // Transaction List
           Expanded(
             child: transactionsAsync.when(
@@ -67,23 +68,38 @@ class TransactionListScreen extends ConsumerWidget {
                       final tx = transactions[index];
                       return Card(
                         margin: const EdgeInsets.only(bottom: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(16),
-                          title: Text(tx.postTitle ?? 'Unknown Product', style: const TextStyle(fontWeight: FontWeight.bold)),
+                          title: Text(
+                            tx.postTitle ?? 'Unknown Product',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 8),
-                              Text('Price: \$${(tx.price ?? 0).toStringAsFixed(2)}', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                              Text(
+                                'Price: \$${(tx.price ?? 0).toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               const SizedBox(height: 4),
                               if (tx.createAt != null)
-                                Text('Date: ${DateFormat.yMMMd().format(tx.createAt!)}'),
+                                Text(
+                                  'Date: ${DateFormat.yMMMd().format(tx.createAt!)}',
+                                ),
                             ],
                           ),
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () {
-                            context.push('${RouteNames.transactionDetail}?id=${tx.id}');
+                            context.push(
+                              '${RouteNames.transactionDetail}?id=${tx.id}',
+                            );
                           },
                         ),
                       );

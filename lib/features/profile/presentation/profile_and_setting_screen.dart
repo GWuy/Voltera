@@ -11,7 +11,8 @@ class ProfileAndSettingScreen extends StatefulWidget {
   const ProfileAndSettingScreen({super.key});
 
   @override
-  State<ProfileAndSettingScreen> createState() => _ProfileAndSettingScreenState();
+  State<ProfileAndSettingScreen> createState() =>
+      _ProfileAndSettingScreenState();
 }
 
 class _ProfileAndSettingScreenState extends State<ProfileAndSettingScreen> {
@@ -43,7 +44,9 @@ class _ProfileAndSettingScreenState extends State<ProfileAndSettingScreen> {
   Widget build(BuildContext context) {
     return Consumer<ProfileProvider>(
       builder: (context, profileProvider, _) {
-        final isLoading = profileProvider.status == ProfileStatus.loading && profileProvider.profile == null;
+        final isLoading =
+            profileProvider.status == ProfileStatus.loading &&
+            profileProvider.profile == null;
         final profile = profileProvider.profile;
 
         return Scaffold(
@@ -51,10 +54,18 @@ class _ProfileAndSettingScreenState extends State<ProfileAndSettingScreen> {
           appBar: AppBar(
             backgroundColor: Colors.white,
             elevation: 0,
-            leading: const Icon(Icons.person_outline, color: Color(0xFF3D3DC6), size: 28),
+            leading: const Icon(
+              Icons.person_outline,
+              color: Color(0xFF3D3DC6),
+              size: 28,
+            ),
             title: const Text(
               'Profile',
-              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
             actions: [
               IconButton(
@@ -64,7 +75,9 @@ class _ProfileAndSettingScreenState extends State<ProfileAndSettingScreen> {
             ],
           ),
           body: isLoading
-              ? const Center(child: CircularProgressIndicator(color: Color(0xFF3D3DC6)))
+              ? const Center(
+                  child: CircularProgressIndicator(color: Color(0xFF3D3DC6)),
+                )
               : SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
@@ -80,7 +93,11 @@ class _ProfileAndSettingScreenState extends State<ProfileAndSettingScreen> {
                                 ? CachedNetworkImageProvider(profile!.avatar!)
                                 : null,
                             child: profile?.avatar == null
-                                ? const Icon(Icons.person, size: 40, color: Color(0xFF3D3DC6))
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 40,
+                                    color: Color(0xFF3D3DC6),
+                                  )
                                 : null,
                           ),
                           const SizedBox(width: 16),
@@ -90,18 +107,28 @@ class _ProfileAndSettingScreenState extends State<ProfileAndSettingScreen> {
                               children: [
                                 Text(
                                   profile?.fullname ?? 'User Name',
-                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   profile?.phone ?? '0000-000-000',
-                                  style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.edit_note_outlined, color: Color(0xFF3D3DC6), size: 30),
+                            icon: const Icon(
+                              Icons.edit_note_outlined,
+                              color: Color(0xFF3D3DC6),
+                              size: 30,
+                            ),
                             onPressed: () => context.push(RouteNames.profile),
                           ),
                         ],
@@ -109,23 +136,49 @@ class _ProfileAndSettingScreenState extends State<ProfileAndSettingScreen> {
                       const SizedBox(height: 32),
 
                       _buildSectionTitle('General'),
-                      _buildSettingItem(Icons.description_outlined, 'Appointment'),
-                      _buildSettingItem(Icons.directions_car_outlined, 'Tes Driver'),
+                      _buildSettingItem(
+                        Icons.description_outlined,
+                        'Appointment',
+                      ),
+                      _buildSettingItem(
+                        Icons.directions_car_outlined,
+                        'Tes Driver',
+                      ),
                       _buildSettingItem(Icons.volume_up, 'Vocher'),
 
                       _buildSectionTitle('Account Setting'),
                       _buildSettingItem(Icons.location_on_outlined, 'Address'),
-                      _buildSettingItem(Icons.payment_outlined, 'Payment Methods'),
-                      _buildSettingItem(Icons.visibility_outlined, 'Dark Mode', isSwitch: true),
-                      _buildSettingItem(Icons.logout_outlined, 'Logout', onTap: _handleLogout),
+                      _buildSettingItem(
+                        Icons.payment_outlined,
+                        'Payment Methods',
+                      ),
+                      _buildSettingItem(
+                        Icons.visibility_outlined,
+                        'Dark Mode',
+                        isSwitch: true,
+                      ),
+                      _buildSettingItem(
+                        Icons.logout_outlined,
+                        'Logout',
+                        onTap: _handleLogout,
+                      ),
 
                       _buildSectionTitle('App Setting'),
                       _buildSettingItem(Icons.description_outlined, 'Language'),
-                      _buildSettingItem(Icons.notifications_none_outlined, 'Notification'),
-                      _buildSettingItem(Icons.verified_user_outlined, 'Security'),
+                      _buildSettingItem(
+                        Icons.notifications_none_outlined,
+                        'Notification',
+                      ),
+                      _buildSettingItem(
+                        Icons.verified_user_outlined,
+                        'Security',
+                      ),
 
                       _buildSectionTitle('Support'),
-                      _buildSettingItem(Icons.help_outline_outlined, 'Help Center'),
+                      _buildSettingItem(
+                        Icons.help_outline_outlined,
+                        'Help Center',
+                      ),
                       const SizedBox(height: 40),
                     ],
                   ),
@@ -149,7 +202,12 @@ class _ProfileAndSettingScreenState extends State<ProfileAndSettingScreen> {
     );
   }
 
-  Widget _buildSettingItem(IconData icon, String label, {bool isSwitch = false, VoidCallback? onTap}) {
+  Widget _buildSettingItem(
+    IconData icon,
+    String label, {
+    bool isSwitch = false,
+    VoidCallback? onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -168,7 +226,11 @@ class _ProfileAndSettingScreenState extends State<ProfileAndSettingScreen> {
             Expanded(
               child: Text(
                 label,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF0D0D0D)),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF0D0D0D),
+                ),
               ),
             ),
             if (isSwitch)
@@ -178,7 +240,11 @@ class _ProfileAndSettingScreenState extends State<ProfileAndSettingScreen> {
                 activeColor: const Color(0xFF3D3DC6),
               )
             else
-              Icon(Icons.arrow_forward_ios, color: Colors.grey.shade400, size: 16),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.grey.shade400,
+                size: 16,
+              ),
           ],
         ),
       ),

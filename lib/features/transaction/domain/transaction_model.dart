@@ -15,5 +15,6 @@ abstract class TransactionModel with _$TransactionModel {
     DateTime? updateAt,
   }) = _TransactionModel;
 
-  factory TransactionModel.fromJson(Map<String, dynamic> json) => _$TransactionModelFromJson(json);
+  factory TransactionModel.fromJson(Map<String, dynamic> json) =>
+      _$TransactionModelFromJson(json);
 }

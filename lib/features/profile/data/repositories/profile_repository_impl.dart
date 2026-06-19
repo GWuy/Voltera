@@ -8,7 +8,7 @@ import '../services/profile_api_service.dart';
 /// Concrete implementation of [ProfileRepository].
 class ProfileRepositoryImpl implements ProfileRepository {
   ProfileRepositoryImpl({ProfileApiService? apiService})
-      : _apiService = apiService ?? ProfileApiService();
+    : _apiService = apiService ?? ProfileApiService();
 
   final ProfileApiService _apiService;
 
@@ -20,7 +20,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       _apiService.saveProfile(request);
 
   @override
-  Future<String> uploadAvatar(File imageFile) => 
+  Future<String> uploadAvatar(File imageFile) =>
       _apiService.uploadAvatar(imageFile);
 
   @override

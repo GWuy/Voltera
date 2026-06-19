@@ -28,7 +28,8 @@ class OtpActionRow extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: Colors.grey.shade300, width: 1.5),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
+                  borderRadius: BorderRadius.circular(14),
+                ),
                 backgroundColor: AppColors.fill,
               ),
               child: Text(
@@ -54,7 +55,8 @@ class OtpActionRow extends StatelessWidget {
                 foregroundColor: Colors.white,
                 disabledBackgroundColor: AppColors.primaryAlpha50,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
+                  borderRadius: BorderRadius.circular(14),
+                ),
                 elevation: 0,
               ),
               child: isVerifying
@@ -62,7 +64,9 @@ class OtpActionRow extends StatelessWidget {
                       width: 22,
                       height: 22,
                       child: CircularProgressIndicator(
-                          strokeWidth: 2.5, color: Colors.white),
+                        strokeWidth: 2.5,
+                        color: Colors.white,
+                      ),
                     )
                   : const Text('Continue', style: AppTextStyles.buttonSmall),
             ),

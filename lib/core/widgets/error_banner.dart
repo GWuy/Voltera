@@ -28,10 +28,7 @@ class ErrorBanner extends StatelessWidget {
           Expanded(
             child: Text(
               message,
-              style: TextStyle(
-                color: Colors.red.shade700,
-                fontSize: 13,
-              ),
+              style: TextStyle(color: Colors.red.shade700, fontSize: 13),
             ),
           ),
         ],
@@ -58,8 +55,11 @@ class SuccessBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.check_circle_outline,
-              color: AppColors.success, size: 18),
+          const Icon(
+            Icons.check_circle_outline,
+            color: AppColors.success,
+            size: 18,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(

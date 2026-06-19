@@ -36,18 +36,25 @@ class _NotificationScreenState extends State<NotificationScreen> {
           IconButton(
             icon: const Icon(Icons.done_all),
             tooltip: 'Mark all as read',
-            onPressed: () => context.read<NotificationProvider>().markAllAsRead(),
+            onPressed: () =>
+                context.read<NotificationProvider>().markAllAsRead(),
           ),
         ],
       ),
       body: Consumer<NotificationProvider>(
         builder: (context, provider, _) {
-          if (provider.status == NotificationStatus.loading && provider.notifications.isEmpty) {
+          if (provider.status == NotificationStatus.loading &&
+              provider.notifications.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (provider.status == NotificationStatus.error && provider.notifications.isEmpty) {
-            return Center(child: Text(provider.errorMessage ?? 'Error loading notifications'));
+          if (provider.status == NotificationStatus.error &&
+              provider.notifications.isEmpty) {
+            return Center(
+              child: Text(
+                provider.errorMessage ?? 'Error loading notifications',
+              ),
+            );
           }
 
           if (provider.notifications.isEmpty) {
@@ -55,9 +62,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.notifications_off_outlined, size: 64, color: Colors.grey),
+                  Icon(
+                    Icons.notifications_off_outlined,
+                    size: 64,
+                    color: Colors.grey,
+                  ),
                   SizedBox(height: 16),
-                  Text('No notifications yet', style: TextStyle(color: Colors.grey)),
+                  Text(
+                    'No notifications yet',
+                    style: TextStyle(color: Colors.grey),
+                  ),
                 ],
               ),
             );
@@ -88,7 +102,7 @@ class _NotificationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.read<NotificationProvider>();
-    
+
     return Dismissible(
       key: Key(notification.id.toString()),
       direction: DismissDirection.endToStart,
@@ -106,16 +120,24 @@ class _NotificationItem extends StatelessWidget {
           }
         },
         leading: CircleAvatar(
-          backgroundColor: notification.readStatus ? Colors.grey[200] : const Color(0xFF3D3DC6).withValues(alpha: 0.1),
+          backgroundColor: notification.readStatus
+              ? Colors.grey[200]
+              : const Color(0xFF3D3DC6).withValues(alpha: 0.1),
           child: Icon(
-            notification.title.contains('Contract') ? Icons.assignment_outlined : Icons.notifications_outlined,
-            color: notification.readStatus ? Colors.grey : const Color(0xFF3D3DC6),
+            notification.title.contains('Contract')
+                ? Icons.assignment_outlined
+                : Icons.notifications_outlined,
+            color: notification.readStatus
+                ? Colors.grey
+                : const Color(0xFF3D3DC6),
           ),
         ),
         title: Text(
           notification.title,
           style: TextStyle(
-            fontWeight: notification.readStatus ? FontWeight.normal : FontWeight.bold,
+            fontWeight: notification.readStatus
+                ? FontWeight.normal
+                : FontWeight.bold,
             color: Colors.black,
           ),
         ),
@@ -123,7 +145,10 @@ class _NotificationItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 4),
-            Text(notification.message, style: const TextStyle(color: Colors.black87)),
+            Text(
+              notification.message,
+              style: const TextStyle(color: Colors.black87),
+            ),
             const SizedBox(height: 4),
             Text(
               DateFormat('MMM dd, yyyy HH:mm').format(notification.createdAt),
@@ -131,8 +156,15 @@ class _NotificationItem extends StatelessWidget {
             ),
           ],
         ),
-        trailing: !notification.readStatus 
-            ? Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF3D3DC6), shape: BoxShape.circle))
+        trailing: !notification.readStatus
+            ? Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF3D3DC6),
+                  shape: BoxShape.circle,
+                ),
+              )
             : null,
       ),
     );

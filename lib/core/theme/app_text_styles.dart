@@ -72,9 +72,7 @@ abstract final class AppTextStyles {
     color: AppColors.textDark,
   );
 
-  static const TextStyle inputHint = TextStyle(
-    fontSize: 14,
-  );
+  static const TextStyle inputHint = TextStyle(fontSize: 14);
 
   // ── Links / Actions ───────────────────────────────────────────────────────
   static const TextStyle link = TextStyle(

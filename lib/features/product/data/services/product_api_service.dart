@@ -43,18 +43,28 @@ class ProductApiService {
       if (minRange != null) params['minRange'] = minRange;
       if (maxRange != null) params['maxRange'] = maxRange;
       if (bodyInsurance != null) params['bodyInsurance'] = bodyInsurance;
-      if (vehicleInspection != null) params['vehicleInspection'] = vehicleInspection;
+      if (vehicleInspection != null)
+        params['vehicleInspection'] = vehicleInspection;
       if (minPrice != null) params['minPrice'] = minPrice;
       if (maxPrice != null) params['maxPrice'] = maxPrice;
-      if (minYearManufacture != null) params['minYearManufacture'] = minYearManufacture;
-      if (maxYearManufacture != null) params['maxYearManufacture'] = maxYearManufacture;
+      if (minYearManufacture != null)
+        params['minYearManufacture'] = minYearManufacture;
+      if (maxYearManufacture != null)
+        params['maxYearManufacture'] = maxYearManufacture;
       if (numberOfSeat != null) params['numberOfSeat'] = numberOfSeat;
 
-      final response = await _dio.get('/api/post/filter/vehicles', queryParameters: params);
+      final response = await _dio.get(
+        '/api/post/filter/vehicles',
+        queryParameters: params,
+      );
       final list = response.data as List;
-      return list.map((e) => PostResponse.fromJson(e as Map<String, dynamic>)).toList();
+      return list
+          .map((e) => PostResponse.fromJson(e as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e) {
-      debugPrint('ProductApiService FILTER: ${e.response?.statusCode} ${e.response?.data}');
+      debugPrint(
+        'ProductApiService FILTER: ${e.response?.statusCode} ${e.response?.data}',
+      );
       rethrow;
     }
   }
@@ -64,7 +74,9 @@ class ProductApiService {
       final response = await _dio.get('/api/post/detail/$postId');
       return PostResponse.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      debugPrint('ProductApiService DETAIL: ${e.response?.statusCode} ${e.response?.data}');
+      debugPrint(
+        'ProductApiService DETAIL: ${e.response?.statusCode} ${e.response?.data}',
+      );
       rethrow;
     }
   }

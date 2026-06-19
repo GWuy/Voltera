@@ -85,10 +85,8 @@ class OtpException implements Exception {
   String toString() => message;
 
   String get userMessage => switch (kind) {
-        OtpErrorKind.emailAlreadyExists =>
-          'This email is already registered.',
-        OtpErrorKind.validationError =>
-          'Invalid data. Please check your input.',
-        OtpErrorKind.unknown => message,
-      };
+    OtpErrorKind.emailAlreadyExists => 'This email is already registered.',
+    OtpErrorKind.validationError => 'Invalid data. Please check your input.',
+    OtpErrorKind.unknown => message,
+  };
 }

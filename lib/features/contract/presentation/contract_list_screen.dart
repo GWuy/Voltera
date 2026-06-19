@@ -14,10 +14,7 @@ class ContractListScreen extends ConsumerWidget {
     final contractsAsync = ref.watch(contractsListProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Contracts'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('My Contracts'), centerTitle: true),
       body: contractsAsync.when(
         data: (contracts) {
           if (contracts.isEmpty) {
@@ -34,22 +31,31 @@ class ContractListScreen extends ConsumerWidget {
                 final contract = contracts[index];
                 return Card(
                   margin: const EdgeInsets.only(bottom: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   child: ListTile(
                     contentPadding: const EdgeInsets.all(16),
-                    title: Text('Contract #${contract.id}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    title: Text(
+                      'Contract #${contract.id}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 8),
-                        Text('Date: ${DateFormat.yMMMd().format(contract.createdAt)}'),
+                        Text(
+                          'Date: ${DateFormat.yMMMd().format(contract.createdAt)}',
+                        ),
                         const SizedBox(height: 4),
                         Text('Status: ${contract.status.name.toUpperCase()}'),
                       ],
                     ),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
-                      context.push('${RouteNames.contractPreview}?id=${contract.id}');
+                      context.push(
+                        '${RouteNames.contractPreview}?id=${contract.id}',
+                      );
                     },
                   ),
                 );

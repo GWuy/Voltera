@@ -9,8 +9,7 @@ import '../../domain/repositories/post_repository.dart';
 ///
 /// Widgets listen via [Consumer] or [context.watch] — no direct API calls from UI.
 class HomeProvider extends ChangeNotifier {
-  HomeProvider({required PostRepository repository})
-      : _repository = repository;
+  HomeProvider({required PostRepository repository}) : _repository = repository;
 
   final PostRepository _repository;
   final Debouncer _searchDebouncer = Debouncer();

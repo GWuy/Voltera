@@ -11,13 +11,11 @@ import '../providers/contract_providers.dart';
 class ContractPreviewScreen extends ConsumerStatefulWidget {
   final String contractId;
 
-  const ContractPreviewScreen({
-    super.key,
-    required this.contractId,
-  });
+  const ContractPreviewScreen({super.key, required this.contractId});
 
   @override
-  ConsumerState<ContractPreviewScreen> createState() => _ContractPreviewScreenState();
+  ConsumerState<ContractPreviewScreen> createState() =>
+      _ContractPreviewScreenState();
 }
 
 class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
@@ -47,7 +45,11 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
     );
   }
 
-  Widget _buildContent(BuildContext context, WidgetRef ref, ContractModel contract) {
+  Widget _buildContent(
+    BuildContext context,
+    WidgetRef ref,
+    ContractModel contract,
+  ) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -55,9 +57,19 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
         children: [
           _buildHeaderCard(contract, context),
           const SizedBox(height: 16),
-          _buildPartyCard('Seller Information', contract.seller.fullName, contract.seller.email, context),
+          _buildPartyCard(
+            'Seller Information',
+            contract.seller.fullName,
+            contract.seller.email,
+            context,
+          ),
           const SizedBox(height: 16),
-          _buildPartyCard('Buyer Information', contract.buyer.fullName, contract.buyer.email, context),
+          _buildPartyCard(
+            'Buyer Information',
+            contract.buyer.fullName,
+            contract.buyer.email,
+            context,
+          ),
           const SizedBox(height: 16),
           _buildProductSection(int.parse(widget.contractId), context, ref),
           const SizedBox(height: 16),
@@ -96,7 +108,11 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
     );
   }
 
-  Widget _buildSignButton(BuildContext context, WidgetRef ref, ContractModel contract) {
+  Widget _buildSignButton(
+    BuildContext context,
+    WidgetRef ref,
+    ContractModel contract,
+  ) {
     return SizedBox(
       width: double.infinity,
       height: 56,
@@ -104,8 +120,15 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
         onPressed: _agreedToTerms && !_isSigning
             ? () => _handleSignContract(context, ref)
             : null,
-        icon: _isSigning 
-            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+        icon: _isSigning
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
             : const Icon(Icons.draw),
         label: Text(_isSigning ? 'Signing...' : 'Sign Contract'),
         style: FilledButton.styleFrom(
@@ -120,13 +143,20 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
   Future<void> _handleSignContract(BuildContext context, WidgetRef ref) async {
     setState(() => _isSigning = true);
     try {
-      await ref.read(contractRepositoryProvider).signContract(widget.contractId);
+      await ref
+          .read(contractRepositoryProvider)
+          .signContract(widget.contractId);
       ref.invalidate(contractProvider(widget.contractId));
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Contract signed successfully! Waiting for the other party.'), backgroundColor: Colors.green),
+          const SnackBar(
+            content: Text(
+              'Contract signed successfully! Waiting for the other party.',
+            ),
+            backgroundColor: Colors.green,
+          ),
         );
-        
+
         // Wait 5 seconds and go to home
         Future.delayed(const Duration(seconds: 5), () {
           if (context.mounted) {
@@ -136,24 +166,36 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to sign contract: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to sign contract: $e')));
       }
     } finally {
       if (mounted) setState(() => _isSigning = false);
     }
   }
 
-  Future<void> _handleCancelContract(BuildContext context, WidgetRef ref) async {
+  Future<void> _handleCancelContract(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Cancel Contract'),
         content: const Text('Are you sure you want to cancel this contract?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('No')),
-          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Yes, Cancel', style: TextStyle(color: Colors.red))),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(
+              'Yes, Cancel',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
         ],
       ),
     );
@@ -161,12 +203,14 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
     if (confirm != true) return;
 
     try {
-      await ref.read(contractRepositoryProvider).cancelContract(widget.contractId);
+      await ref
+          .read(contractRepositoryProvider)
+          .cancelContract(widget.contractId);
       ref.invalidate(contractProvider(widget.contractId));
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Contract cancelled')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Contract cancelled')));
         context.pop();
       }
     } catch (e) {
@@ -196,11 +240,15 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
               children: [
                 Text(
                   'Contract ID',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(color: colorScheme.onSurfaceVariant),
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
                 Text(
                   contract.id,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -210,7 +258,9 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
               children: [
                 Text(
                   'Status',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(color: colorScheme.onSurfaceVariant),
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
                 _buildStatusChip(contract.status),
               ],
@@ -258,7 +308,12 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
     );
   }
 
-  Widget _buildPartyCard(String title, String name, String email, BuildContext context) {
+  Widget _buildPartyCard(
+    String title,
+    String name,
+    String email,
+    BuildContext context,
+  ) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Card(
@@ -274,7 +329,9 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             _buildInfoRow('Full Name', name, context),
@@ -286,7 +343,11 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
     );
   }
 
-  Widget _buildProductSection(int contractId, BuildContext context, WidgetRef ref) {
+  Widget _buildProductSection(
+    int contractId,
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     final productAsync = ref.watch(productInfoProvider(contractId));
 
     return productAsync.when(
@@ -309,7 +370,8 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
               Text('Failed to load product info: $error'),
               const SizedBox(height: 8),
               TextButton(
-                onPressed: () => ref.invalidate(productInfoProvider(contractId)),
+                onPressed: () =>
+                    ref.invalidate(productInfoProvider(contractId)),
                 child: const Text('Retry'),
               ),
             ],
@@ -335,7 +397,9 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
           children: [
             Text(
               'Product Information',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             product.map(
@@ -351,7 +415,12 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
                   _buildInfoRow('ODO', '${v.odo} km', context),
                   _buildInfoRow('Color', v.color, context),
                   const Divider(height: 16),
-                  _buildInfoRow('Price', NumberFormat.currency(symbol: '\$').format(v.price), context, isBold: true),
+                  _buildInfoRow(
+                    'Price',
+                    NumberFormat.currency(symbol: '\$').format(v.price),
+                    context,
+                    isBold: true,
+                  ),
                 ],
               ),
               battery: (b) => Column(
@@ -359,13 +428,22 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
                   _buildInfoRow('Type', 'Battery', context),
                   _buildInfoRow('Title', b.name, context),
                   _buildInfoRow('Serial', b.serialNumber, context),
-                  _buildInfoRow('Capacity', '${b.remainingCapacity} / ${b.originalCapacity} kWh', context),
+                  _buildInfoRow(
+                    'Capacity',
+                    '${b.remainingCapacity} / ${b.originalCapacity} kWh',
+                    context,
+                  ),
                   _buildInfoRow('Voltage', '${b.voltage} V', context),
                   _buildInfoRow('Cycles', '${b.cycleCount}', context),
                   _buildInfoRow('Warranty', b.warranty, context),
                   _buildInfoRow('Mileage', '${b.mileageCovered} km', context),
                   const Divider(height: 16),
-                  _buildInfoRow('Price', NumberFormat.currency(symbol: '\$').format(b.price), context, isBold: true),
+                  _buildInfoRow(
+                    'Price',
+                    NumberFormat.currency(symbol: '\$').format(b.price),
+                    context,
+                    isBold: true,
+                  ),
                 ],
               ),
             ),
@@ -391,16 +469,26 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
           children: [
             Text(
               'Signatures',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
-                  child: _buildSignatureStatus('Seller', contract.signedBySeller, context),
+                  child: _buildSignatureStatus(
+                    'Seller',
+                    contract.signedBySeller,
+                    context,
+                  ),
                 ),
                 Expanded(
-                  child: _buildSignatureStatus('Buyer', contract.signedByBuyer, context),
+                  child: _buildSignatureStatus(
+                    'Buyer',
+                    contract.signedByBuyer,
+                    context,
+                  ),
                 ),
               ],
             ),
@@ -410,7 +498,11 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
     );
   }
 
-  Widget _buildSignatureStatus(String role, bool isSigned, BuildContext context) {
+  Widget _buildSignatureStatus(
+    String role,
+    bool isSigned,
+    BuildContext context,
+  ) {
     final color = isSigned ? Colors.green : Colors.red;
     final icon = isSigned ? Icons.check_circle : Icons.cancel;
     final text = isSigned ? 'Signed' : 'Not Signed';
@@ -442,7 +534,12 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value, BuildContext context, {bool isBold = false}) {
+  Widget _buildInfoRow(
+    String label,
+    String value,
+    BuildContext context, {
+    bool isBold = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
@@ -471,7 +568,11 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
     );
   }
 
-  Widget _buildDownloadButton(BuildContext context, WidgetRef ref, ContractModel contract) {
+  Widget _buildDownloadButton(
+    BuildContext context,
+    WidgetRef ref,
+    ContractModel contract,
+  ) {
     final canDownload = contract.signedBySeller && contract.signedByBuyer;
 
     return Column(
@@ -480,7 +581,9 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.5),
+              color: Theme.of(
+                context,
+              ).colorScheme.errorContainer.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -490,7 +593,9 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
                 Expanded(
                   child: Text(
                     'Waiting for both parties to sign',
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
                   ),
                 ),
               ],
@@ -502,7 +607,9 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
           width: double.infinity,
           height: 56,
           child: FilledButton.icon(
-            onPressed: canDownload ? () => _handleDownload(context, ref, contract) : null,
+            onPressed: canDownload
+                ? () => _handleDownload(context, ref, contract)
+                : null,
             icon: const Icon(Icons.download),
             label: const Text('Download Contract'),
             style: FilledButton.styleFrom(
@@ -516,7 +623,11 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
     );
   }
 
-  Future<void> _handleDownload(BuildContext context, WidgetRef ref, ContractModel contract) async {
+  Future<void> _handleDownload(
+    BuildContext context,
+    WidgetRef ref,
+    ContractModel contract,
+  ) async {
     try {
       // Show loading
       showDialog(
@@ -545,7 +656,10 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
                   title: const Text('Share PDF'),
                   onTap: () {
                     Navigator.pop(context);
-                    Printing.sharePdf(bytes: pdfBytes, filename: 'Contract_${contract.id}.pdf');
+                    Printing.sharePdf(
+                      bytes: pdfBytes,
+                      filename: 'Contract_${contract.id}.pdf',
+                    );
                   },
                 ),
                 ListTile(
@@ -553,7 +667,10 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
                   title: const Text('Print PDF'),
                   onTap: () {
                     Navigator.pop(context);
-                    Printing.layoutPdf(onLayout: (_) => pdfBytes, name: 'Contract_${contract.id}.pdf');
+                    Printing.layoutPdf(
+                      onLayout: (_) => pdfBytes,
+                      name: 'Contract_${contract.id}.pdf',
+                    );
                   },
                 ),
               ],
@@ -564,9 +681,9 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
     } catch (e) {
       if (context.mounted) {
         Navigator.pop(context); // Hide loading
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to generate PDF: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to generate PDF: $e')));
       }
     }
   }
@@ -576,7 +693,11 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline, size: 48, color: Theme.of(context).colorScheme.error),
+          Icon(
+            Icons.error_outline,
+            size: 48,
+            color: Theme.of(context).colorScheme.error,
+          ),
           const SizedBox(height: 16),
           Text(
             'Failed to load contract',
@@ -586,7 +707,8 @@ class _ContractPreviewScreenState extends ConsumerState<ContractPreviewScreen> {
           Text(error.toString()),
           const SizedBox(height: 16),
           FilledButton(
-            onPressed: () => ref.invalidate(contractProvider(widget.contractId)),
+            onPressed: () =>
+                ref.invalidate(contractProvider(widget.contractId)),
             child: const Text('Retry'),
           ),
         ],

@@ -37,45 +37,96 @@ final GoRouter appRouter = GoRouter(
     return null;
   },
   routes: [
-    GoRoute(path: RouteNames.login, builder: (context, state) {
-      final extra = state.extra as Map<String, dynamic>?;
-      return LoginScreen(message: extra?['message'] as String?);
-    }),
-    GoRoute(path: RouteNames.register, builder: (context, state) => const RegisterScreen()),
-    GoRoute(path: RouteNames.home, builder: (context, state) => const HomeScreen()),
-    GoRoute(path: RouteNames.profile, builder: (context, state) => const ProfileScreen()),
-    GoRoute(path: RouteNames.favorites, builder: (context, state) => const FavoriteScreen()),
-    GoRoute(path: RouteNames.carList, builder: (context, state) => CarListScreen(brand: state.uri.queryParameters['brand'])),
+    GoRoute(
+      path: RouteNames.login,
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return LoginScreen(message: extra?['message'] as String?);
+      },
+    ),
+    GoRoute(
+      path: RouteNames.register,
+      builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.home,
+      builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.profile,
+      builder: (context, state) => const ProfileScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.favorites,
+      builder: (context, state) => const FavoriteScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.carList,
+      builder: (context, state) =>
+          CarListScreen(brand: state.uri.queryParameters['brand']),
+    ),
     GoRoute(
       path: RouteNames.carDetail,
       builder: (context, state) {
-        final postId = int.tryParse(state.uri.queryParameters['postId'] ?? '') ?? 0;
+        final postId =
+            int.tryParse(state.uri.queryParameters['postId'] ?? '') ?? 0;
         return CarDetailScreen(postId: postId);
       },
     ),
-    GoRoute(path: RouteNames.notifications, builder: (context, state) => const NotificationScreen()),
-    GoRoute(path: RouteNames.verifyEmail, builder: (context, state) {
-      final extra = (state.extra as Map<String, dynamic>?) ?? {};
-      return OtpScreen(email: extra['email'] as String? ?? '', registrationData: (extra['registrationData'] as Map<String, dynamic>?) ?? {});
-    }),
-    GoRoute(path: RouteNames.fillProfile, builder: (context, state) {
-      final extra = (state.extra as Map<String, dynamic>?) ?? {};
-      return FillProfileScreen(userId: extra['userId'] as int? ?? 0, token: extra['token'] as String? ?? '', role: extra['role'] as String? ?? '');
-    }),
-    GoRoute(path: RouteNames.contractPreview, builder: (context, state) => ContractPreviewScreen(contractId: state.uri.queryParameters['id'] ?? '1')),
-    GoRoute(path: RouteNames.contractList, builder: (context, state) => const ContractListScreen()),
-    GoRoute(path: RouteNames.transactionList, builder: (context, state) => const TransactionListScreen()),
-    GoRoute(path: RouteNames.transactionDetail, builder: (context, state) => TransactionDetailScreen(transactionId: int.parse(state.uri.queryParameters['id'] ?? '0'))),
+    GoRoute(
+      path: RouteNames.notifications,
+      builder: (context, state) => const NotificationScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.verifyEmail,
+      builder: (context, state) {
+        final extra = (state.extra as Map<String, dynamic>?) ?? {};
+        return OtpScreen(
+          email: extra['email'] as String? ?? '',
+          registrationData:
+              (extra['registrationData'] as Map<String, dynamic>?) ?? {},
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.fillProfile,
+      builder: (context, state) {
+        final extra = (state.extra as Map<String, dynamic>?) ?? {};
+        return FillProfileScreen(
+          userId: extra['userId'] as int? ?? 0,
+          token: extra['token'] as String? ?? '',
+          role: extra['role'] as String? ?? '',
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.contractPreview,
+      builder: (context, state) => ContractPreviewScreen(
+        contractId: state.uri.queryParameters['id'] ?? '1',
+      ),
+    ),
+    GoRoute(
+      path: RouteNames.contractList,
+      builder: (context, state) => const ContractListScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.transactionList,
+      builder: (context, state) => const TransactionListScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.transactionDetail,
+      builder: (context, state) => TransactionDetailScreen(
+        transactionId: int.parse(state.uri.queryParameters['id'] ?? '0'),
+      ),
+    ),
     GoRoute(
       path: '/payment/callback',
       builder: (context, state) {
-
         print('=== CALLBACK ROUTE HIT ===');
         print('URI = ${state.uri}');
 
-        final id = int.tryParse(
-          state.uri.queryParameters['transactionId'] ?? '',
-        ) ?? 0;
+        final id =
+            int.tryParse(state.uri.queryParameters['transactionId'] ?? '') ?? 0;
 
         print('ID = $id');
 
@@ -87,7 +138,20 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-    GoRoute(path: RouteNames.paymentSuccess, builder: (context, state) => PaymentSuccessScreen(transactionId: int.tryParse(state.uri.queryParameters['transactionId'] ?? '') ?? 0)),
-    GoRoute(path: RouteNames.paymentFailed, builder: (context, state) => PaymentFailedScreen(transactionId: int.tryParse(state.uri.queryParameters['transactionId'] ?? '') ?? 0, status: state.uri.queryParameters['status'] ?? 'FAILED')),
+    GoRoute(
+      path: RouteNames.paymentSuccess,
+      builder: (context, state) => PaymentSuccessScreen(
+        transactionId:
+            int.tryParse(state.uri.queryParameters['transactionId'] ?? '') ?? 0,
+      ),
+    ),
+    GoRoute(
+      path: RouteNames.paymentFailed,
+      builder: (context, state) => PaymentFailedScreen(
+        transactionId:
+            int.tryParse(state.uri.queryParameters['transactionId'] ?? '') ?? 0,
+        status: state.uri.queryParameters['status'] ?? 'FAILED',
+      ),
+    ),
   ],
 );

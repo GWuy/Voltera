@@ -6,13 +6,7 @@ import '../../../../core/network/api_client.dart';
 import '../../transaction/data/transaction_repository_impl.dart';
 import '../../transaction/domain/transaction_model.dart';
 
-enum PaymentPollStatus {
-  verifying,
-  paid,
-  cancelled,
-  failed,
-  timeout,
-}
+enum PaymentPollStatus { verifying, paid, cancelled, failed, timeout }
 
 class PaymentCallbackState {
   final PaymentPollStatus status;
@@ -28,14 +22,15 @@ class PaymentCallbackState {
 
 class PaymentCallbackNotifier extends StateNotifier<PaymentCallbackState> {
   final int transactionId;
-  final TransactionRepository _transactionRepository = TransactionRepositoryImpl();
+  final TransactionRepository _transactionRepository =
+      TransactionRepositoryImpl();
   final _dio = ApiClient.instance.dio;
 
   Timer? _timer;
   int _secondsElapsed = 0;
 
   PaymentCallbackNotifier(this.transactionId)
-      : super(PaymentCallbackState(status: PaymentPollStatus.verifying));
+    : super(PaymentCallbackState(status: PaymentPollStatus.verifying));
 
   Future<void> startPolling(String? initialStatus) async {
     if ((initialStatus ?? '').toUpperCase() == 'CANCELLED') {
@@ -67,18 +62,29 @@ class PaymentCallbackNotifier extends StateNotifier<PaymentCallbackState> {
 
   Future<void> _poll() async {
     try {
-      final tx = await _transactionRepository.getTransactionDetail(transactionId);
+      final tx = await _transactionRepository.getTransactionDetail(
+        transactionId,
+      );
       final status = (tx.transactionStatus ?? '').toUpperCase();
 
       if (status == 'PAID' || status == 'DONE' || status == 'APPROVE') {
         _timer?.cancel();
-        state = PaymentCallbackState(status: PaymentPollStatus.paid, transaction: tx);
+        state = PaymentCallbackState(
+          status: PaymentPollStatus.paid,
+          transaction: tx,
+        );
       } else if (status == 'CANCELLED') {
         _timer?.cancel();
-        state = PaymentCallbackState(status: PaymentPollStatus.cancelled, transaction: tx);
+        state = PaymentCallbackState(
+          status: PaymentPollStatus.cancelled,
+          transaction: tx,
+        );
       } else if (status == 'FAILED' || status == 'FAIL' || status == 'FAILD') {
         _timer?.cancel();
-        state = PaymentCallbackState(status: PaymentPollStatus.failed, transaction: tx);
+        state = PaymentCallbackState(
+          status: PaymentPollStatus.failed,
+          transaction: tx,
+        );
       }
     } catch (_) {}
   }
@@ -90,6 +96,9 @@ class PaymentCallbackNotifier extends StateNotifier<PaymentCallbackState> {
   }
 }
 
-final paymentCallbackProvider = StateNotifierProvider.family<PaymentCallbackNotifier, PaymentCallbackState, int>(
-  (ref, transactionId) => PaymentCallbackNotifier(transactionId),
-);
+final paymentCallbackProvider =
+    StateNotifierProvider.family<
+      PaymentCallbackNotifier,
+      PaymentCallbackState,
+      int
+    >((ref, transactionId) => PaymentCallbackNotifier(transactionId));

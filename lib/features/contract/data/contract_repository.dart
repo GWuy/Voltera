@@ -30,7 +30,10 @@ class ContractRepositoryImpl implements ContractRepository {
 
   @override
   Future<ContractModel> createContract(int postId) async {
-    final response = await _dio.post('/api/contract/create', data: {'postId': postId});
+    final response = await _dio.post(
+      '/api/contract/create',
+      data: {'postId': postId},
+    );
     return _mapResponseToModel(response.data);
   }
 
@@ -52,8 +55,8 @@ class ContractRepositoryImpl implements ContractRepository {
     return ContractModel(
       id: data['contractId'].toString(),
       transactionId: data['transactionId'] ?? 0,
-      createdAt: data['signedDate'] != null 
-          ? DateTime.parse(data['signedDate']) 
+      createdAt: data['signedDate'] != null
+          ? DateTime.parse(data['signedDate'])
           : DateTime.now(),
       status: _mapStatus(data['contractStatus']),
       seller: UserInfo(
@@ -64,7 +67,7 @@ class ContractRepositoryImpl implements ContractRepository {
         fullName: data['buyerName'] ?? 'Unknown',
         email: data['buyerEmail'] ?? '',
       ),
-      // Since backend doesn't return full product info in contract response, 
+      // Since backend doesn't return full product info in contract response,
       // we'd normally fetch it or use a placeholder if the UI only needs the title
       product: ProductInfo.vehicle(
         name: data['postTitle'] ?? 'Product',
@@ -121,11 +124,16 @@ class ContractRepositoryImpl implements ContractRepository {
 
   ContractStatus _mapStatus(String? status) {
     switch (status?.toUpperCase()) {
-      case 'PENDING': return ContractStatus.pending;
-      case 'SIGNED': return ContractStatus.signed;
-      case 'CANCELLED': return ContractStatus.cancelled;
-      case 'COMPLETED': return ContractStatus.completed;
-      default: return ContractStatus.pending;
+      case 'PENDING':
+        return ContractStatus.pending;
+      case 'SIGNED':
+        return ContractStatus.signed;
+      case 'CANCELLED':
+        return ContractStatus.cancelled;
+      case 'COMPLETED':
+        return ContractStatus.completed;
+      default:
+        return ContractStatus.pending;
     }
   }
 }
@@ -187,10 +195,7 @@ class FakeContractRepository implements ContractRepository {
         fullName: 'Nguyen Van A',
         email: 'seller@example.com',
       ),
-      buyer: const UserInfo(
-        fullName: 'Tran Thi B',
-        email: 'buyer@example.com',
-      ),
+      buyer: const UserInfo(fullName: 'Tran Thi B', email: 'buyer@example.com'),
       product: const ProductInfo.vehicle(
         name: 'VinFast VF e34',
         brand: 'VinFast',

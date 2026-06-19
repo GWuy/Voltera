@@ -17,9 +17,17 @@ class CategoryChipsRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
         children: [
-          _buildCategoryChip('All', Icons.directions_car, selectedStyle == null),
+          _buildCategoryChip(
+            'All',
+            Icons.directions_car,
+            selectedStyle == null,
+          ),
           const SizedBox(width: 12),
-          _buildCategoryChip('Sedan', Icons.directions_car_filled, selectedStyle == 'Sedan'),
+          _buildCategoryChip(
+            'Sedan',
+            Icons.directions_car_filled,
+            selectedStyle == 'Sedan',
+          ),
           const SizedBox(width: 12),
           _buildCategoryChip('SUV', Icons.garage, selectedStyle == 'SUV'),
           const SizedBox(width: 12),
@@ -55,7 +63,11 @@ class CategoryChipsRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: isSelected ? Colors.white : Colors.black, size: 20),
+            Icon(
+              icon,
+              color: isSelected ? Colors.white : Colors.black,
+              size: 20,
+            ),
             const SizedBox(width: 8),
             Text(
               label,

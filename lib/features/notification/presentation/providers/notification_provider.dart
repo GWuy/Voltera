@@ -7,7 +7,7 @@ enum NotificationStatus { idle, loading, success, error }
 
 class NotificationProvider extends ChangeNotifier {
   NotificationProvider({required NotificationRepository repository})
-      : _repository = repository;
+    : _repository = repository;
 
   final NotificationRepository _repository;
 
@@ -44,7 +44,9 @@ class NotificationProvider extends ChangeNotifier {
       await _repository.markAsRead(id);
       final index = _notifications.indexWhere((n) => n.id == id);
       if (index != -1) {
-        _notifications[index] = _notifications[index].copyWith(readStatus: true);
+        _notifications[index] = _notifications[index].copyWith(
+          readStatus: true,
+        );
         notifyListeners();
       }
     } catch (e) {
@@ -55,7 +57,9 @@ class NotificationProvider extends ChangeNotifier {
   Future<void> markAllAsRead() async {
     try {
       await _repository.markAllAsRead();
-      _notifications = _notifications.map((n) => n.copyWith(readStatus: true)).toList();
+      _notifications = _notifications
+          .map((n) => n.copyWith(readStatus: true))
+          .toList();
       notifyListeners();
     } catch (e) {
       debugPrint('Error marking all as read: $e');

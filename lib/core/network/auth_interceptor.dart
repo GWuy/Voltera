@@ -17,7 +17,7 @@ class AuthInterceptor extends Interceptor {
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
     }
-    
+
     // Log for debugging 403 issues
     debugPrint('--> HTTP ${options.method} ${options.baseUrl}${options.path}');
     debugPrint('Headers: ${options.headers}');

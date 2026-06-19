@@ -9,9 +9,15 @@ class PaymentCheckoutResponse {
   final int orderCode;
   final int transactionId;
 
-  PaymentCheckoutResponse({required this.checkoutUrl, required this.paymentLinkId, required this.orderCode, required this.transactionId});
+  PaymentCheckoutResponse({
+    required this.checkoutUrl,
+    required this.paymentLinkId,
+    required this.orderCode,
+    required this.transactionId,
+  });
 
-  factory PaymentCheckoutResponse.fromJson(Map<String, dynamic> json) => PaymentCheckoutResponse(
+  factory PaymentCheckoutResponse.fromJson(Map<String, dynamic> json) =>
+      PaymentCheckoutResponse(
         checkoutUrl: json['checkoutUrl'] as String? ?? '',
         paymentLinkId: json['paymentLinkId'] as String? ?? '',
         orderCode: json['orderCode'] as int? ?? 0,
@@ -23,7 +29,9 @@ class PaymentService {
   final _dio = ApiClient.createPublicDio();
 
   Future<PaymentCheckoutResponse> createPayment(int transactionId) async {
-    final response = await _dio.post('/api/payos/create-payment/$transactionId');
+    final response = await _dio.post(
+      '/api/payos/create-payment/$transactionId',
+    );
     return PaymentCheckoutResponse.fromJson(response.data);
   }
 
@@ -36,4 +44,6 @@ class PaymentService {
   }
 }
 
-final paymentServiceProvider = Provider<PaymentService>((ref) => PaymentService());
+final paymentServiceProvider = Provider<PaymentService>(
+  (ref) => PaymentService(),
+);

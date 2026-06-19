@@ -43,11 +43,11 @@ class CarListSearchBar extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 border: Border.all(
-                    color: const Color(0xFF3D3DC6).withOpacity(0.3)),
+                  color: const Color(0xFF3D3DC6).withOpacity(0.3),
+                ),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.tune_rounded,
-                  color: Color(0xFF3D3DC6)),
+              child: const Icon(Icons.tune_rounded, color: Color(0xFF3D3DC6)),
             ),
           ),
         ],

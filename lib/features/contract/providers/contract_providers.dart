@@ -6,14 +6,17 @@ import '../domain/product_info.dart';
 import '../services/contract_pdf_service.dart';
 
 final contractRepositoryProvider = Provider<ContractRepository>((ref) {
-  return ContractRepositoryImpl(); 
+  return ContractRepositoryImpl();
 });
 
 final contractPdfServiceProvider = Provider<ContractPdfService>((ref) {
   return ContractPdfService();
 });
 
-final contractProvider = FutureProvider.family<ContractModel, String>((ref, id) {
+final contractProvider = FutureProvider.family<ContractModel, String>((
+  ref,
+  id,
+) {
   final repository = ref.watch(contractRepositoryProvider);
   return repository.getContract(id);
 });
@@ -23,7 +26,10 @@ final contractsListProvider = FutureProvider<List<ContractModel>>((ref) {
   return repository.getContracts();
 });
 
-final productInfoProvider = FutureProvider.family<ProductInfo, int>((ref, contractId) {
+final productInfoProvider = FutureProvider.family<ProductInfo, int>((
+  ref,
+  contractId,
+) {
   final repository = ref.watch(contractRepositoryProvider);
   return repository.getProductInfo(contractId);
 });

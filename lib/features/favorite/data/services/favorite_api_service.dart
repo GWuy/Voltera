@@ -12,9 +12,13 @@ class FavoriteApiService {
     try {
       final response = await _dio.get('/api/favorites');
       final list = response.data as List;
-      return list.map((e) => FavListResponse.fromJson(e as Map<String, dynamic>)).toList();
+      return list
+          .map((e) => FavListResponse.fromJson(e as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e) {
-      debugPrint('FavoriteApiService GET: ${e.response?.statusCode} ${e.response?.data}');
+      debugPrint(
+        'FavoriteApiService GET: ${e.response?.statusCode} ${e.response?.data}',
+      );
       rethrow;
     }
   }
@@ -23,7 +27,9 @@ class FavoriteApiService {
     try {
       await _dio.post('/api/favorites/add/$postId');
     } on DioException catch (e) {
-      debugPrint('FavoriteApiService ADD: ${e.response?.statusCode} ${e.response?.data}');
+      debugPrint(
+        'FavoriteApiService ADD: ${e.response?.statusCode} ${e.response?.data}',
+      );
       rethrow;
     }
   }
@@ -32,7 +38,9 @@ class FavoriteApiService {
     try {
       await _dio.delete('/api/favorites/delete/$postId');
     } on DioException catch (e) {
-      debugPrint('FavoriteApiService DELETE: ${e.response?.statusCode} ${e.response?.data}');
+      debugPrint(
+        'FavoriteApiService DELETE: ${e.response?.statusCode} ${e.response?.data}',
+      );
       rethrow;
     }
   }

@@ -15,7 +15,7 @@ enum UserRole {
   }
 
   String get label => switch (this) {
-        UserRole.buyer => 'Buyer',
-        UserRole.seller => 'Seller',
-      };
+    UserRole.buyer => 'Buyer',
+    UserRole.seller => 'Seller',
+  };
 }

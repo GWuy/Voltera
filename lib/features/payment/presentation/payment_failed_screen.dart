@@ -29,7 +29,9 @@ class PaymentFailedScreen extends StatelessWidget {
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                  color: isCancelled ? Colors.orange.shade50 : Colors.red.shade50,
+                  color: isCancelled
+                      ? Colors.orange.shade50
+                      : Colors.red.shade50,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -41,7 +43,10 @@ class PaymentFailedScreen extends StatelessWidget {
               const SizedBox(height: 32),
               Text(
                 isCancelled ? 'Payment Cancelled' : 'Payment Failed',
-                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 12),
               Text(
@@ -49,7 +54,11 @@ class PaymentFailedScreen extends StatelessWidget {
                     ? 'You cancelled the payment. Your transaction has not been processed.'
                     : 'Something went wrong with your payment. Please try again.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15, color: Colors.grey.shade600, height: 1.5),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey.shade600,
+                  height: 1.5,
+                ),
               ),
               const SizedBox(height: 40),
               SizedBox(
@@ -59,9 +68,14 @@ class PaymentFailedScreen extends StatelessWidget {
                   style: FilledButton.styleFrom(
                     backgroundColor: const Color(0xFF3D3DC6),
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text('Back to Home', style: TextStyle(fontSize: 16)),
+                  child: const Text(
+                    'Back to Home',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -71,7 +85,9 @@ class PaymentFailedScreen extends StatelessWidget {
                   onPressed: () => context.pop(),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: const Text('Go Back', style: TextStyle(fontSize: 16)),
                 ),

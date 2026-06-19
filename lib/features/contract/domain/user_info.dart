@@ -5,10 +5,9 @@ part 'user_info.g.dart';
 
 @freezed
 abstract class UserInfo with _$UserInfo {
-  const factory UserInfo({
-    required String fullName,
-    required String email,
-  }) = _UserInfo;
+  const factory UserInfo({required String fullName, required String email}) =
+      _UserInfo;
 
-  factory UserInfo.fromJson(Map<String, dynamic> json) => _$UserInfoFromJson(json);
+  factory UserInfo.fromJson(Map<String, dynamic> json) =>
+      _$UserInfoFromJson(json);
 }

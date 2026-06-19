@@ -4,7 +4,7 @@ import '../services/product_api_service.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   ProductRepositoryImpl({ProductApiService? apiService})
-      : _apiService = apiService ?? ProductApiService();
+    : _apiService = apiService ?? ProductApiService();
 
   final ProductApiService _apiService;
 
@@ -28,28 +28,28 @@ class ProductRepositoryImpl implements ProductRepository {
     int? minYearManufacture,
     int? maxYearManufacture,
     int? numberOfSeat,
-  }) =>
-      _apiService.filterVehicles(
-        keyword: keyword,
-        address: address,
-        brand: brand,
-        version: version,
-        color: color,
-        origin: origin,
-        style: style,
-        minOdo: minOdo,
-        maxOdo: maxOdo,
-        minRange: minRange,
-        maxRange: maxRange,
-        bodyInsurance: bodyInsurance,
-        vehicleInspection: vehicleInspection,
-        minPrice: minPrice,
-        maxPrice: maxPrice,
-        minYearManufacture: minYearManufacture,
-        maxYearManufacture: maxYearManufacture,
-        numberOfSeat: numberOfSeat,
-      );
+  }) => _apiService.filterVehicles(
+    keyword: keyword,
+    address: address,
+    brand: brand,
+    version: version,
+    color: color,
+    origin: origin,
+    style: style,
+    minOdo: minOdo,
+    maxOdo: maxOdo,
+    minRange: minRange,
+    maxRange: maxRange,
+    bodyInsurance: bodyInsurance,
+    vehicleInspection: vehicleInspection,
+    minPrice: minPrice,
+    maxPrice: maxPrice,
+    minYearManufacture: minYearManufacture,
+    maxYearManufacture: maxYearManufacture,
+    numberOfSeat: numberOfSeat,
+  );
 
   @override
-  Future<PostResponse> getPostDetail(int postId) => _apiService.getPostDetail(postId);
+  Future<PostResponse> getPostDetail(int postId) =>
+      _apiService.getPostDetail(postId);
 }

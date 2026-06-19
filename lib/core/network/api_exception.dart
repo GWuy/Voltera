@@ -50,8 +50,7 @@ class ApiException implements Exception {
     }
 
     return ApiException(
-      userMessage:
-          message.isNotEmpty ? message : 'An unknown error occurred',
+      userMessage: message.isNotEmpty ? message : 'An unknown error occurred',
       statusCode: statusCode,
       rawData: data,
     );
@@ -62,7 +61,8 @@ class ApiException implements Exception {
       final map = Map<String, dynamic>.from(data);
 
       // Try common message fields
-      final msg = map['message']?.toString() ??
+      final msg =
+          map['message']?.toString() ??
           map['detail']?.toString() ??
           map['error']?.toString();
       if (msg != null && msg.trim().isNotEmpty) return msg;

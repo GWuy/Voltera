@@ -79,10 +79,11 @@ class _BannerData {
   final String title;
   final String subtitle;
   final List<Color> gradient;
-  const _BannerData(
-      {required this.title,
-      required this.subtitle,
-      required this.gradient});
+  const _BannerData({
+    required this.title,
+    required this.subtitle,
+    required this.gradient,
+  });
 }
 
 class _BannerCard extends StatelessWidget {
@@ -141,8 +142,10 @@ class _BannerCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(30),

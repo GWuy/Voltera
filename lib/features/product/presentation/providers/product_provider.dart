@@ -7,7 +7,7 @@ enum ProductStatus { idle, loading, success, error }
 
 class ProductProvider extends ChangeNotifier {
   ProductProvider({required ProductRepository repository})
-      : _repository = repository;
+    : _repository = repository;
 
   final ProductRepository _repository;
 

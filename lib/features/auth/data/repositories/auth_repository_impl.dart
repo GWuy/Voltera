@@ -13,15 +13,14 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
     AuthApiService? authApiService,
     OtpApiService? otpApiService,
-  })  : _authApi = authApiService ?? AuthApiService(),
-        _otpApi = otpApiService ?? OtpApiService();
+  }) : _authApi = authApiService ?? AuthApiService(),
+       _otpApi = otpApiService ?? OtpApiService();
 
   final AuthApiService _authApi;
   final OtpApiService _otpApi;
 
   @override
-  Future<LoginResponse> login(LoginRequest request) =>
-      _authApi.login(request);
+  Future<LoginResponse> login(LoginRequest request) => _authApi.login(request);
 
   @override
   Future<RegisterResponse> register(RegisterRequest request) =>

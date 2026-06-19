@@ -19,7 +19,8 @@ class PaymentCallbackScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<PaymentCallbackScreen> createState() => _PaymentCallbackScreenState();
+  ConsumerState<PaymentCallbackScreen> createState() =>
+      _PaymentCallbackScreenState();
 }
 
 class _PaymentCallbackScreenState extends ConsumerState<PaymentCallbackScreen> {
@@ -27,7 +28,9 @@ class _PaymentCallbackScreenState extends ConsumerState<PaymentCallbackScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(paymentCallbackProvider(widget.transactionId).notifier).startPolling(widget.initialStatus);
+      ref
+          .read(paymentCallbackProvider(widget.transactionId).notifier)
+          .startPolling(widget.initialStatus);
     });
   }
 
@@ -37,11 +40,18 @@ class _PaymentCallbackScreenState extends ConsumerState<PaymentCallbackScreen> {
 
     ref.listen(paymentCallbackProvider(widget.transactionId), (previous, next) {
       if (next.status == PaymentPollStatus.paid) {
-        context.go('${RouteNames.paymentSuccess}?transactionId=${widget.transactionId}');
+        context.go(
+          '${RouteNames.paymentSuccess}?transactionId=${widget.transactionId}',
+        );
       } else if (next.status == PaymentPollStatus.cancelled) {
-        context.go('${RouteNames.paymentFailed}?transactionId=${widget.transactionId}&status=CANCELLED');
-      } else if (next.status == PaymentPollStatus.failed || next.status == PaymentPollStatus.timeout) {
-        context.go('${RouteNames.paymentFailed}?transactionId=${widget.transactionId}&status=FAILED');
+        context.go(
+          '${RouteNames.paymentFailed}?transactionId=${widget.transactionId}&status=CANCELLED',
+        );
+      } else if (next.status == PaymentPollStatus.failed ||
+          next.status == PaymentPollStatus.timeout) {
+        context.go(
+          '${RouteNames.paymentFailed}?transactionId=${widget.transactionId}&status=FAILED',
+        );
       }
     });
 

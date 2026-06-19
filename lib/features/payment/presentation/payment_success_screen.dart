@@ -25,7 +25,11 @@ class PaymentSuccessScreen extends StatelessWidget {
                   color: Colors.green.shade50,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.check_circle_rounded, color: Colors.green, size: 64),
+                child: const Icon(
+                  Icons.check_circle_rounded,
+                  color: Colors.green,
+                  size: 64,
+                ),
               ),
               const SizedBox(height: 32),
               const Text(
@@ -36,7 +40,11 @@ class PaymentSuccessScreen extends StatelessWidget {
               Text(
                 'Your transaction #$transactionId has been completed successfully.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15, color: Colors.grey.shade600, height: 1.5),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey.shade600,
+                  height: 1.5,
+                ),
               ),
               const SizedBox(height: 40),
               SizedBox(
@@ -46,21 +54,32 @@ class PaymentSuccessScreen extends StatelessWidget {
                   style: FilledButton.styleFrom(
                     backgroundColor: const Color(0xFF3D3DC6),
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text('Back to Home', style: TextStyle(fontSize: 16)),
+                  child: const Text(
+                    'Back to Home',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: () => context.push('${RouteNames.transactionList}'),
+                  onPressed: () =>
+                      context.push('${RouteNames.transactionList}'),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text('View Transactions', style: TextStyle(fontSize: 16)),
+                  child: const Text(
+                    'View Transactions',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
             ],

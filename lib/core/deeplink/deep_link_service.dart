@@ -46,7 +46,6 @@ class DeepLinkService {
   static String toGoRouterLocation(Uri uri) {
     final route = '/${uri.host}${uri.path}';
 
-    return route +
-        (uri.hasQuery ? '?${uri.query}' : '');
+    return route + (uri.hasQuery ? '?${uri.query}' : '');
   }
 }

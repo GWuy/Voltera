@@ -4,7 +4,7 @@ import '../services/favorite_api_service.dart';
 
 class FavoriteRepositoryImpl implements FavoriteRepository {
   FavoriteRepositoryImpl({FavoriteApiService? apiService})
-      : _apiService = apiService ?? FavoriteApiService();
+    : _apiService = apiService ?? FavoriteApiService();
 
   final FavoriteApiService _apiService;
 
@@ -15,5 +15,6 @@ class FavoriteRepositoryImpl implements FavoriteRepository {
   Future<void> addToFavorite(int postId) => _apiService.addToFavorite(postId);
 
   @override
-  Future<void> removeFromFavorite(int postId) => _apiService.removeFromFavorite(postId);
+  Future<void> removeFromFavorite(int postId) =>
+      _apiService.removeFromFavorite(postId);
 }

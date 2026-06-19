@@ -42,7 +42,9 @@ class _CarListScreenState extends State<CarListScreen> {
     final provider = context.read<ProductProvider>();
     final f = filters ?? _currentFilters;
     provider.filterVehicles(
-      keyword: f['keyword'] ?? (_searchController.text.isNotEmpty ? _searchController.text : null),
+      keyword:
+          f['keyword'] ??
+          (_searchController.text.isNotEmpty ? _searchController.text : null),
       address: f['address'],
       brand: f['brand'] ?? _selectedBrand,
       style: f['style'] ?? _selectedStyle,
@@ -84,7 +86,10 @@ class _CarListScreenState extends State<CarListScreen> {
         ),
         title: Text(
           _selectedBrand ?? 'Available Car',
-          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           IconButton(
@@ -126,7 +131,8 @@ class _CarListScreenState extends State<CarListScreen> {
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CarFilterScreen(initialFilters: _currentFilters),
+                        builder: (context) =>
+                            CarFilterScreen(initialFilters: _currentFilters),
                       ),
                     );
                     if (result != null && result is Map<String, dynamic>) {
@@ -136,10 +142,15 @@ class _CarListScreenState extends State<CarListScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFF3D3DC6).withOpacity(0.3)),
+                      border: Border.all(
+                        color: const Color(0xFF3D3DC6).withOpacity(0.3),
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.tune_rounded, color: Color(0xFF3D3DC6)),
+                    child: const Icon(
+                      Icons.tune_rounded,
+                      color: Color(0xFF3D3DC6),
+                    ),
                   ),
                 ),
               ],
@@ -151,11 +162,23 @@ class _CarListScreenState extends State<CarListScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Row(
               children: [
-                _buildCategoryChip('All', Icons.directions_car, _selectedStyle == null),
+                _buildCategoryChip(
+                  'All',
+                  Icons.directions_car,
+                  _selectedStyle == null,
+                ),
                 const SizedBox(width: 12),
-                _buildCategoryChip('Sedan', Icons.directions_car_filled, _selectedStyle == 'Sedan'),
+                _buildCategoryChip(
+                  'Sedan',
+                  Icons.directions_car_filled,
+                  _selectedStyle == 'Sedan',
+                ),
                 const SizedBox(width: 12),
-                _buildCategoryChip('SUV', Icons.garage, _selectedStyle == 'SUV'),
+                _buildCategoryChip(
+                  'SUV',
+                  Icons.garage,
+                  _selectedStyle == 'SUV',
+                ),
                 const SizedBox(width: 12),
                 _buildCategoryChip('Electric', Icons.electric_car, false),
               ],
@@ -166,7 +189,9 @@ class _CarListScreenState extends State<CarListScreen> {
             child: Consumer<ProductProvider>(
               builder: (context, provider, _) {
                 if (provider.listStatus == ProductStatus.loading) {
-                  return const Center(child: CircularProgressIndicator(color: Color(0xFF3D3DC6)));
+                  return const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF3D3DC6)),
+                  );
                 }
                 if (provider.listStatus == ProductStatus.error) {
                   return Center(child: Text(provider.errorMessage ?? 'Error'));
@@ -224,7 +249,11 @@ class _CarListScreenState extends State<CarListScreen> {
         ),
         child: Row(
           children: [
-            Icon(icon, color: isSelected ? Colors.white : Colors.black, size: 20),
+            Icon(
+              icon,
+              color: isSelected ? Colors.white : Colors.black,
+              size: 20,
+            ),
             const SizedBox(width: 8),
             Text(
               label,
@@ -264,16 +293,16 @@ class _CarCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: car.thumbnail != null
-                    ? CachedNetworkImage(
-                        imageUrl: car.thumbnail!,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      )
-                    : Container(
-                        height: 100,
-                        color: Colors.grey.shade200,
-                        child: const Icon(Icons.image_not_supported),
-                      ),
+                      ? CachedNetworkImage(
+                          imageUrl: car.thumbnail!,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        )
+                      : Container(
+                          height: 100,
+                          color: Colors.grey.shade200,
+                          child: const Icon(Icons.image_not_supported),
+                        ),
                 ),
               ),
               const SizedBox(width: 16),
@@ -284,7 +313,10 @@ class _CarCard extends StatelessWidget {
                   children: [
                     Text(
                       car.title ?? 'No Name',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -293,7 +325,13 @@ class _CarCard extends StatelessWidget {
                       children: [
                         const Icon(Icons.star, color: Colors.orange, size: 16),
                         const SizedBox(width: 4),
-                        Text('4.8', style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+                        Text(
+                          '4.8',
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 14,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
@@ -302,9 +340,19 @@ class _CarCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.speed, color: Colors.grey.shade400, size: 18),
+                            Icon(
+                              Icons.speed,
+                              color: Colors.grey.shade400,
+                              size: 18,
+                            ),
                             const SizedBox(width: 4),
-                            Text('${car.vehicle?.odo ?? 0} km', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                            Text(
+                              '${car.vehicle?.odo ?? 0} km',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
                           ],
                         ),
                         Text(

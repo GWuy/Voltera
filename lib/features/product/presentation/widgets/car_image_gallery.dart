@@ -30,7 +30,8 @@ class _CarImageGalleryState extends State<CarImageGallery> {
                 borderRadius: BorderRadius.circular(20),
                 image: DecorationImage(
                   image: CachedNetworkImageProvider(
-                      widget.images[_selectedIndex]),
+                    widget.images[_selectedIndex],
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -58,8 +59,7 @@ class _CarImageGalleryState extends State<CarImageGallery> {
                       width: 2,
                     ),
                     image: DecorationImage(
-                      image:
-                          CachedNetworkImageProvider(widget.images[index]),
+                      image: CachedNetworkImageProvider(widget.images[index]),
                       fit: BoxFit.cover,
                     ),
                   ),

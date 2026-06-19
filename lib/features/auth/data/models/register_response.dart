@@ -15,9 +15,7 @@ class RegisterResponse {
 
   factory RegisterResponse.fromJson(Map<String, dynamic> json) {
     return RegisterResponse(
-      id: json['id'] is int
-          ? json['id'] as int
-          : int.tryParse('${json['id']}'),
+      id: json['id'] is int ? json['id'] as int : int.tryParse('${json['id']}'),
       email: json['email']?.toString(),
       username: json['username']?.toString(),
       role: json['role']?.toString(),

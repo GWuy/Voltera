@@ -8,14 +8,14 @@ import '../presentation/providers/profile_provider.dart';
 import '../../../core/router/route_names.dart';
 
 // ── Pre-computed color constants (avoid runtime withValues() in build) ─────────
-const _kPrimary            = Color(0xFF3D3DC6);
-const _kPrimaryBorder      = Color(0x263D3DC6);
-const _kPrimaryShadow      = Color(0x1F3D3DC6);
-const _kPrimaryEditShadow  = Color(0x663D3DC6);
-const _kPrimaryDisabled    = Color(0x993D3DC6);
-const _kPrimaryBtnShadow   = Color(0x663D3DC6);
-const _kGenderSelected     = Color(0x143D3DC6);
-const _kFill               = Color(0xFFF4F5F7);
+const _kPrimary = Color(0xFF3D3DC6);
+const _kPrimaryBorder = Color(0x263D3DC6);
+const _kPrimaryShadow = Color(0x1F3D3DC6);
+const _kPrimaryEditShadow = Color(0x663D3DC6);
+const _kPrimaryDisabled = Color(0x993D3DC6);
+const _kPrimaryBtnShadow = Color(0x663D3DC6);
+const _kGenderSelected = Color(0x143D3DC6);
+const _kFill = Color(0xFFF4F5F7);
 
 class FillProfileScreen extends StatefulWidget {
   final int userId;
@@ -45,7 +45,7 @@ class _FillProfileScreenState extends State<FillProfileScreen>
   bool? _gender; // null = not selected, true = Male, false = Female
   bool _isLoading = false;
   bool _isLoadingProfile = true; // loading initial profile data
-  bool _emailPrefilled = false;  // true nếu email được lấy từ server
+  bool _emailPrefilled = false; // true nếu email được lấy từ server
   String? _serverError;
 
   late final AnimationController _fadeController;
@@ -178,12 +178,13 @@ class _FillProfileScreenState extends State<FillProfileScreen>
 
     try {
       final request = ProfileRequest(
-          firstname: _firstnameController.text.trim(),
-          lastname: _lastnameController.text.trim(),
-          email: _emailController.text.trim(),
-          phone: _phoneController.text.trim(),
-          gender: _gender,
-          address: _addressController.text.trim());
+        firstname: _firstnameController.text.trim(),
+        lastname: _lastnameController.text.trim(),
+        email: _emailController.text.trim(),
+        phone: _phoneController.text.trim(),
+        gender: _gender,
+        address: _addressController.text.trim(),
+      );
 
       final success = await _profileProvider.saveProfile(request);
 
@@ -197,8 +198,10 @@ class _FillProfileScreenState extends State<FillProfileScreen>
             duration: Duration(seconds: 2),
           ),
         );
-        context.go(RouteNames.login,
-            extra: {'message': 'Profile completed! Welcome aboard.'});
+        context.go(
+          RouteNames.login,
+          extra: {'message': 'Profile completed! Welcome aboard.'},
+        );
       } else {
         setState(() => _serverError = _profileProvider.errorMessage);
       }
@@ -217,7 +220,8 @@ class _FillProfileScreenState extends State<FillProfileScreen>
     final data = e.response?.data;
     if (data is Map) {
       final map = Map<String, dynamic>.from(data);
-      final msg = map['message']?.toString() ??
+      final msg =
+          map['message']?.toString() ??
           map['detail']?.toString() ??
           map['error']?.toString();
       if (msg != null && msg.trim().isNotEmpty) return msg;
@@ -250,325 +254,340 @@ class _FillProfileScreenState extends State<FillProfileScreen>
               ),
             )
           : FadeTransition(
-        opacity: _fadeAnimation,
-        child: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              // ── App bar ──────────────────────────────────────────────────
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => context.go(RouteNames.login),
-                        child: Container(
-                          width: 42,
-                          height: 42,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF4F5F7),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            size: 18,
-                            color: Color(0xFF0D0D0D),
-                          ),
-                        ),
-                      ),
-                      const Expanded(
-                        child: Center(
-                          child: Text(
-                            'Fill Your Profile',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF0D0D0D),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 42), // balance back button
-                    ],
-                  ),
-                ),
-              ),
-
-              // ── Avatar ──────────────────────────────────────────────────
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 32, bottom: 8),
-                  child: Center(
-                    child: ScaleTransition(
-                      scale: _avatarScaleAnimation,
-                      child: Stack(
-                        children: [
-                          Container(
-                            width: 110,
-                            height: 110,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: const Color(0xFFF0F0F8),
-                              border: Border.all(
-                                color: _kPrimaryBorder,
-                                width: 3,
-                              ),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: _kPrimaryShadow,
-                                  blurRadius: 20,
-                                  offset: Offset(0, 6),
-                                ),
-                              ],
-                            ),
-                            child: const Icon(
-                              Icons.person_rounded,
-                              size: 60,
-                              color: Color(0xFF3D3DC6),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 2,
-                            right: 2,
-                            child: Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: const Color(0xFF3D3DC6),
-                                border: Border.all(
-                                  color: Colors.white,
-                                  width: 2.5,
-                                ),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: _kPrimaryEditShadow,
-                                    blurRadius: 8,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: const Icon(
-                                Icons.edit_rounded,
-                                size: 14,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              // ── Subtitle ────────────────────────────────────────────────
-              SliverToBoxAdapter(
-                child: Center(
-                  child: Text(
-                    'Complete your profile to get started',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey.shade500,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-
-              // ── Form ─────────────────────────────────────────────────────
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
-                  child: Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // First Name & Last Name row
-                        Row(
+              opacity: _fadeAnimation,
+              child: SafeArea(
+                child: CustomScrollView(
+                  slivers: [
+                    // ── App bar ──────────────────────────────────────────────────
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                        child: Row(
                           children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _buildLabel('First Name'),
-                                  const SizedBox(height: 8),
-                                  _buildTextField(
-                                    controller: _firstnameController,
-                                    hintText: 'John',
-                                    prefixIcon: Icons.person_outline_rounded,
-                                    validator: (v) =>
-                                        _validateRequired(v, 'First name'),
-                                  ),
-                                ],
+                            GestureDetector(
+                              onTap: () => context.go(RouteNames.login),
+                              child: Container(
+                                width: 42,
+                                height: 42,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF4F5F7),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Icon(
+                                  Icons.arrow_back_ios_new_rounded,
+                                  size: 18,
+                                  color: Color(0xFF0D0D0D),
+                                ),
                               ),
                             ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _buildLabel('Last Name'),
-                                  const SizedBox(height: 8),
-                                  _buildTextField(
-                                    controller: _lastnameController,
-                                    hintText: 'Doe',
-                                    prefixIcon: Icons.person_outline_rounded,
-                                    validator: (v) =>
-                                        _validateRequired(v, 'Last name'),
+                            const Expanded(
+                              child: Center(
+                                child: Text(
+                                  'Fill Your Profile',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF0D0D0D),
                                   ),
-                                ],
+                                ),
                               ),
                             ),
+                            const SizedBox(width: 42), // balance back button
                           ],
                         ),
-                        const SizedBox(height: 20),
+                      ),
+                    ),
 
-                        // Email
-                        _buildLabel('Email'),
-                        const SizedBox(height: 8),
-                        _buildTextField(
-                          controller: _emailController,
-                          hintText: 'example@yourdomain.com',
-                          prefixIcon: Icons.mail_outline_rounded,
-                          keyboardType: TextInputType.emailAddress,
-                          validator: _validateEmail,
-                          readOnly: _emailPrefilled, // không cho sửa nếu đã lấy từ server
-                          suffixIcon: _emailPrefilled
-                              ? const Icon(Icons.verified_rounded,
-                                  color: Color(0xFF059669), size: 20)
-                              : null,
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Phone
-                        _buildLabel('Phone Number'),
-                        const SizedBox(height: 8),
-                        _buildTextField(
-                          controller: _phoneController,
-                          hintText: 'Typing your phone number',
-                          prefixIcon: Icons.phone_outlined,
-                          keyboardType: TextInputType.phone,
-                          validator: _validatePhone,
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Gender
-                        _buildLabel('Gender'),
-                        const SizedBox(height: 10),
-                        _buildGenderSelector(),
-                        const SizedBox(height: 20),
-
-                        // Address (optional)
-                        _buildLabel('Address (Optional)'),
-                        const SizedBox(height: 8),
-                        _buildTextField(
-                          controller: _addressController,
-                          hintText: 'Typing your address',
-                          prefixIcon: Icons.location_on_outlined,
-                          keyboardType: TextInputType.streetAddress,
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Server error
-                        if (_serverError != null) ...[
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.red.shade50,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.red.shade200),
-                            ),
-                            child: Row(
+                    // ── Avatar ──────────────────────────────────────────────────
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 32, bottom: 8),
+                        child: Center(
+                          child: ScaleTransition(
+                            scale: _avatarScaleAnimation,
+                            child: Stack(
                               children: [
-                                Icon(Icons.error_outline_rounded,
-                                    color: Colors.red.shade600, size: 18),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    _serverError!,
-                                    style: TextStyle(
-                                      color: Colors.red.shade700,
-                                      fontSize: 13,
+                                Container(
+                                  width: 110,
+                                  height: 110,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: const Color(0xFFF0F0F8),
+                                    border: Border.all(
+                                      color: _kPrimaryBorder,
+                                      width: 3,
+                                    ),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: _kPrimaryShadow,
+                                        blurRadius: 20,
+                                        offset: Offset(0, 6),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(
+                                    Icons.person_rounded,
+                                    size: 60,
+                                    color: Color(0xFF3D3DC6),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 2,
+                                  right: 2,
+                                  child: Container(
+                                    width: 32,
+                                    height: 32,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: const Color(0xFF3D3DC6),
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 2.5,
+                                      ),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: _kPrimaryEditShadow,
+                                          blurRadius: 8,
+                                          offset: Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit_rounded,
+                                      size: 14,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(height: 20),
-                        ],
+                        ),
+                      ),
+                    ),
 
-                        // Submit button
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56,
-                          child: ElevatedButton(
-                            onPressed: _isLoading ? null : _submit,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF3D3DC6),
-                              foregroundColor: Colors.white,
-                              disabledBackgroundColor: _kPrimaryDisabled,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              elevation: 0,
-                              shadowColor: _kPrimaryBtnShadow,
-                            ),
-                            child: _isLoading
-                                ? const SizedBox(
-                                    height: 24,
-                                    width: 24,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.5,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : const Text(
-                                    'Submit',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 0.3,
+                    // ── Subtitle ────────────────────────────────────────────────
+                    SliverToBoxAdapter(
+                      child: Center(
+                        child: Text(
+                          'Complete your profile to get started',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade500,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // ── Form ─────────────────────────────────────────────────────
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+                        child: Form(
+                          key: _formKey,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // First Name & Last Name row
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        _buildLabel('First Name'),
+                                        const SizedBox(height: 8),
+                                        _buildTextField(
+                                          controller: _firstnameController,
+                                          hintText: 'John',
+                                          prefixIcon:
+                                              Icons.person_outline_rounded,
+                                          validator: (v) => _validateRequired(
+                                            v,
+                                            'First name',
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 24),
-
-                        // Skip for now
-                        Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              // TODO: Navigate to home without profile
-                              context.go(RouteNames.login);
-                            },
-                            child: Text(
-                              'Skip for now',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey.shade500,
-                                decoration: TextDecoration.underline,
-                                decorationColor: Colors.grey.shade400,
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        _buildLabel('Last Name'),
+                                        const SizedBox(height: 8),
+                                        _buildTextField(
+                                          controller: _lastnameController,
+                                          hintText: 'Doe',
+                                          prefixIcon:
+                                              Icons.person_outline_rounded,
+                                          validator: (v) =>
+                                              _validateRequired(v, 'Last name'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
+                              const SizedBox(height: 20),
+
+                              // Email
+                              _buildLabel('Email'),
+                              const SizedBox(height: 8),
+                              _buildTextField(
+                                controller: _emailController,
+                                hintText: 'example@yourdomain.com',
+                                prefixIcon: Icons.mail_outline_rounded,
+                                keyboardType: TextInputType.emailAddress,
+                                validator: _validateEmail,
+                                readOnly:
+                                    _emailPrefilled, // không cho sửa nếu đã lấy từ server
+                                suffixIcon: _emailPrefilled
+                                    ? const Icon(
+                                        Icons.verified_rounded,
+                                        color: Color(0xFF059669),
+                                        size: 20,
+                                      )
+                                    : null,
+                              ),
+                              const SizedBox(height: 20),
+
+                              // Phone
+                              _buildLabel('Phone Number'),
+                              const SizedBox(height: 8),
+                              _buildTextField(
+                                controller: _phoneController,
+                                hintText: 'Typing your phone number',
+                                prefixIcon: Icons.phone_outlined,
+                                keyboardType: TextInputType.phone,
+                                validator: _validatePhone,
+                              ),
+                              const SizedBox(height: 20),
+
+                              // Gender
+                              _buildLabel('Gender'),
+                              const SizedBox(height: 10),
+                              _buildGenderSelector(),
+                              const SizedBox(height: 20),
+
+                              // Address (optional)
+                              _buildLabel('Address (Optional)'),
+                              const SizedBox(height: 8),
+                              _buildTextField(
+                                controller: _addressController,
+                                hintText: 'Typing your address',
+                                prefixIcon: Icons.location_on_outlined,
+                                keyboardType: TextInputType.streetAddress,
+                              ),
+                              const SizedBox(height: 24),
+
+                              // Server error
+                              if (_serverError != null) ...[
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.shade50,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.red.shade200,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.error_outline_rounded,
+                                        color: Colors.red.shade600,
+                                        size: 18,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          _serverError!,
+                                          style: TextStyle(
+                                            color: Colors.red.shade700,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                              ],
+
+                              // Submit button
+                              SizedBox(
+                                width: double.infinity,
+                                height: 56,
+                                child: ElevatedButton(
+                                  onPressed: _isLoading ? null : _submit,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF3D3DC6),
+                                    foregroundColor: Colors.white,
+                                    disabledBackgroundColor: _kPrimaryDisabled,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    elevation: 0,
+                                    shadowColor: _kPrimaryBtnShadow,
+                                  ),
+                                  child: _isLoading
+                                      ? const SizedBox(
+                                          height: 24,
+                                          width: 24,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2.5,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : const Text(
+                                          'Submit',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 0.3,
+                                          ),
+                                        ),
+                                ),
+                              ),
+
+                              const SizedBox(height: 24),
+
+                              // Skip for now
+                              Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // TODO: Navigate to home without profile
+                                    context.go(RouteNames.login);
+                                  },
+                                  child: Text(
+                                    'Skip for now',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey.shade500,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: Colors.grey.shade400,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 16),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
@@ -609,13 +628,14 @@ class _FillProfileScreenState extends State<FillProfileScreen>
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
-        prefixIcon:
-            Icon(prefixIcon, color: Colors.grey.shade400, size: 22),
+        prefixIcon: Icon(prefixIcon, color: Colors.grey.shade400, size: 22),
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: readOnly ? const Color(0xFFEEEEF8) : const Color(0xFFF4F5F7),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide.none,
@@ -628,8 +648,7 @@ class _FillProfileScreenState extends State<FillProfileScreen>
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide:
-              const BorderSide(color: Color(0xFF3D3DC6), width: 1.5),
+          borderSide: const BorderSide(color: Color(0xFF3D3DC6), width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
@@ -700,9 +719,7 @@ class _GenderOption extends StatelessWidget {
           color: isSelected ? _kGenderSelected : _kFill,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xFF3D3DC6)
-                : Colors.transparent,
+            color: isSelected ? const Color(0xFF3D3DC6) : Colors.transparent,
             width: 1.5,
           ),
         ),
@@ -721,8 +738,7 @@ class _GenderOption extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: 14,
-                fontWeight:
-                    isSelected ? FontWeight.w600 : FontWeight.w500,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 color: isSelected
                     ? const Color(0xFF3D3DC6)
                     : Colors.grey.shade600,

@@ -38,7 +38,8 @@ class BatteryDTO {
       lifecycle: json['lifecycle'] as String?,
       batteryTypeId: json['batteryTypeId'] != null
           ? BatteryTypeDTO.fromJson(
-              json['batteryTypeId'] as Map<String, dynamic>)
+              json['batteryTypeId'] as Map<String, dynamic>,
+            )
           : null,
     );
   }

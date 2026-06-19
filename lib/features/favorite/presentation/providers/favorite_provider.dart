@@ -4,7 +4,7 @@ import '../../domain/repositories/favorite_repository.dart';
 
 class FavoriteProvider extends ChangeNotifier {
   FavoriteProvider({required FavoriteRepository repository})
-      : _repository = repository;
+    : _repository = repository;
 
   final FavoriteRepository _repository;
 
@@ -33,7 +33,12 @@ class FavoriteProvider extends ChangeNotifier {
     return favoritePostIds.contains(postId);
   }
 
-  Future<bool> toggleFavorite(int postId, {String? title, double? price, String? thumbnail}) async {
+  Future<bool> toggleFavorite(
+    int postId, {
+    String? title,
+    double? price,
+    String? thumbnail,
+  }) async {
     final currentlyFavorite = isFavorite(postId);
     try {
       if (currentlyFavorite) {
@@ -42,13 +47,15 @@ class FavoriteProvider extends ChangeNotifier {
       } else {
         await _repository.addToFavorite(postId);
         if (title != null && price != null) {
-          _favorites.add(FavListResponse(
-            userId: 0,
-            postId: postId,
-            postTitle: title,
-            price: price,
-            thumbnailUrl: thumbnail,
-          ));
+          _favorites.add(
+            FavListResponse(
+              userId: 0,
+              postId: postId,
+              postTitle: title,
+              price: price,
+              thumbnailUrl: thumbnail,
+            ),
+          );
         } else {
           await loadFavorites();
         }

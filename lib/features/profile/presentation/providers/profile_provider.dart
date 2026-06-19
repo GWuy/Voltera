@@ -13,7 +13,7 @@ enum ProfileStatus { idle, loading, success, error }
 /// Manages profile load/save state for the fill-profile screen.
 class ProfileProvider extends ChangeNotifier {
   ProfileProvider({required ProfileRepository repository})
-      : _repository = repository;
+    : _repository = repository;
 
   final ProfileRepository _repository;
 

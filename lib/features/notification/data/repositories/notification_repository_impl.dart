@@ -4,7 +4,7 @@ import '../../domain/repositories/notification_repository.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
   NotificationRepositoryImpl({NotificationApiService? apiService})
-      : _apiService = apiService ?? NotificationApiService();
+    : _apiService = apiService ?? NotificationApiService();
 
   final NotificationApiService _apiService;
 

@@ -68,8 +68,11 @@ class HomeAppBar extends StatelessWidget {
                     const SizedBox(height: 2),
                     Row(
                       children: [
-                        const Icon(Icons.location_on_rounded,
-                            size: 13, color: _kTextMid),
+                        const Icon(
+                          Icons.location_on_rounded,
+                          size: 13,
+                          color: _kTextMid,
+                        ),
                         const SizedBox(width: 2),
                         Flexible(
                           child: Text(

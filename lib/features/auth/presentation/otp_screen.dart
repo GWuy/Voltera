@@ -30,10 +30,14 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   static const int _otpLength = 6;
 
-  final List<TextEditingController> _controllers =
-      List.generate(_otpLength, (_) => TextEditingController());
-  final List<FocusNode> _focusNodes =
-      List.generate(_otpLength, (_) => FocusNode());
+  final List<TextEditingController> _controllers = List.generate(
+    _otpLength,
+    (_) => TextEditingController(),
+  );
+  final List<FocusNode> _focusNodes = List.generate(
+    _otpLength,
+    (_) => FocusNode(),
+  );
 
   @override
   void initState() {
@@ -90,10 +94,10 @@ class _OtpScreenState extends State<OtpScreen> {
       return;
     }
     context.read<OtpProvider>().verifyAndRegister(
-          email: widget.email,
-          otp: _currentOtp,
-          registrationData: widget.registrationData,
-        );
+      email: widget.email,
+      otp: _currentOtp,
+      registrationData: widget.registrationData,
+    );
   }
 
   void _reset() {
@@ -124,8 +128,7 @@ class _OtpScreenState extends State<OtpScreen> {
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
               child: Consumer2<OtpProvider, AuthProvider>(
                 builder: (context, otp, auth, _) {
                   // Handle Success: Login and Navigate
@@ -134,28 +137,32 @@ class _OtpScreenState extends State<OtpScreen> {
                       otp.resetStatus(); // Custom method to prevent loop
                       auth
                           .login(
-                        widget.registrationData['username'] as String,
-                        widget.registrationData['password'] as String,
-                      )
+                            widget.registrationData['username'] as String,
+                            widget.registrationData['password'] as String,
+                          )
                           .then((_) {
-                        if (auth.status == AuthStatus.success &&
-                            auth.loginResponse != null) {
-                          final res = auth.loginResponse!;
-                          if (!res.updatedProfile) {
-                            context.go(RouteNames.fillProfile, extra: {
-                              'userId': res.userId,
-                              'token': res.token,
-                              'role': res.role,
-                            });
-                          } else {
-                            context.go(RouteNames.home);
-                          }
-                        }
-                      });
+                            if (auth.status == AuthStatus.success &&
+                                auth.loginResponse != null) {
+                              final res = auth.loginResponse!;
+                              if (!res.updatedProfile) {
+                                context.go(
+                                  RouteNames.fillProfile,
+                                  extra: {
+                                    'userId': res.userId,
+                                    'token': res.token,
+                                    'role': res.role,
+                                  },
+                                );
+                              } else {
+                                context.go(RouteNames.home);
+                              }
+                            }
+                          });
                     });
                   }
 
-                  final isVerifying = otp.status == OtpStatus.verifying ||
+                  final isVerifying =
+                      otp.status == OtpStatus.verifying ||
                       auth.status == AuthStatus.loading;
 
                   return Column(
@@ -167,11 +174,11 @@ class _OtpScreenState extends State<OtpScreen> {
                       RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
-                          style: AppTextStyles.bodySmall
-                              .copyWith(height: 1.5),
+                          style: AppTextStyles.bodySmall.copyWith(height: 1.5),
                           children: [
                             const TextSpan(
-                                text: 'A 6-digit code has been sent to\n'),
+                              text: 'A 6-digit code has been sent to\n',
+                            ),
                             TextSpan(
                               text: widget.email,
                               style: const TextStyle(
@@ -189,9 +196,12 @@ class _OtpScreenState extends State<OtpScreen> {
                       _buildOtpBoxes(),
 
                       // Error message
-                      if (otp.errorMessage != null || auth.errorMessage != null) ...[
+                      if (otp.errorMessage != null ||
+                          auth.errorMessage != null) ...[
                         const SizedBox(height: 16),
-                        ErrorBanner(message: otp.errorMessage ?? auth.errorMessage!),
+                        ErrorBanner(
+                          message: otp.errorMessage ?? auth.errorMessage!,
+                        ),
                       ],
 
                       const SizedBox(height: 32),
@@ -206,11 +216,12 @@ class _OtpScreenState extends State<OtpScreen> {
                                 onPressed: isVerifying ? null : _reset,
                                 style: OutlinedButton.styleFrom(
                                   side: BorderSide(
-                                      color: Colors.grey.shade300,
-                                      width: 1.5),
+                                    color: Colors.grey.shade300,
+                                    width: 1.5,
+                                  ),
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(14)),
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
                                   backgroundColor: AppColors.fill,
                                 ),
                                 child: Text(
@@ -239,8 +250,8 @@ class _OtpScreenState extends State<OtpScreen> {
                                   disabledBackgroundColor:
                                       AppColors.primaryAlpha50,
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(14)),
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
                                   elevation: 0,
                                 ),
                                 child: isVerifying
@@ -248,11 +259,14 @@ class _OtpScreenState extends State<OtpScreen> {
                                         width: 22,
                                         height: 22,
                                         child: CircularProgressIndicator(
-                                            strokeWidth: 2.5,
-                                            color: Colors.white),
+                                          strokeWidth: 2.5,
+                                          color: Colors.white,
+                                        ),
                                       )
-                                    : const Text('Continue',
-                                        style: AppTextStyles.buttonSmall),
+                                    : const Text(
+                                        'Continue',
+                                        style: AppTextStyles.buttonSmall,
+                                      ),
                               ),
                             ),
                           ),
@@ -268,7 +282,9 @@ class _OtpScreenState extends State<OtpScreen> {
                           Text(
                             "Didn't receive the code? ",
                             style: TextStyle(
-                                fontSize: 14, color: Colors.grey.shade600),
+                              fontSize: 14,
+                              color: Colors.grey.shade600,
+                            ),
                           ),
                           GestureDetector(
                             onTap: otp.canResend
@@ -365,16 +381,14 @@ class _OtpDigitBoxState extends State<_OtpDigitBox> {
         width: 48,
         height: 58,
         decoration: BoxDecoration(
-          color: hasValue
-              ? const Color(0xFFF0F0FF)
-              : AppColors.fill,
+          color: hasValue ? const Color(0xFFF0F0FF) : AppColors.fill,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: _isFocused
                 ? AppColors.primary
                 : hasValue
-                    ? AppColors.primaryAlpha40
-                    : Colors.grey.shade300,
+                ? AppColors.primaryAlpha40
+                : Colors.grey.shade300,
             width: _isFocused ? 2 : 1.5,
           ),
           boxShadow: _isFocused
