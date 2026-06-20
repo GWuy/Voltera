@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart' as provider_pkg;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../auth/presentation/providers/auth_provider.dart';
 import '../../favorite/presentation/providers/favorite_provider.dart';
 import '../../contract/providers/contract_providers.dart';
 import '../../../core/router/route_names.dart';
@@ -382,13 +383,25 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                   ],
                 ),
                 const Spacer(),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
+                GestureDetector(
+                  onTap: () {
+                    final userId = provider_pkg.Provider.of<AuthProvider>(
+                      context,
+                      listen: false,
+                    ).loginResponse?.userId.toString() ?? '';
+                    context.push(
+                      RouteNames.conversations,
+                      extra: {'currentUserId': userId},
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(Icons.message_outlined),
                   ),
-                  child: const Icon(Icons.message_outlined),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

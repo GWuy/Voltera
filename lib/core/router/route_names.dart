@@ -16,4 +16,6 @@ class RouteNames {
   static const paymentCallback = '/payment/callback';
   static const paymentSuccess = '/payment/success';
   static const paymentFailed = '/payment/failed';
+  static const conversations = '/conversations';
+  static const chat = '/chat';
 }

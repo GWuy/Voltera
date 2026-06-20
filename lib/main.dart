@@ -26,6 +26,9 @@ import 'features/product/presentation/providers/product_provider.dart';
 import 'features/notification/data/repositories/notification_repository_impl.dart';
 import 'features/notification/domain/repositories/notification_repository.dart';
 import 'features/notification/presentation/providers/notification_provider.dart';
+import 'features/chat/data/repositories/chat_repository_impl.dart';
+import 'features/chat/domain/repositories/chat_repository.dart';
+import 'features/chat/presentation/providers/chat_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,6 +71,7 @@ class _VolteraAppState extends State<VolteraApp> {
     final ProductRepository productRepository = ProductRepositoryImpl();
     final NotificationRepository notificationRepository =
         NotificationRepositoryImpl();
+    final ChatRepository chatRepository = ChatRepositoryImpl();
 
     return MultiProvider(
       providers: [
@@ -92,6 +96,9 @@ class _VolteraAppState extends State<VolteraApp> {
         ChangeNotifierProvider(
           create: (_) =>
               NotificationProvider(repository: notificationRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ChatProvider(repository: chatRepository),
         ),
       ],
       child: MaterialApp.router(

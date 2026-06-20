@@ -17,6 +17,8 @@ import '../../features/transaction/presentation/transaction_detail_screen.dart';
 import '../../features/payment/presentation/payment_callback_screen.dart';
 import '../../features/payment/presentation/payment_failed_screen.dart';
 import '../../features/payment/presentation/payment_success_screen.dart';
+import '../../features/chat/presentation/conversation_list_screen.dart';
+import '../../features/chat/presentation/chat_screen.dart';
 import 'route_names.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -154,6 +156,26 @@ final GoRouter appRouter = GoRouter(
             int.tryParse(state.uri.queryParameters['transactionId'] ?? '') ?? 0,
         status: state.uri.queryParameters['status'] ?? 'FAILED',
       ),
+    ),
+    GoRoute(
+      path: RouteNames.conversations,
+      builder: (context, state) {
+        final extra = (state.extra as Map<String, dynamic>?) ?? {};
+        return ConversationListScreen(
+          currentUserId: extra['currentUserId'] as String? ?? '',
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.chat,
+      builder: (context, state) {
+        final extra = (state.extra as Map<String, dynamic>?) ?? {};
+        return ChatScreen(
+          currentUserId: extra['currentUserId'] as String? ?? '',
+          receiverId: state.uri.queryParameters['receiverId'] ?? '',
+          receiverName: state.uri.queryParameters['receiverName'] ?? '',
+        );
+      },
     ),
   ],
 );
