@@ -28,12 +28,9 @@ import 'features/notification/domain/repositories/notification_repository.dart';
 import 'features/notification/presentation/providers/notification_provider.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const ProviderScope(child: VolteraApp()));
 }
