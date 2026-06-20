@@ -1,0 +1,24 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "voltera-d4928",
+          "appId": "1:1020624026276:android:cf7780ee4c71e232020431",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "voltera-d4928",
+          "configurations": {
+            "android": "1:1020624026276:android:cf7780ee4c71e232020431",
+            "ios": "1:1020624026276:ios:62377a5ffb4e1197020431",
+            "macos": "1:1020624026276:ios:62377a5ffb4e1197020431",
+            "web": "1:1020624026276:web:06bcb06837741949020431"
+          }
+        }
+      }
+    }
+  }
+}

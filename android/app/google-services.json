@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1020624026276",
+    "project_id": "voltera-d4928",
+    "storage_bucket": "voltera-d4928.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020624026276:android:cf7780ee4c71e232020431",
+        "android_client_info": {
+          "package_name": "com.example.voltera"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBueOojaFmNhX5uGbGjKvvmtKpfj2eaMVk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020624026276:android:0e5f694f40833203020431",
+        "android_client_info": {
+          "package_name": "com.gwuy.voltera"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBueOojaFmNhX5uGbGjKvvmtKpfj2eaMVk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

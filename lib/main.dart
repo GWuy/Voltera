@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:voltera/firebase_options.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
@@ -25,7 +27,14 @@ import 'features/notification/data/repositories/notification_repository_impl.dar
 import 'features/notification/domain/repositories/notification_repository.dart';
 import 'features/notification/presentation/providers/notification_provider.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const ProviderScope(child: VolteraApp()));
 }
 
@@ -44,9 +53,6 @@ class _VolteraAppState extends State<VolteraApp> {
     super.initState();
     deepLinkService.init((uri) {
       print('URI = $uri');
-      // Do NOT call appRouter.go(loc) here.
-      // GoRouter automatically handles incoming Android Intents and Deep Links natively.
-      // Calling it here causes duplicate navigation, leading to the GoException.
     });
   }
 
