@@ -1,64 +1,100 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+enum MessageType {
+  text('TEXT'),
+  image('IMAGE'),
+  file('FILE');
 
-/// Supported message types.
-enum MessageType { TEXT, IMAGE }
+  const MessageType(this.wireName);
 
-/// Represents a single chat message stored in Firestore.
+  final String wireName;
+
+  static MessageType fromWireName(String? value) {
+    return MessageType.values.firstWhere(
+      (type) => type.wireName == value,
+      orElse: () => MessageType.text,
+    );
+  }
+}
+
+enum MessageDeliveryStatus { sending, sent, failed }
+
 class ChatMessageModel {
   final String? id;
+  final String conversationId;
   final String senderId;
   final String receiverId;
+  final String senderName;
+  final String? senderAvatar;
   final String content;
   final DateTime createdAt;
   final bool isRead;
   final MessageType type;
+  final MessageDeliveryStatus deliveryStatus;
 
   const ChatMessageModel({
     this.id,
+    this.conversationId = '',
     required this.senderId,
-    required this.receiverId,
+    this.receiverId = '',
+    this.senderName = '',
+    this.senderAvatar,
     required this.content,
     required this.createdAt,
     this.isRead = false,
-    this.type = MessageType.TEXT,
+    this.type = MessageType.text,
+    this.deliveryStatus = MessageDeliveryStatus.sent,
   });
 
-  factory ChatMessageModel.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+  factory ChatMessageModel.fromJson(
+    Map<String, dynamic> json, {
+    String receiverId = '',
+  }) {
     return ChatMessageModel(
-      id: doc.id,
-      senderId: data['senderId'] as String? ?? '',
-      receiverId: data['receiverId'] as String? ?? '',
-      content: data['content'] as String? ?? '',
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      isRead: data['isRead'] as bool? ?? false,
-      type: MessageType.values.firstWhere(
-        (e) => e.name == (data['type'] as String? ?? 'TEXT'),
-        orElse: () => MessageType.TEXT,
-      ),
+      id: json['id']?.toString(),
+      conversationId: json['conversationId']?.toString() ?? '',
+      senderId: json['senderId']?.toString() ?? '',
+      receiverId: receiverId,
+      senderName: json['senderName'] as String? ?? '',
+      senderAvatar: json['senderAvatar'] as String?,
+      content: json['content'] as String? ?? '',
+      createdAt: DateTime.tryParse(json['createdAt']?.toString() ?? '') ??
+          DateTime.now(),
+      type: MessageType.fromWireName(json['messageType'] as String?),
     );
   }
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toSendJson() {
     return {
-      'senderId': senderId,
-      'receiverId': receiverId,
+      'receiverId': int.tryParse(receiverId),
       'content': content,
-      'createdAt': Timestamp.fromDate(createdAt),
-      'isRead': isRead,
-      'type': type.name,
+      'messageType': type.wireName,
     };
   }
 
-  ChatMessageModel copyWith({bool? isRead}) {
+  ChatMessageModel copyWith({
+    String? id,
+    String? conversationId,
+    String? senderId,
+    String? receiverId,
+    String? senderName,
+    String? senderAvatar,
+    String? content,
+    DateTime? createdAt,
+    bool? isRead,
+    MessageType? type,
+    MessageDeliveryStatus? deliveryStatus,
+  }) {
     return ChatMessageModel(
-      id: id,
-      senderId: senderId,
-      receiverId: receiverId,
-      content: content,
-      createdAt: createdAt,
+      id: id ?? this.id,
+      conversationId: conversationId ?? this.conversationId,
+      senderId: senderId ?? this.senderId,
+      receiverId: receiverId ?? this.receiverId,
+      senderName: senderName ?? this.senderName,
+      senderAvatar: senderAvatar ?? this.senderAvatar,
+      content: content ?? this.content,
+      createdAt: createdAt ?? this.createdAt,
       isRead: isRead ?? this.isRead,
-      type: type,
+      type: type ?? this.type,
+      deliveryStatus: deliveryStatus ?? this.deliveryStatus,
     );
   }
 }

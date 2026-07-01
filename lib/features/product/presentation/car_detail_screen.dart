@@ -9,6 +9,7 @@ import '../../auth/presentation/providers/auth_provider.dart';
 import '../../favorite/presentation/providers/favorite_provider.dart';
 import '../../contract/providers/contract_providers.dart';
 import '../../../core/router/route_names.dart';
+import '../../../core/utils/token_storage.dart';
 import 'providers/product_provider.dart';
 
 class CarDetailScreen extends StatefulWidget {
@@ -384,11 +385,14 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                 ),
                 const Spacer(),
                 GestureDetector(
-                  onTap: () {
-                    final userId = provider_pkg.Provider.of<AuthProvider>(
-                      context,
-                      listen: false,
-                    ).loginResponse?.userId.toString() ?? '';
+                  onTap: () async {
+                    final userId = await TokenStorage.instance.getUserId() ??
+                        provider_pkg.Provider.of<AuthProvider>(
+                          context,
+                          listen: false,
+                        ).loginResponse?.userId.toString() ??
+                        '';
+                    if (!context.mounted) return;
                     context.push(
                       RouteNames.conversations,
                       extra: {'currentUserId': userId},
