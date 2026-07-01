@@ -42,7 +42,11 @@ class AuthProvider extends ChangeNotifier {
         LoginRequest(username: email.trim(), password: password),
       );
 
-      await TokenStorage.instance.saveToken(response.token);
+      await TokenStorage.instance.saveSession(
+        token: response.token,
+        userId: response.userId,
+        role: response.role,
+      );
 
       _loginResponse = response;
       _status = AuthStatus.success;

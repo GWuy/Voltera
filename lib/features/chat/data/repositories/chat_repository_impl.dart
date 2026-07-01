@@ -3,7 +3,6 @@ import '../models/chat_message_model.dart';
 import '../models/conversation_model.dart';
 import '../services/chat_service.dart';
 
-/// Concrete implementation of [ChatRepository] backed by [ChatService].
 class ChatRepositoryImpl implements ChatRepository {
   ChatRepositoryImpl({ChatService? service})
       : _service = service ?? ChatService();
@@ -11,38 +10,38 @@ class ChatRepositoryImpl implements ChatRepository {
   final ChatService _service;
 
   @override
-  String conversationId(String userId1, String userId2) =>
-      _service.conversationId(userId1, userId2);
+  Future<List<ConversationModel>> getConversations() {
+    return _service.getConversations();
+  }
 
   @override
-  Stream<List<ChatMessageModel>> messagesStream(String conversationId) =>
-      _service.messagesStream(conversationId);
+  Future<List<ChatMessageModel>> getMessages({
+    required String receiverId,
+    int page = 0,
+    int size = 50,
+  }) {
+    return _service.getMessages(
+      receiverId: receiverId,
+      page: page,
+      size: size,
+    );
+  }
 
   @override
-  Stream<List<ConversationModel>> conversationsStream(String currentUserId) =>
-      _service.conversationsStream(currentUserId);
-
-  @override
-  Future<void> sendMessage({
-    required String senderId,
+  Future<ChatMessageModel> sendMessage({
     required String receiverId,
     required String content,
-    MessageType type = MessageType.TEXT,
-  }) =>
-      _service.sendMessage(
-        senderId: senderId,
-        receiverId: receiverId,
-        content: content,
-        type: type,
-      );
+    MessageType type = MessageType.text,
+  }) {
+    return _service.sendMessage(
+      receiverId: receiverId,
+      content: content,
+      type: type,
+    );
+  }
 
   @override
-  Future<void> markMessagesAsRead({
-    required String conversationId,
-    required String currentUserId,
-  }) =>
-      _service.markMessagesAsRead(
-        conversationId: conversationId,
-        currentUserId: currentUserId,
-      );
+  Future<void> markMessagesAsRead({required String senderId}) {
+    return _service.markMessagesAsRead(senderId: senderId);
+  }
 }

@@ -1,47 +1,38 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-/// Represents a conversation document in Firestore.
 class ConversationModel {
   final String id;
-  final List<String> participants;
+  final String type;
+  final String otherUserId;
+  final String otherUserName;
+  final String? otherUserAvatar;
   final String lastMessage;
-  final String lastSenderId;
   final DateTime lastMessageTime;
+  final int unreadCount;
 
   const ConversationModel({
     required this.id,
-    required this.participants,
+    this.type = 'PRIVATE',
+    required this.otherUserId,
+    this.otherUserName = 'Unknown',
+    this.otherUserAvatar,
     this.lastMessage = '',
-    this.lastSenderId = '',
     required this.lastMessageTime,
+    this.unreadCount = 0,
   });
 
-  factory ConversationModel.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+  factory ConversationModel.fromJson(Map<String, dynamic> json) {
     return ConversationModel(
-      id: doc.id,
-      participants: List<String>.from(data['participants'] ?? []),
-      lastMessage: data['lastMessage'] as String? ?? '',
-      lastSenderId: data['lastSenderId'] as String? ?? '',
+      id: json['id']?.toString() ?? '',
+      type: json['type'] as String? ?? 'PRIVATE',
+      otherUserId: json['otherUserId']?.toString() ?? '',
+      otherUserName: json['otherUserName'] as String? ?? 'Unknown',
+      otherUserAvatar: json['otherUserAvatar'] as String?,
+      lastMessage: json['lastMessage'] as String? ?? '',
       lastMessageTime:
-          (data['lastMessageTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
+          DateTime.tryParse(json['lastMessageTime']?.toString() ?? '') ??
+              DateTime.now(),
+      unreadCount: json['unreadCount'] as int? ?? 0,
     );
   }
 
-  Map<String, dynamic> toFirestore() {
-    return {
-      'participants': participants,
-      'lastMessage': lastMessage,
-      'lastSenderId': lastSenderId,
-      'lastMessageTime': Timestamp.fromDate(lastMessageTime),
-    };
-  }
-
-  /// Returns the other participant's ID given the current user's ID.
-  String otherParticipantId(String currentUserId) {
-    return participants.firstWhere(
-      (id) => id != currentUserId,
-      orElse: () => '',
-    );
-  }
+  String otherParticipantId(String currentUserId) => otherUserId;
 }

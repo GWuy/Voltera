@@ -1,0 +1,10 @@
+.dart_tool/
+.git/
+.github/
+.ai/
+build/
+android/.gradle/
+ios/Pods/
+macos/Pods/
+*.log
+adb_logs.txt
