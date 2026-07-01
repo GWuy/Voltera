@@ -1,4 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'core/services/fcm_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,6 +36,28 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // ─── Firebase Messaging: xin quyền thông báo ───────────────────────────
+  try {
+    final messaging = FirebaseMessaging.instance;
+
+    final settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    debugPrint('🔔 Notification permission: ${settings.authorizationStatus}');
+
+    // In FCM Token ra console để dùng cho test push notification
+    final fcmToken = await messaging.getToken();
+    debugPrint('📱 FCM Token: $fcmToken');
+
+    // Khởi tạo FCM handlers (foreground, background, tap)
+    await FcmService.init();
+  } catch (e) {
+    debugPrint('⚠️ Firebase Messaging initialization failed or blocked: $e');
+  }
+  // ────────────────────────────────────────────────────────────────────────
 
   runApp(const ProviderScope(child: VolteraApp()));
 }
@@ -106,6 +130,8 @@ class _VolteraAppState extends State<VolteraApp> {
         title: 'Voltera',
         theme: appTheme,
         routerConfig: appRouter,
+        // Dùng key dùng chung với FcmService để hiện SnackBar từ handler FCM
+        scaffoldMessengerKey: scaffoldMessengerKey,
       ),
     );
   }

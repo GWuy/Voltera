@@ -20,8 +20,10 @@ import '../../features/payment/presentation/payment_success_screen.dart';
 import '../../features/chat/presentation/conversation_list_screen.dart';
 import '../../features/chat/presentation/chat_screen.dart';
 import 'route_names.dart';
+import '../services/fcm_service.dart';
 
 final GoRouter appRouter = GoRouter(
+  navigatorKey: navigatorKey, // <- FcmService dùng key này để navigate
   initialLocation: RouteNames.login,
   redirect: (context, state) {
     // 1. GoRouter natively intercepts Android Intents.
